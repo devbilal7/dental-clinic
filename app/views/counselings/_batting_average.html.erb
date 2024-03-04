@@ -1,0 +1,103 @@
+<tr>                    
+    <td rowspan="8" class="sticky left-0 bg-white z-2 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4"><%= @data[0].full_name %></td>
+    
+        <% batting_average(@data[1]) %>
+        
+        <td rowspan="8" class="bg-white px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border border-l-4" ><%= @prosthodontics_consultant  %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= @total_contract  %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= number_with_precision(@prosthodontics_batting_average.to_f, precision: 2) %></td>
+
+        <td rowspan="8" class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border border-l-4" ><%= @denture_consultant  %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= @total_contract  %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= number_with_precision(@denture_batting_average.to_f, precision: 2) %></td>
+        
+        <td rowspan="8" class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border border-l-4" ><%= @implant_consultant %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= @total_contract  %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= number_with_precision(@implant_batting_average.to_f, precision: 2) %></td>
+        
+        <td rowspan="8" class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border border-l-4" ><%= @invisalign_consultant %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= @total_contract  %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= number_with_precision(@invisalign_batting_average.to_f, precision: 2) %></td>
+        
+        <td rowspan="8" class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border border-l-4" ><%= @other_correct_consultant  %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= @total_contract  %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= number_with_precision(@other_correct_batting_average.to_f, precision: 2) %></td>
+        
+        <td rowspan="8" class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border border-l-4" ><%= @micro_consultant  %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= @total_contract  %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= number_with_precision(@micro_batting_average.to_f, precision: 2) %></td>
+        
+        <td rowspan="8" class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border border-l-4" ><%= @whitening_consultant  %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= @total_contract  %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= number_with_precision(@whitening_batting_average.to_f, precision: 2) %></td>
+        
+        <td rowspan="8" class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border border-l-4" ><%= @self_pay_contract  %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= @total_counselings  %></td>
+        <td rowspan="8" class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= number_with_precision(@self_pay_contract / @total_counselings.to_f,precision: 2) %></td>
+        
+        <tr>
+            <th class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4">補綴</th>
+            <td class="sticky bg-white z-2 left-[125px] px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border" ><%= @total_contract  %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@prosthodontics_batting_average.to_f, precision: 2) %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @prosthodontics_target_amt %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @prosthodontics_amt %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= @prosthodontics_rate %></td>
+        </tr>
+
+        <tr>
+            <th class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4">義歯</th>
+            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border" ><%= @total_contract  %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@denture_batting_average.to_f, precision: 2) %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @denture_target_amt %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @denture_amt %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= @denture_rate %></td>
+        </tr>
+
+        <tr>
+            <th class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4">インプラント</th>
+            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border" ><%= @total_contract  %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@implant_batting_average.to_f, precision: 2) %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @implant_target_amt %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @implant_amt %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= @implant_rate %></td>
+        </tr>
+        
+        <tr>
+            <th class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4">矯正</th>
+            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border" ><%= @total_contract * 2 %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@invisalign_batting_average.to_f, precision: 2) %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @correct_target_amt %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @correct_amt %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= @correct_rate %></td>
+        </tr>
+        
+        <tr>
+            <th class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4">マイクロ</th>
+            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border" ><%= @total_contract  %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@micro_batting_average.to_f, precision: 2) %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @micro_target_amt %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @micro_amt %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= @micro_rate %></td>
+        </tr>
+
+        <tr>
+            <th class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4">ホワイトニング</th>
+            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border" ><%= @total_contract  %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@whitening_batting_average.to_f, precision: 2) %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @whitening_target_amt %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @whitening_amt %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= @whitening_rate %></td>
+        </tr>
+
+        <tr>
+            <th class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4">合計</th>
+            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border" ><%= @total_target_value %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@total / @total_target_value.to_f, precision: 2) %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @total_target_amt %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @total_amt %></td>
+            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= @total_rate %></td>
+        </tr>
+        
+    
+    <% @self_pay = 0 %>
+</tr>

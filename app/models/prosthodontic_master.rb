@@ -1,0 +1,2 @@
+class ProsthodonticMaster < ApplicationRecord
+end

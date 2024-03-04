@@ -1,0 +1,256 @@
+  <main class="pb-8 px-4 h-screen">
+      <%# <div class="max-w-full mx-auto flex justify-end px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 mt-16"> %>
+      <div class="font-medium text-gray-900 mt-16" >
+          <%= render 'search_form' %>  <!-- Search -->
+        <div class="flex-0.5 mt-2 ml-2">  
+        <%= render "layouts/pagination_limit", controller: params[:controller], action: params[:action] %> <!-- Pagy DropDown -->
+        </div>
+      </div>
+    </div>
+        <!-- Table -->
+        <div class="flex flex-col">
+          <div class="-my-2 overflow-x-auto ">
+              <div class="max-h-[600px]">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-[#fff] sticky top-0 z-10">
+                    <tr>
+                    <th scope="col" class="sticky bg-white left-0 z-2 px-6 py-3 text-left text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2">No.</th>
+                      <th scope="col" class="sticky bg-white z-2 px-6 py-3 text-left text-xs font-medium text-blackuppercase tracking-wider border border-l-4 underline whitespace-nowrap" rowspan="2" style="left:70px "><%= sort_link(@q, :patient_number, "患者番号", default_order: :desc)  %></th> <!-- Patient Number -->
+                      <!-- <% if params[:direction] == "asc" %>
+                        <%= link_to patients_path(direction: "desc")  do %>
+                        <div class="inline-flex">
+                          <%= t("patient.Patient Name") %>  
+                            <%= image_tag('up.png',class:"text-gray-500 mr-2 flex-shrink-0 h-4 w-4 sort")  %>
+                        </div>
+                        <% end %>
+                      <% else %>
+                        <%= link_to patients_path(direction: "asc")  do %>
+                        <div class="inline-flex">
+                          <%= t("patient.Patient Name") %>  
+                            <%= image_tag('down.png',class:"text-gray-500 mr-2 flex-shrink-0 h-4 w-4 sort")  %>
+                        </div>
+                        <% end %>
+                      <% end %> -->
+                      </th>
+                      
+                      <th scope="col" class="sticky bg-white z-2 px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" style="left:170px">処置No</th>  <!-- Treatment No -->
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-l-4 underline whitespace-nowrap" rowspan="2">
+                      <%= sort_link(@q, :first_name, "患者氏名")%> <!-- Patient Name-->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" >担当DR</th> <!-- DR in charge-->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" >カウンセリング</th> <!-- Counseling-->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap text-center" colspan="14" >カウンセリング実施日</th> <!-- Counseling Date -->
+                      
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" >メンテ 予約日</th> <!-- Maintenance Reservation Date-->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" >メンテ 移行数</th> <!-- Number of Maintenance Transition-->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" >契約 結果</th>   <!-- Contract Result-->                    
+                      <th scope="col" class="relative px-6 py-3 border border-l-4 border-r-4" rowspan="2" >
+                        <span class="sr-only">Edit</span>
+                      </th>
+                    </tr>
+                    <tr>
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">初診      </th> <!-- First Visit -->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">再初診    </th> <!-- Re-First visit-->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">セカンド  </th> <!-- Second -->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">Pコンサル </th> <!-- P Consultant-->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">検査③    </th> <!-- Inspection 3 -->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">治療計画  </th> <!-- Treatment Plan-->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">補綴     </th> <!-- Prosthodontics-->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">義歯     </th> <!-- Denture -->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">ホワイト  </th> <!-- White -->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">インプラント</th> <!-- Implant -->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">インビザ  </th> <!-- Invisa -->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">他矯正    </th> <!-- Other Correction -->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">マイクロ  </th> <!-- Micro -->
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">メンテ    </th> <!-- Maintenance -->
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200">
+                    <% index = 1 %>
+                    <% @patients.each do |patient| %>
+                    <% treatment_no = 1 %>
+                    <% unless patient.counselings.present? %>
+                    <tr>
+                    <td class="sticky bg-white z-2 left-0 px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= index %></td>
+                      <td class="sticky bg-white z-2 px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" style="left:70px"><%= patient.patient_number %></td>                    
+                      <td class="sticky bg-white z-2 px-6 text-gray-500 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4" style="left:170px"><%= '0' %></td>                    
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= patient.full_name %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %> </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>               
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= %></td>
+                      
+                      <!-- Create Visit Routes -->
+                        <td class="px-6 underline text-blue-300 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4 border-r-4" onclick="new_counseling(<%= patient.id %>,<%= '' %>)">
+                          <button type="button" class="col-span-1 active items-center px-4 py-1 border border-transparent  font-small  rounded-md shadow-xl text-white bg-[#43c17a] hover:bg-green-500">
+                            追加 
+                          </button> <!-- Add  -->
+                        </td>
+                        <% index += 1 %>
+                    </tr>
+                    <% end %>
+                    <% patient.counselings.each do |counseling| %>
+                    <tr>
+                    <td class="sticky bg-white z-2 left-0 px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= index %></td>
+                      <td class="sticky bg-white z-2 px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" style="left:70px"><%= patient.patient_number %></td>
+                      <% if counseling.present? %>
+                        <!-- Editing Visit Routes -->
+                        <td class="sticky bg-white z-2 px-6 underline text-blue-300 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4 cursor-pointer" onclick="edit_counseling(<%= counseling.id %>,<%= patient.id %>,<%= true %>)" style="left:170px" ><%= treatment_no %></td>
+                      <% else %>
+                          <td class="sticky bg-white z-2 px-6 text-gray-500 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4" style="left:170px"><%= treatment_no %></td>
+                      <% end %>
+
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= patient.full_name %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.dentist.full_name if counseling.present? %> </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.resp_couns_staff if counseling.present? %></td>
+                      
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.first_visit if counseling.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.re_first_visit if counseling.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.second_visit if counseling.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.p_consult if counseling.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.inspection if counseling.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.treat_plan if counseling.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.prostho if counseling.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.denture if counseling.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.whitening if counseling.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.implant if counseling.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.invisalign if counseling.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.other_correc if counseling.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.micro if counseling.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.maintainance if counseling.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.main_resv_date if counseling.present? %></td>
+                      
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.main_trans if counseling.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.contract_amt if counseling.present? %></td>
+                      
+                      
+                      <td class="px-6 underline text-blue-300 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4 border-r-4" >
+                        <button type="button" class="col-span-1 active items-center px-4 py-1 border border-transparent  font-small  rounded-md shadow-xl text-white bg-[#43c17a] hover:bg-green-500" onclick="new_counseling(<%= patient.id %>,<%= '' %>)">
+                          Add
+                        </button>
+                      </td>
+                        <%# <%= link_to "Delete", counseling_path(patient), method: :delete, data: { confirm: "このカウンセリングを削除してもよろしいですか？" },class:"text-green-900 hover:text-green-900" %>
+                    </tr>
+                    <% treatment_no += 1 %>
+                    <% index += 1 %>
+                    <% end %>
+                    <% end %>
+                    <!-- More people... -->
+                  </tbody>
+                </table>
+              </div>
+          </div>
+          <!-- Pagination -->
+            <%= render "layouts/pagination" %>
+        </div>
+        </div>
+      </div>
+      <div id="edit_popup" class="bg-white" >
+      </div>
+    </main>
+<style>
+
+div#edit_popup {
+    position: absolute;
+    width: 100%;
+    top: 64px;
+    z-index: 10;
+    right: -100%;
+    transition: all 0.8s ease-in;
+    display: block !important;
+    max-width: 1000px;
+}
+
+.edit_patient {
+    background: #fff;
+    padding: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+div#edit_popup>div {
+    position: unset !important;
+    min-height: 100vh;
+}
+
+div#edit_popup[style="display: block;"] {
+    right: 0 !important;
+}
+
+.showPopUp {
+    right: 27% !important;
+    transform:translateX(50%)
+}
+
+
+div#edit_popup>.bg-white {
+    background: transparent;
+    box-shadow: none;
+}
+
+div#edit_popup>.bg-white div.form-div {
+    background: #fff;
+    padding: 25px 15px;
+}
+
+div#edit_popup>.bg-white .contents>div button {
+    border-radius: 15px 15px 0px 0px;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+
+</style>
+
+<script>
+  function new_counseling(patientId,errors=""){  
+    $('#edit_popup').show();
+    $('#edit_popup').addClass("showPopUp");
+    $.ajax({
+            type: "get",
+            data: "id="+patientId+"&errors="+errors,
+            url: "<%= new_counseling_path %>"
+        }) 
+  }
+
+</script>
+
+<script>
+  function edit_counseling(id,patientId,edit,errors=""){
+    $('#edit_popup').show();
+    $('#edit_popup').addClass("showPopUp");
+    $.ajax({
+            type: "get",
+            data: "patient="+patientId+"&edit="+edit+"&errors="+errors,
+            url: "/counselings/"+id+"/edit"
+        }) 
+  }
+
+</script>
+
+<script>
+  if("<%= params[:type] %>"=="createerrors"){
+      new_counseling("<%= params[:id] %>","<%=j raw @errors %>")  
+  }
+
+  
+  if("<%= params[:type] %>"=="updateerrors"){
+    edit_counseling("<%= params[:id] %>","<%= params[:patientid] %>","<%= true %>","<%=j raw @errors %>")
+  }
+</script>

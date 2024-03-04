@@ -1,0 +1,62 @@
+<%= form_with(model: clinic, class: "contents") do |form| %>
+  <% if clinic.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+      <h2><%= pluralize(clinic.errors.count, "error") %> prohibited this clinic from being saved:</h2>
+
+      <ul>
+        <% clinic.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= t("clinics.Name") %>
+    <%= form.text_field :name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= t("clinics.Postal Code") %>
+    <%= form.text_field :postal_code, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= t("clinics.Region") %>
+    <%= form.select_field :region, Clinic.regions.sort.to_h.keys.map {|w| [w.humanize, w]},{prompt: "Select"},{class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-64"} %>
+  </div>
+
+  <div class="my-5">
+    <%= t("clinics.Address") %>
+    <%= form.text_area :address, rows: 4, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= t("clinics.Municipalities") %>
+    <%= form.text_field :municipalities, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= t("clinics.Building Name") %>
+    <%= form.text_field :building_name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= t("clinics.Floors") %>
+    <%= form.text_field :floors, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= t("clinics.Fax Number") %>
+    <%= form.text_field :fax_number, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= t("clinics.Phone Number") %>
+    <%= form.number_field :phone_number, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit t("clinics.Create Clinic"), class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

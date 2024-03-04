@@ -1,0 +1,339 @@
+<div class="mx-auto mt-5">
+  <h1 class="font-bold text-4xl"><%= t("newuser.New User")%></h1>
+    
+    <%= form_with(model: @user, url: registrations_path, class: "contents") do |form| %>
+
+        <%= form.hidden_field :role,value: params[:role] , id: "role"%>    
+        <div id="clinic-form"> 
+            <%= form.fields_for :clinic do |f| %>
+                <!-- Basic Information -->
+                <div class="border border-solid border-gray-300 mb-5 ">
+                    <div class="w-full bg-gray-100 p-3">
+                      基本情報
+                    </div> <!-- Basic Information -->
+
+                    <div class="p-5">
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= f.label t("patient.User No") %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :user_no,value: User.last.id + 1,disabled: true, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            法人名
+                        </div> <!-- Corporate Name -->
+                        <div class=" col-span-4">
+                            <%= f.text_field :name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% if  @user.errors['clinic.name'][0] .present?%>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Name #{@user.errors['clinic.name'][0]}" %></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            郵便番号
+                        </div> <!-- Post Code -->
+                        <div class=" col-span-4">
+                            <%= f.text_field :postal_code, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                            <% if  @user.errors['clinic.postal_code'][0] .present?%>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Postal Code #{@user.errors['clinic.postal_code'][0]}"%></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            都道府県
+                        </div> <!-- Prefectures -->
+                        <div class=" col-span-4">
+                            <%= f.select :region, Clinic.regions.sort.to_h.keys.map {|w| [w.humanize, w]},{prompt: "Select"},{class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-64"} %>
+                            <% if  @user.errors['clinic.region'][0] .present? %>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Region #{@user.errors['clinic.region'][0]} " %></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            市区町村
+                        </div> <!-- Municipalities -->
+                        <div class=" col-span-4">
+                            <%= f.text_field :municipalities, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% if  @user.errors['clinic.municipalities'][0] .present?%>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Municipalities #{@user.errors['clinic.municipalities'][0]}" %></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            番地
+                        </div> <!-- Address -->
+                        <div class=" col-span-4">
+                            <%= f.text_area :address, rows: 4, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% if  @user.errors['clinic.address'][0] .present? %>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Address #{@user.errors['clinic.address'][0]} " %></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+                    
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            ビル名
+                        </div> <!-- Building Name -->
+                        <div class=" col-span-4">
+                            <%= f.text_field :building_name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% if  @user.errors['clinic.building_name'][0] .present? %>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Building Name #{@user.errors['clinic.building_name'][0]}"%></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            階数
+                        </div> <!-- Number of Floors -->
+                        <div class=" col-span-4">
+                            <%= f.text_field :floors, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% if  @user.errors['clinic.floors'][0] .present? %>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Building Name #{@user.errors['clinic.floors'][0]}"%></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            電話番号
+                        </div> <!-- Phone Number -->
+                        <div class=" col-span-4">
+                            <%= f.text_field :phone_number, id: "phone-number", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% if  @user.errors['clinic.phone_number'][0] .present? %>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Phone Number #{@user.errors['clinic.phone_number'][0]}" %></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            FAX番号
+                        </div> <!-- FAX Number -->
+                        <div class=" col-span-4">
+                            <%= f.text_field :fax_number, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% if  @user.errors['clinic.fax_number'][0] .present? %>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Fax Number #{@user.errors['clinic.fax_number'][0]}"  %></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+
+
+                <!-- Representative/ Person IN Charge -->
+                <div class="border border-solid border-gray-300 mb-5 ">
+                    <div class="w-full bg-gray-100 p-3">
+                        代表者
+                    </div> <!-- Representative -->
+                <fieldset class="p-3">
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            氏名
+                        </div> <!-- Full Name -->
+                        <div class=" col-span-4">
+                            <%= f.text_field :representative_first_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+                            <%= f.text_field :representative_last_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            かな
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :representative_wonder1, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+                            <%= f.text_field :representative_wonder2, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                    </div>
+                </fieldset>
+                </div>
+
+                <div class="border border-solid border-gray-300 mb-5 ">
+                    <div class="w-full bg-gray-100 p-3">
+                       担当者１
+                    </div> <!-- Person in charge 1 -->
+                <fieldset class="p-3">
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            氏名
+                        </div> <!-- Full Name -->
+                        <div class=" col-span-4">
+                            <%= f.text_field :charge1_first_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+                            <%= f.text_field :charge1_last_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            かな
+                        </div> <!-- Kana -->
+                        <div class=" col-span-4">
+                            <%= f.text_field :charge1_wonder1, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+                            <%= f.text_field :charge1_wonder2, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                    </div>
+                </fieldset>
+                </div>
+
+                <div class="border border-solid border-gray-300 mb-5 ">
+                    <div class="w-full bg-gray-100 p-3">
+                        担当者2
+                    </div> <!-- Person in charge 2 -->
+                <fieldset class="p-3">
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            氏名
+                        </div> <!-- Full Name -->
+                        <div class=" col-span-4">
+                            <%= f.text_field :charge2_first_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+                            <%= f.text_field :charge2_last_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            かな
+                        </div> <!-- Kana -->
+                        <div class=" col-span-4">
+                            <%= f.text_field :charge2_wonder1, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+                            <%= f.text_field :charge2_wonder2, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                    </div>
+                </fieldset>
+                </div>
+
+            <% end %>
+        </div>
+
+        <!-- ID/Password -->
+        <div class="border border-solid border-gray-300 mb-5 ">
+                <div class="w-full bg-gray-100 p-3">
+                    ＩＤ・パスワード
+                </div> <!-- ID / Password -->
+            <fieldset class="p-3">
+
+                <div class="my-5 d-flex">        
+                    <div class="flex flex-wrap">
+                        <div class="flex items-center w-32">
+                        <%= t("patient.ID") %>
+                    </div>
+                    <div class=" col-span-4">
+                        <div class="my-5">
+                            <%= form.email_field :email, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% @user.errors.full_messages_for(:email).each do |message| %>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+                            <% end %>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="my-5 d-flex">        
+                    <div class="flex flex-wrap">
+                        <div class="flex items-center w-32">
+                        パスワード
+                    </div> <!-- Password -->
+                    <div class=" col-span-4">
+                        <%= form.password_field :password, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                        <% @user.errors.full_messages_for(:password).each do |message| %>
+                            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+                        <% end %> 
+                    </div>
+                    </div>
+                </div>
+
+                <div class="my-5 d-flex">        
+                    <div class="flex flex-wrap">
+                        <div class="flex items-center w-32">
+                        <%= t("patient.Password Confirmation") %>
+                    </div>
+                    <div class=" col-span-4">
+                        <%= form.password_field :password_confirmation, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                        <% @user.errors.full_messages_for(:password_confirmation).each do |message| %>
+                            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+                        <% end %>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="my-5 d-flex">        
+                    <div class="flex flex-wrap">
+                        <div class="flex items-center w-32">
+                        <%= t("patient.Usage Classification") %>
+                    </div>
+                    <div class=" col-span-4">
+                        <%= form.select :usage_classification, User.usages.keys, {:include_blank => "選択する"},class:"bg-teal p-3 rounded text-black shadow-inner w-full" %>
+                        <% @user.errors.full_messages_for(:usage_classification).each do |message| %>
+                            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+                        <% end %>
+                    </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="inline">
+            <%= form.submit t("newuser.Create User"), class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer"%>
+        </div>
+    <% end %>
+</div>
+
+
+
+<script>
+$(document).on('input','#phone-number',function(){
+    var phone=$('#phone-number').val();
+   if(phone.indexOf('0')!== 0){
+     $('#phone-number').val('0');
+   }
+});
+</script>

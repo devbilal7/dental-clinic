@@ -1,0 +1,541 @@
+<main class="flex-1 pb-8 h-screen">
+    <div class="max-w-full mx-auto mt-20 px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8 mr-6">  
+    <% unless params[:format] == "pdf"%>
+    <div class="flex">
+            <%= form_tag({controller: "visit_routes",action: "new_patient_indi_progress"}, {:method => :get}) do %>
+            <div class="md:grid md:grid-cols-10 gap-2 mb-5 flex-1" style="    grid-template-columns: 0fr 1fr 1fr 0fr 1fr 0fr 1fr 1fr 1fr;white-space: nowrap;" >   
+            <%= label_tag "Period", nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700" %>
+
+            <%= month_field_tag :first_date,value = params[:first_date],id: "first_date", onchange: "check_fields_search()", class:"text-center font-medium md:col-span-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"%>
+
+            <%= month_field_tag :second_date,value = params[:second_date],id: "second_date", onchange: "check_fields_search()", class:"text-center font-medium md:col-span-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"%>
+
+            <%= label_tag t("monthly.Occupation"), nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700" %>
+            
+            <%= select_tag(:occupation, options_for_select(OccupationMaster.pluck(:job_title).map {|occu| occu}, :selected => params[:occupation]), :prompt => t("newstaffinfo.Select Occupation"), class:"bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500") %>
+            <%= label_tag t("monthly.Manager"), nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700" %>
+            <%= select_tag(:manager, options_for_select(@manager.keys,selected: params[:manager]), prompt: "マネージャーを選択" , class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full") %>
+                                
+            <%= submit_tag("表示", :id=>"search-button", :class=>"cursor-pointer mt-2 w-30 col-span-1 active items-center px-4 py-1 border font-small rounded-md shadow-xl text-black bg-[#43c17a] hover:bg-green-500 ", :name=>"submit") %>
+            <%= link_to "リセット", new_patient_indi_progress_path, class:"w-full mt-2 col-span-1 active items-center px-4 py-2 border border-transparent font-small rounded-md shadow-xl text-black bg-red-500 hover:bg-red-600 text-center" %>
+            </div>    
+        <% end %>  
+        <div class="mt-4 flex-0.5" >
+                <%= link_to "帳票出力", new_patient_indi_progress_path(format: "pdf", first_date: params[:first_date],second_date: params[:second_date],submit: params[:submit]), class: "cursor-pointer mt-2 w-30 col-span-1 active items-center px-4 py-2 ml-2 border font-small rounded-md shadow-xl text-black bg-[#43c17a] hover:bg-green-500 whitespace-nowrap"%>
+        </div>
+        </div>
+    <% end %>
+    <!-- Table -->
+    
+      <div class="flex flex-col">
+          <div class="my-2 sm:-mx-6 lg:-mx-8">     
+            <div class="block border-b border-gray-200 sm:rounded">
+            <h1 class="heading-new-patient text-2xl p-4 bg-gray-300" ><%= t("monthly.New Patient Progress") %></h1>
+              <div class="bg-gray-300 overflow-x-auto max-h-[500px]">
+              <div style="display:block" id="new-patient-progress">
+                      <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-[#fff] sticky top-0 z-10">
+                              <tr>
+                                <th scope="col" rowspan="2" class="sticky bg-[#fff] left-0 z-2 px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4 whitespace-nowrap"><%= t("monthly.Year Month") %></th>
+                                <th scope="col" rowspan="2" class="sticky bg-[#fff] z-2 px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4 whitespace-nowrap" style="left:106px"><%= t("monthly.Number of New Cases") %> </th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.First Visit Consultant") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2">セカンド</th> <!-- Second -->
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.Treatment Plan") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.Imp / Correction") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.Maintenance") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.Continue Treatment") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.Suspension") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.P Second") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.Inspection ③") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.End") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.Maintenance Transition") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.Medical Tube") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.Next Reservation Rate") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.P Heavy Defense Target Person") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.White") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.P Heavy Defense Calculation") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.Prosthodontics") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.MT No of Teeth") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.Malocclusion") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap" colspan="2"><%= t("monthly.Pocket 4mm or More") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-black uppercase text-center tracking-wider border border-l-4 whitespace-nowrap border-r-4" colspan="2"><%= t("monthly.F Number of OP Implemented") %></th>
+                              </tr>
+                          
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                            <% available_data = 0 %>
+                            <% @hash.each do |year,v| %>
+                              <% @hash[year].each do |month| %> 
+                                <% patient_progress(@visits, month,year) %> 
+                                                         
+                                <tr>
+                                  <% if @visit_by_month.present? %>
+                                    <% available_data += 1 %>
+                                    <td class="sticky bg-white left-0 z-2 px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= "#{year}/#{month}"  %></td>
+                                   
+                                    <td class="sticky bg-white z-2 px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" style="left:103px"><%=  @visit_by_month.count    %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @first_visit   %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@first_visit.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @second   %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@second.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @treatment_plan %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@treatment_plan.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @implant_correction %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@implant_correction.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @maintenance %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@maintenance.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @treatment_plan_date %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@treatment_plan_date.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @suspension %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@suspension.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @p_second %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@p_second.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @inspection_3 %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@inspection_3.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @confirmation_end %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@confirmation_end.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @maintenance_visit %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@maintenance_visit.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @medical_tube %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@medical_tube.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @next_reservation_date %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@next_reservation_date.to_f / @visit_monthly,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @p_heavy_defense_target %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@p_heavy_defense_target.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @whitening %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@whitening.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @p_heavy_defense_calculation %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@p_heavy_defense_calculation.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @prosthodontics %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@prosthodontics.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @mt_tooth_number %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@mt_tooth_number.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @malocclusion %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@malocclusion.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @inspection_4mm  %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  number_with_precision(@inspection_4mm.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%=  @fop %></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-r-4"><%=  number_with_precision(@fop.to_f / @visit_monthly ,precision: 2)   %></td>
+
+                                  <% end %>
+                                  
+                                </tr> 
+                              <% end %>                               
+                            <% end %>                      
+                            </tbody>
+                            <tfoot>
+                              <!-- TOTAL -->
+                              <% if available_data > 0 %>
+                               <tr>
+                                <th id="total" class="sticky bg-white left-0 z-2 px-6 py-3 text-xs font-medium text-gray-500 uppercase text-center tracking-wider border border-l-4"><%= t("monthly.Total") %></th>
+                                <td class="sticky bg-white z-2 px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4" style="left:103px"><%= @visit_by_year.count    %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @first_visit_of_year    %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@first_visit_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @second_of_year    %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@second_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @treatment_plan_of_year    %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@treatment_plan_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @implant_correction_of_year    %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@implant_correction_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @maintenance_of_year %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@maintenance_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @treatment_plan_date_of_year   %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@treatment_plan_date_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @suspension_of_year    %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@suspension_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @p_second_of_year   %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@p_second_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @inspection_3_of_year    %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@inspection_3_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @confirmation_end_of_year    %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@confirmation_end_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @maintenance_visit_of_year    %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@maintenance_visit_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @medical_tube_of_year    %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@medical_tube_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @next_reservation_date_of_year   %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@next_reservation_date_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @p_heavy_defense_target_of_year    %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@p_heavy_defense_target_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @whitening_of_year %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@whitening_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @p_heavy_defense_calculation_of_year %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@p_heavy_defense_calculation_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @prosthodontics_of_year    %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@prosthodontics_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @mt_tooth_number_of_year    %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@mt_tooth_number_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @malocclusion_of_year %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@malocclusion_of_year.to_f / @visit_yearly ,precision: 2)  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @inspection_4mm_of_year %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= number_with_precision(@inspection_4mm_of_year.to_f / @visit_yearly ,precision: 2)  %></td> 
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @fop_of_year %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-r-4"><%= number_with_precision(@fop_of_year.to_f / @visit_yearly ,precision: 2)  %></td>                               
+                              </tr>
+                              
+                              <!-- AVERAGE -->
+                              <tr>
+                                <th id="total" class="sticky bg-white left-0 z-2 px-6 py-3 text-xs font-medium text-gray-500 uppercase text-center tracking-wider border border-l-4 bg-white">平均</th> <!-- Average -->
+                                <td class="sticky bg-white z-2 px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white" style="left:103px"><%= number_with_precision(@visit_by_year.count.to_f/ available_data, :precision => 2) %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@first_visit_of_year.to_f / available_data ,precision: 2) %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@second_of_year.to_f/available_data, :precision => 2) %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=   %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@treatment_plan_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=   %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@implant_correction_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=   %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@maintenance_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=   %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@treatment_plan_date_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@suspension_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=   %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@p_second_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=   %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@inspection_3_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=   %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@confirmation_end_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=   %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@maintenance_visit_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@medical_tube_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@next_reservation_date_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@p_heavy_defense_target_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@whitening_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%= %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@p_heavy_defense_calculation_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@prosthodontics_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@mt_tooth_number_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=   %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@malocclusion_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=   %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@inspection_4mm_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  %></td>
+
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= number_with_precision(@fop_of_year.to_f / available_data ,precision: 2)  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-r-4"><%=   %></td>                              
+                              </tr>
+                            <% end %>
+                            </tfoot>                           
+                  </table>
+                  <% if available_data == 0 %>     
+                      <h1 class="mx-2 my-2 text-red-900">No Result Found!!</h1>
+                  <% end %>
+              </div>
+              </div>
+              <!-- COURSE --> 
+              <h1 class="heading-new-course text-2xl p-4 bg-gray-300 mt-4"><%= t("monthly.Course") %></h1>
+              <div class="overflow-x-auto bg-gray-300 pb-2 max-h-[500px]">
+              
+              <div  id="course-div">
+                        <table class="min-w-full divide-y divide-gray-200">
+                          <thead class="bg-[#fff] sticky top-0 z-10">
+                              <tr>
+                                <th scope="col" rowspan="2" class="sticky bg-[#fff] left-0 z-2 px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4"><%= t("monthly.Year Month") %></th>
+                                <th scope="col" rowspan="2" class="sticky bg-[#fff] z-2 px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4" style="left:95px"> <%= t("monthly.Number of New Cases") %> </th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-blackuppercase text-center tracking-wider border border-l-4" colspan="2"><%= t("monthly.Course Unknown") %></th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-blackuppercase text-center tracking-wider border border-l-4" colspan="2"> A</th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-blackuppercase text-center tracking-wider border border-l-4" colspan="2"> B </th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-blackuppercase text-center tracking-wider border border-l-4" colspan="2"> C</th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-blackuppercase text-center tracking-wider border border-l-4" colspan="2"> D </th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-blackuppercase text-center tracking-wider border border-l-4" colspan="2"> E </th>
+                                <th scope="col" class="px-6 py-3 text-xs font-medium text-blackuppercase text-center tracking-wider border border-l-4 border-r-4" colspan="2"> <%= t("monthly.Total") %> </th>
+                              </tr>
+                            </thead>
+                              <tbody>
+                                <% @available_course_data = 0 %>
+                                <% @hash.each do |year,v| %>
+                                  <% @hash[year].each do |month| %>
+                                    <% course(@courses,month,year) %>
+                                    
+                                    <% if @courses_by_month.present? %>
+                                    <% @available_course_data += 1 %>
+                                  
+                                    <tr>
+                                    <th scope="col" class="sticky bg-white left-0 z-2 px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-l-4 bg-white"><%= "#{year}/#{month}" %></th>
+                                    
+                                    <th scope="col" class="sticky bg-white z-2 px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-l-4 bg-white" style="left:105px"><%= @courses_by_month.count %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-l-4 bg-white"><%= @unknown_course %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white"><%= number_with_precision(@unknown_course.to_f / @monthly_course_count,precision: 2) %></th>
+
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-l-4 bg-white"><%= @course_a %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white"><%= number_with_precision(@course_a.to_f / @monthly_course_count,precision: 2) %></th>
+
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-l-4 bg-white"><%= @course_b %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white"><%= number_with_precision(@course_b.to_f / @monthly_course_count,precision: 2) %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-l-4 bg-white"><%= @course_c %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white"><%= number_with_precision(@course_c.to_f / @monthly_course_count,precision: 2) %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-l-4 bg-white"><%= @course_d %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white"><%= number_with_precision(@course_d.to_f / @monthly_course_count,precision: 2) %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-l-4 bg-white"><%= @course_e %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white"><%= number_with_precision(@course_e.to_f / @monthly_course_count,precision: 2) %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-l-4 bg-white"><%= @monthly_total %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-r-4"><%= number_with_precision(@monthly_total.to_f / @monthly_course_count,precision: 2) %></th>
+                                  
+                                    </tr>
+                                    <% end %>
+                                  <% end %> 
+                                <% end %>
+                              </tbody>
+                            <tfoot>
+                              <!-- TOTAL -->
+                              <% if @available_course_data > 0 %> 
+                              <% course_total_average(@courses,@available_course_data) %>
+                              <tr>
+
+                                  <th id="total" class="sticky bg-white left-0 z-2 px-6 py-3 text-xs font-medium text-gray-500 uppercase text-center tracking-wider border border-l-4 bg-white"><%= t("monthly.Total") %></th>
+                                  
+                                  <td class="sticky bg-white px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center" style="left:105px"><%= @courses_by_year.count    %></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @unknown_course_year %></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white text-center"><%= number_with_precision(@unknown_course_year.to_f / @yearly_course_count ,precision: 2) %></td>
+
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @course_a_year    %></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white text-center"><%= number_with_precision(@course_a_year.to_f / @yearly_course_count ,precision: 2)  %></td>
+
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @course_b_year    %></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white text-center"><%= number_with_precision(@course_b_year.to_f / @yearly_course_count ,precision: 2)  %></td>
+
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @course_c_year    %></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white text-center"><%= number_with_precision(@course_c_year.to_f / @yearly_course_count ,precision: 2)  %></td>
+
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @course_d_year    %></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white text-center"><%= number_with_precision(@course_d_year.to_f / @yearly_course_count ,precision: 2)  %></td>
+
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @course_e_year %></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white text-center"><%= number_with_precision(@course_e_year.to_f / @yearly_course_count ,precision: 2)  %></td>
+
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @yearly_total %></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white text-center border-r-4"><%= number_with_precision(@yearly_total.to_f / @yearly_course_count ,precision: 2)  %></td>
+                                
+                                 
+                              </tr>
+                              
+                              <!-- AVERAGE -->
+                              <tr>
+                                <th id="total" class="sticky bg-white left-0 z-2 px-6 py-3 text-xs font-medium text-gray-500 uppercase text-center tracking-wider border border-l-4 bg-white"><%= t("monthly.Average") %></th>
+
+                                <td class="sticky bg-white px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white" style="left:105px"><%= @average_new_cases %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @average_unknown_courses %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @average_course_a %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=   %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @average_course_b %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=   %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @average_course_c %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=   %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @average_course_d %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @average_course_e %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white"><%=   %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white"><%= @average_yearly_total %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-r-4"><%=  %></td>
+                                
+                              </tr>
+                              <% end %>
+
+                            </tfoot>          
+                            </tbody>                                    
+                        </table>  
+                        <% unless @available_course_data > 0 %>     
+                          <h1 class="mx-2 my-2 text-red-900">No Result Found!!</h1>
+                        <% end %>                 
+              </div>
+              </div>
+
+            <!-- P COURSE -->
+            <h1 class="heading-new-pcourse text-2xl p-4 bg-gray-300 mt-4"><%= t("monthly.P Course") %></h1>
+            <div class="bg-gray-300 pb-2 overflow-x-auto max-h-[500px]">
+            <div  id="pcourse-div">
+                      <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-[#fff] sticky top-0 z-10">
+                           <tr>
+                             <th scope="col" class="sticky bg-[#fff] left-0 z-2 px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4"><%= t("monthly.Year Month") %></th>
+                             <th scope="col" class="sticky bg-[#fff] z-2 px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4" style="left:103px"><%= t("monthly.Number of New Cases") %></th>
+                             <th scope="col" class="px-6 py-3 text-xs font-medium text-blackuppercase text-center tracking-wider border border-l-4" colspan="2"><%= t("monthly.P Course") %></th>
+                             <th scope="col" class="px-6 py-3 text-xs font-medium text-blackuppercase text-center tracking-wider border border-l-4" colspan="2">a</th>
+                             <th scope="col" class="px-6 py-3 text-xs font-medium text-blackuppercase text-center tracking-wider border border-l-4" colspan="2">b</th>
+                             <th scope="col" class="px-6 py-3 text-xs font-medium text-blackuppercase text-center tracking-wider border border-l-4 border-r-4" colspan="2">c</th>
+                           </tr>
+                         </thead>
+                            <tbody class="bg-blackdivide-y divide-gray-200">
+                                <% @available_p_course_data = 0 %>
+                                <% @hash.each do |year,v| %>
+                                  <% @hash[year].each do |month| %>
+                                    <% p_course(@courses,month,year) %>
+                                    <% if @p_courses_by_month.present? %>
+                                    <% @available_p_course_data += 1 %>
+                                    <tr>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-l-4 bg-white"><%= "#{year}/#{month}" %></th>
+
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-l-4" ><%= @p_courses_by_month.count %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-l-4" ><%= @monthly_p_courses %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white" ><%= number_with_precision(@monthly_p_courses.to_f / @p_courses_month_count.to_f ,precision: 2) %></th>
+
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-l-4 bg-white" ><%= @p_course_ah %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white" ><%= number_with_precision(@p_course_ah.to_f / @p_courses_month_count.to_f ,precision: 2) %></th>
+
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-l-4 bg-white" ><%= @p_course_I %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white" ><%= number_with_precision(@p_course_I.to_f / @p_courses_month_count.to_f ,precision: 2) %></th>
+
+                                    
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-l-4 bg-white" ><%= @p_course_hare %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border bg-white border-r-4" ><%= number_with_precision(@p_course_hare.to_f / @p_courses_month_count.to_f ,precision: 2) %></th>
+                                    
+                                    </tr>
+                                    <% end %>
+                                  <% end %> 
+                                <% end %>
+                            <tfoot>
+                              <!-- TOTAL -->
+                              <% if @available_p_course_data > 0 %>
+                              <% pcourse_total_average(@courses,@available_p_course_data) %>
+                              <tr>
+                                  <th id="total" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-center tracking-wider border border-l-4 bg-white text-center"><%= t("monthly.Total") %></th>
+                                  
+
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @p_courses_by_year.count    %></td>
+
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @total_p_courses %></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white text-center"><%= %></td>
+
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @p_course_ah_year    %></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white text-center"><%= number_with_precision(@p_course_ah_year.to_f / @p_courses_year_count.to_f ,precision: 2) %></td>
+
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @p_course_I_year    %></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white text-center"><%= number_with_precision(@p_course_I_year.to_f / @p_courses_year_count.to_f ,precision: 2) %></td>
+
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @p_course_hare_year    %></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white text-center border-r-4"><%= number_with_precision(@p_course_hare_year.to_f / @p_courses_year_count.to_f ,precision: 2) %></td>
+                                
+                              </tr>
+                              
+                              <!-- AVERAGE -->
+                              <tr>
+                                
+                                <th id="total" class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-center tracking-wider border border-l-4 bg-white text-center">平均</th> <!-- Average -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @average_cases %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @average_p_courses %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white text-center"><%=  %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @average_course_ah %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white text-center"><%=   %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @average_course_I %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white text-center"><%=   %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white border-l-4 bg-white text-center"><%= @average_course_hare %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border bg-white text-center border-r-4"><%=   %></td>
+                                
+                              </tr>
+                            <% end %>
+                            </tfoot>          
+                          </tbody>                                                  
+                     </table> 
+                     <% unless @available_p_course_data > 0 %>     
+                      <h1 class="mx-2 my-2 text-red-900">No Result Found!!</h1>
+                     <% end %>                 
+                  </div> 
+                  </div>            
+              </div>             
+          </div>            
+        </div>
+      </div>
+  </div>
+</main>
+<script>
+  $(document).ready(function(){
+    $("#button-course").click(function(){
+      $(".heading-new-patient").hide();
+      $(".heading-new-pcourse").hide();
+      $(".heading-new-course").show();
+      $("#course-div").show();
+      $("#pcourse-div").hide();
+      $("#new-patient-progress").hide();
+    });
+  });
+
+  $(document).ready(function(){
+    $("#button-pcourse").click(function(){
+      $(".heading-new-patient").hide();
+      $(".heading-new-pcourse").show();
+      $(".heading-new-course").hide();
+      $("#course-div").hide();
+      $("#pcourse-div").show();
+      $("#new-patient-progress").hide();
+    });
+  });
+
+  $(document).ready(function(){
+    $("#button-new").click(function(){
+    $(".heading-new-patient").show();
+      $(".heading-new-pcourse").hide();
+      $(".heading-new-course").hide();
+      $("#course-div").hide();
+      $("#pcourse-div").hide();
+      $("#new-patient-progress").show();
+    });
+  });
+</script>

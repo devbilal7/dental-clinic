@@ -1,0 +1,144 @@
+<div class="mx-auto mt-5">
+  <h1 class="font-bold text-4xl"><%= t("newuser.New User")%></h1>
+    
+    <%= form_with(model: @user, url: admin_update_registrations_path(id: @user.id), class: "contents") do |form| %>
+
+        <%= form.hidden_field :role,value: params[:role] , id: "role"%>    
+        <div class="border border-solid border-gray-300 mb-5 ">
+                <div class="w-full bg-gray-100 p-3">
+                    <%= t("patient.Usage Classification") %>
+                </div>
+            <fieldset class="p-3">
+
+                <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t("patient.User Code") %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= form.text_field :user_no,value: @user.id,disabled: true, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+                        </div>
+                        </div>
+                </div>
+
+                <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t("patient.Full Name") %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= form.text_field :first_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+                            <%= form.text_field :last_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                </div>
+
+                <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t("patient.Kana Name") %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= form.text_field :kana_first_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+                            <%= form.text_field :kana_last_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                </div>
+            </fieldset>
+        </div>
+                    
+        <!-- ID/Password -->
+        <div class="border border-solid border-gray-300 mb-5 ">
+                <div class="w-full bg-gray-100 p-3">
+                    <%= t("patient.ID / Password") %>
+                </div>
+            <fieldset class="p-3">
+
+                <div class="my-5 d-flex">        
+                    <div class="flex flex-wrap">
+                        <div class="flex items-center w-32">
+                        <%= t("patient.Authority") %>
+                    </div>
+                    <div class=" col-span-4">
+                        <%= form.select :role, User.roles.keys, {:include_blank => "Select"},class:"bg-teal p-3 rounded text-black shadow-inner w-full" %>
+                        <% @user.errors.full_messages_for(:role).each do |message| %>
+                            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+                        <% end %>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="my-5 d-flex">        
+                    <div class="flex flex-wrap">
+                        <div class="flex items-center w-32">
+                        <%= t("patient.ID") %>
+                    </div>
+                    <div class=" col-span-4">
+                        <div class="my-5">
+                            <%= form.email_field :email, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% @user.errors.full_messages_for(:email).each do |message| %>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+                            <% end %>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="my-5 d-flex">        
+                    <div class="flex flex-wrap">
+                        <div class="flex items-center w-32">
+                        <%= t("patient.Password") %>
+                    </div>
+                    <div class=" col-span-4">
+                        <%= form.password_field :password, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                        <% @user.errors.full_messages_for(:password).each do |message| %>
+                            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+                        <% end %> 
+                    </div>
+                    </div>
+                </div>
+
+                <div class="my-5 d-flex">        
+                    <div class="flex flex-wrap">
+                        <div class="flex items-center w-32">
+                        <%= t("patient.Password Confirmation") %>
+                    </div>
+                    <div class=" col-span-4">
+                        <%= form.password_field :password_confirmation, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                        <% @user.errors.full_messages_for(:password_confirmation).each do |message| %>
+                            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+                        <% end %>
+                    </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="border border-solid border-gray-300 mb-5 ">
+                <div class="w-full bg-gray-100 p-3">
+                    <%= t("patient.Usage Classification") %>
+                </div>
+            <fieldset class="p-3">
+                <div class="my-5 d-flex">        
+                    <div class="flex flex-wrap">
+                        <div class="flex items-center w-32">
+                        <%= t("patient.Usage Classification") %>
+                    </div>
+                    <div class=" col-span-4">
+                        <%= form.select :usage_classification, User.usages.keys, {:include_blank => "Select"},class:"bg-teal p-3 rounded text-black shadow-inner w-full" %>
+                        <% @user.errors.full_messages_for(:usage_classification).each do |message| %>
+                            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+                        <% end %>
+                    </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="inline">
+            <%= form.submit t("newuser.Create User"), class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer"%>
+        </div>
+    <% end %>
+
+    <%= link_to t("newuser.Back to Patients"), user_index_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+</div>

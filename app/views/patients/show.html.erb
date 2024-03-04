@@ -1,0 +1,149 @@
+<div class="w-full flex">
+  <div class="m-4 mx-auto grid grid-cols-12 gap-4 ">
+    <div class="col-span-12 md:col-span-7 shadow mt-5 px-5 py-5">
+
+      <p class="my-5">
+      <h3 class="inline-flex px-6 py-4 text-sm text-gray-500">
+      <strong class="block font-medium mb-1 mr-4"><%= t("patient.First Name") %>:</strong>
+          <%= @patient.first_name %>
+      </h3>
+      </p>
+
+      <p class="my-5">
+      <h4 class="inline-flex px-6 py-4 text-sm text-gray-500">
+      <strong class="block font-medium mb-1 mr-4"><%= t("patient.Last Name") %>:</strong>
+          <%= @patient.last_name %>
+      </h4>
+      </p>
+
+      <p class="my-5">
+      <h4 class="inline-flex px-6 py-4 text-sm text-gray-500">
+      <strong class="block font-medium mb-1 mr-4">Visit Route:</strong>
+          <%= @patient.patient_visit_route %>
+      </h4>
+      </p>
+
+      <p class="my-5">
+      <h4 class="inline-flex px-6 py-4 text-sm text-gray-500">
+      <strong class="block font-medium mb-1 mr-4">Panorama:</strong>
+          <%= @patient.panorama ? "Yes" : "NO" %>
+      </h4>
+      </p>
+
+      <p class="my-5">
+      <h4 class="inline-flex px-6 py-4 text-sm text-gray-500">
+      <strong class="block font-medium mb-1 mr-4">Caries Check:</strong>
+          <%= @patient.caries_check ? "Yes" : "NO" %>
+      </h4>
+      </p>
+
+      <p class="my-5">
+      <h4 class="inline-flex px-6 py-4 text-sm text-gray-500">
+      <strong class="block font-medium mb-1 mr-4">Course:</strong>
+          <%= @patient.course %>
+      </h4>
+      </p>
+
+      <p class="my-5">
+      <h4 class="inline-flex px-6 py-4 text-sm text-gray-500">
+      <strong class="block font-medium mb-1 mr-4">P Course:</strong>
+          <%= @patient.p_course %>
+      </h4>
+      </p>
+
+      <p class="my-5">
+      <h4 class="inline-flex px-6 py-4 text-sm text-gray-500">
+      <strong class="block font-medium mb-1 mr-4">Unknown Course:</strong>
+          <%= @patient.unknown_course %>
+      </h4>
+      </p>
+
+      <p class="my-5">
+      <h4 class="inline-flex px-6 py-4 text-sm text-gray-500">
+      <strong class="block font-medium mb-1 mr-4">DR:</strong>
+          <%= @patient.dentist.first_name %>
+      </h4>
+      </p>
+
+      <p class="my-5">
+      <h4 class="inline-flex px-6 py-4 text-sm text-gray-500">
+      <strong class="block font-medium mb-1 mr-4">DH:</strong>
+          <%= @patient.dentist_hygienist.first_name %>
+      </h4>
+      </p>
+
+      <p class="my-5">
+      <h4 class="inline-flex px-6 py-4 text-sm text-gray-500">
+      <strong class="block font-medium mb-1 mr-4">TC:</strong>
+          <%= @patient.treatment_coordinator.first_name %>
+      </h4>
+      </p>
+
+      <p class="my-5">
+      <h4 class="inline-flex px-6 py-4 text-sm text-gray-500">
+      <strong class="block font-medium mb-1 mr-4">First Visit:</strong>
+          <%= @patient.multiple_visit_routes.last.visit_route.first_visit if @patient.multiple_visit_routes.present? %>
+      </h4>
+      </p>
+
+      <p class="my-5">
+      <h4 class="inline-flex px-6 py-4 text-sm text-gray-500">
+      <strong class="block font-medium mb-1 mr-4">Next Reservation:</strong>
+          <%= @patient.multiple_visit_routes.last.visit_route.next_reservation_date if @patient.multiple_visit_routes.present? %>
+      </h4>
+      </p>
+
+      <p class="my-5">
+      <h4 class="inline-flex px-6 py-4 text-sm text-gray-500">
+      <strong class="block font-medium mb-1 mr-4">Memo:</strong>
+          <%= @patient.note %>
+      </h4>
+      </p>
+
+      <%= link_to 'Edit this patient', edit_patient_path(@patient), class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+      <div class="inline-block ml-2">
+        <%= button_to t("patient.Delete"), patient_path(@patient), method: :delete, data: { confirm: "この患者を削除してもよろしいですか？" }, class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
+      </div>
+      <%= link_to t("patient.Back"), patients_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    </div>
+
+  <!-- 
+    <div class="col-span-12 md:col-span-3 h-96 overflow-y-scroll">
+      <div class="ml-5 mt-6 text-center">
+        <% if notice.present? %>
+          <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+        <% end %>
+        <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="underline bg-gray-50">
+                    <tr>
+                      <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Treatment Dates</th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <% @patient.appointment.sort.reverse.each do |date| %>
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= date %></td>
+                    </tr>
+                    <% end %>
+                  </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-span-12 md:col-span-2 ml-5 mt-6">  
+      <h1 id="appointment_button" class="inline-flex items-center px-4 py-2 border border-cyan-300 shadow-sm text-sm font-medium rounded-md text-white bg-cyan-500 hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">Next Appointment</h1>
+      <div id="appointment" class="hidden">
+        <%= render "appointment" %>
+      </div>
+    </div>
+    -->
+  </div>
+</div>
+
+<script>
+$(document).ready(function(){
+  $("#appointment_button").click(function(){
+    $("#appointment").toggle();
+  });
+});
+</script>

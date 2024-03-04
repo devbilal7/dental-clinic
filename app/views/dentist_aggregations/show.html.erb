@@ -1,0 +1,15 @@
+<div class="mx-auto mt-20 flex">
+  <div class="mx-auto w-full max-w-7xl">
+    <% if notice.present? %>
+      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+    <% end %>
+
+    <%= render @dentist_aggregation %>
+
+    <%= link_to 'Edit this dentist_aggregation', edit_dentist_aggregation_path(@dentist_aggregation), class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <div class="inline-block ml-2">
+      <%= button_to 'Destroy this dentist_aggregation', dentist_aggregation_path(@dentist_aggregation), method: :delete, class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
+    </div>
+    <%= link_to 'Back to dentist_aggregations', dentist_aggregations_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+  </div>
+</div>

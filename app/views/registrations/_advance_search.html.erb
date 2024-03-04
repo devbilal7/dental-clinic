@@ -1,0 +1,73 @@
+    <div class="w-90 h-full shadow-md bg-white p-8 rounded-xl">
+      <span class="remove-popup absolute top-0 right-0 px-4 py-3">
+          <svg class="remove-popup fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+      </span>
+      <%= form_tag({:controller => "registrations", :action => "index"}, {:method => :get, id: "advance-search"}) do %>
+        
+        <div class="md:grid md:grid-cols-4 gap-2 mb-5 flex items-center flex-wrap " style="grid-template-columns: 0fr 1fr 1fr 1fr;white-space: nowrap;" >
+           
+          User Number
+          <%= search_field_tag :user_number1, params[:user_number1], class:"md:col-span-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md clear",placeholder: t("patient.Starting Number")  %>
+          <%= search_field_tag :user_number2, params[:user_number2], class:"md:col-span-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md clear",placeholder: t("patient.Ending Number") %>
+          <div class="col-span-1"></div>
+
+          User Name
+          <%= search_field_tag :user_name, params[:user_name], class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md clear px-3 py-2" %>
+          <div class="col-span-1"></div>
+
+          Usage Classification
+          <%= search_field_tag :usage_classification, params[:usage_classification], class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md clear px-3 py-2" %>
+          <div class="col-span-1"></div>
+
+          Postal Code 
+          <%= search_field_tag :postal_code, params[:postal_code], class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md clear px-3 py-2" %>
+          <div class="col-span-1"></div>
+
+          Municipalities
+          <%= search_field_tag :municipalities, params[:municipalities], class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md clear px-3 py-2" %>
+          <div class="col-span-1"></div>
+
+          Address
+          <%= search_field_tag :address, params[:address], class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md clear px-3 py-2" %>
+          <div class="col-span-1"></div>
+
+          Building Name
+          <%= search_field_tag :building_name, params[:building_name], class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md clear px-3 py-2" %>
+          <div class="col-span-1"></div>
+
+          Phone Number
+          <%= search_field_tag :phone_number, params[:phone_number], class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md clear px-3 py-2" %>
+          <div class="col-span-1"></div>
+
+          Fax Number
+          <%= search_field_tag :fax_number, params[:fax_number], class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md clear px-3 py-2" %>
+          <div class="col-span-1"></div>
+
+          Representative
+          <%= search_field_tag :representative_name, params[:representative_name], class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md clear px-3 py-2" %>
+          <div class="col-span-1"></div>
+
+          Person Incharge 1
+          <%= search_field_tag :person_incharge1, params[:person_incharge1], class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md clear px-3 py-2" %>
+          <div class="col-span-1"></div>
+
+          Person Incharge 2
+          <%= search_field_tag :person_incharge2, params[:person_incharge2], class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md clear px-3 py-2" %>
+          <div class="col-span-1"></div>
+
+          Region
+          <%= select_tag(:region, options_for_select(Clinic.regions.sort.to_h.keys.map {|w| [w.humanize, w]}),prompt: "Select", class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md clear px-3 py-2") %>
+          <div class="col-span-1"></div>
+
+      </div>
+    <% end %>
+    <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+      <button type="button" id="advance-search-button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-black hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"><%= t("patient.Search") %></button>
+      <button type="button" id="clear" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-black hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"><%= t("patient.Clear") %></button>
+    </div>
+  </div>
+<script>
+  $(".remove-popup").click(() => {
+    $('#advance-search-popup').removeClass("showPopUp");
+  })
+</script>

@@ -1,0 +1,35 @@
+<main class="flex-1 pb-8">
+    <div class="max-w-full mx-auto mt-20 px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8 mr-8">
+        <%= form_tag({:controller => "dentist_aggregations", :action => "annual_tabulation_graph"}, {:method => :get}) do %>
+            <div class="md:grid md:grid-cols-7 gap-2 mb-5">   
+            <%= label_tag t("dr.Period"), nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700" %>
+
+            <%= select_year(Date.today, start_year: Date.today.strftime("%Y").to_i, end_year: 2000,prompt: 'Choose year') %>
+                                
+            <%= submit_tag(t("dr.Filter"), :id=>"search-button",  class:"cursor-pointer w-24 col-span-1 active items-center px-4 py-2 border border-transparent font-small rounded-md shadow-xl text-white bg-[#43c17a] hover:bg-green-500" , :name=>"submit") %>
+            <%= link_to t("dr.Reset"), annual_tabulation_graph_dentist_aggregations_path, class:"w-24 col-span-1 active items-center px-4 py-2 border border-transparent font-small rounded-md shadow-xl text-white bg-red-500 hover:bg-red-600" %>
+            </div>    
+        <% end %>
+        <div class="flex flex-col">
+            <div class="border px-5 py-5">
+            <%= line_chart [
+                {
+                    name: "保険収益" , type: "column",color: "blue", data: @dentist_aggregations.where('extract(year from created_at) = ?', @year).group_by_month(:created_at).sum(:miscellaneous_income) # Insurance Amount
+                    },
+                    {
+                        name: "自費收入", type: "column",color: "orange", data: @dentist_aggregations.where('extract(year from created_at) = ?', @year).group_by_month(:created_at).sum(:own_expense_amount_money) # Self Paid Income
+                    },
+                    {
+                        name: "保険人数 ", type: "line",color: "#ffcc00", data: @dentist_aggregations.where('extract(year from created_at) = ?', @year).group_by_month(:created_at).sum(:insurance_peoples) # Number of people insured
+                    },
+                    {
+                        name: "白費人数", type: "line",color: "gray", data: @dentist_aggregations.where('extract(year from created_at) = ?', @year).group_by_month(:created_at).sum(:own_expense_people) # Self pay people
+                    }
+                ],
+                adapter: "highcharts"
+            %>
+            </div>
+        </div>
+    </div>
+</main>
+

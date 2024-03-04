@@ -1,0 +1,41 @@
+<%= search_form_for @q,url: client_management_admin_managements_path,class:"flex mb-4" do |f| %>
+    <div class="mb-3 xl:w-96">
+        <%= f.hidden_field :search, value: "true" %>
+        <%= f.search_field :region_cont, id:"search-field", class:"opacity-0" %>
+    </div>
+<% end %>
+<div>
+    <!-- Table -->
+    <div class="flex flex-col">
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        
+            <div class="shadow border-b border-gray-200 sm:rounded-lg">
+                <div class="bg-gray-200 p-2 rounded-t">都道府県でフィルタリング</div><!-- Filter by Prefectures -->       
+                <table class="border min-w-full divide-y divide-gray-200">
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <% @regions.each do |key,val| %>
+                        <tr>
+                        <td class="px-2 py-[2px] whitespace-nowrap text-[12px] font-medium text-gray-900 border"><%= key %></td>
+                        <% val.each do |region| %>
+                            <td class="px-2 py-[2px] whitespace-nowrap text-[12px] font-medium text-sky-600">
+                                <button onclick="searchByRegion('<%= region %>')"><%= region %></button>
+                            </td>
+                        <% end %>
+                        </tr>
+                        <% end %>
+                        <!-- More people... -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function searchByRegion(region)
+    {
+        $("#search-field").val(region);
+        $("form").submit();
+    }
+</script>
+

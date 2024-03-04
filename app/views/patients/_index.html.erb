@@ -1,0 +1,96 @@
+
+<div class="flex flex-col overflow-x-auto w-[calc(100%-52px)]">
+          <div class="max-h-[590px]">          
+            <div class="shadow border-b border-gray-200 sm:rounded-lg">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-[#fff] whitespace-nowrap sticky top-0 z-10">
+                  <tr>
+                    <th scope="col" class="sticky bg-white left-0 z-2 px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-l-4 ">N0</th>
+                    <th scope="col" class="sticky bg-white z-2 px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-l-4  underline" style="left:65px">
+                      <%= sort_link(@q, :patient_number, t("patient.Patient Number"), default_order: :desc) %>
+                    </th>
+                    <th scope="col" class="sticky bg-white z-2 px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-l-4 " style="left:172px"><%= t("patient.Patient Name") %></th>
+                    
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4 "><%= t("patient.Visit Route") %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4 "><%= t("patient.Dr") %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4 "><%= t("patient.Dh") %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4 ">TC</th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4 "><%= t("patient.Panorama") %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4 "><%= t("patient.Calies Check") %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4 "><%= t("patient.Course") %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4 "><%= t("patient.P Course") %></th>
+                    
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4  underline"><%= sort_link(@q, :first_visit, t("patient.First Visit"), default_order: :desc) %></th>
+                    
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4  underline"><%= sort_link(@q, :next_reservation_date, t("patient.Next Reservation Date"), default_order: :desc) %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4  underline"><%= sort_link(@q, :last_visit_date, t("patient.Last Visit Date"), default_order: :desc) %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4"><%= t("patient.Memo") %></th>
+                    <% unless params[:format] == "pdf" %>
+                      <th scope="col" class="relative px-6 py-3 border border-l-4">
+                          <span class="sr-only">Action</span>
+                      </th>
+                    <% end %>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200" id="table_body">
+                  <% @patients.uniq.each do |patient| %>
+                    <tr>
+                      <td class="sticky bg-white left-0 z-2 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4"><%= @patient_no + 1 %></td>
+                      <td class="sticky bg-white z-2 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4" style="left:65px"><%= patient.patient_number %></td>
+                      
+                      <td class="sticky bg-white z-2 px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600 border border-l-4  patient_name cursor-pointer" onclick="editpatient(<%= patient.id %>)"  tabindex="14" style="left:172px"><%= patient.full_name %></td>
+
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= patient.patient_visit_route %></td>
+                     
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= patient.dentist.full_name if patient.dentist.present?  %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= patient.dentist_hygienist.full_name if patient.dentist.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= patient.treatment_coordinator.full_name if patient.treatment_coordinator.present? %></td>
+
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 ">
+                        <%= patient.panorama ? '<i><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 109.76" style="margin: auto; width: 15px; enable-background:new 0 0 122.88 109.76" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#01A601;}</style><g><path class="st0" d="M0,52.88l22.68-0.3c8.76,5.05,16.6,11.59,23.35,19.86C63.49,43.49,83.55,19.77,105.6,0h17.28 C92.05,34.25,66.89,70.92,46.77,109.76C36.01,86.69,20.96,67.27,0,52.88L0,52.88z"></path></g></svg></i>'.html_safe : "" %>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 ">
+                        <%= patient.caries_check ? '<i><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 109.76" style="margin: auto; width: 15px; enable-background:new 0 0 122.88 109.76" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#01A601;}</style><g><path class="st0" d="M0,52.88l22.68-0.3c8.76,5.05,16.6,11.59,23.35,19.86C63.49,43.49,83.55,19.77,105.6,0h17.28 C92.05,34.25,66.89,70.92,46.77,109.76C36.01,86.69,20.96,67.27,0,52.88L0,52.88z"></path></g></svg></i>'.html_safe : "" %>
+                      </td>
+
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= patient.course %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= patient.p_course %></td>
+
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= patient.multiple_visit_routes.last.visit_route.first_visit if patient.multiple_visit_routes.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= patient.multiple_visit_routes.last.visit_route.next_reservation_date if patient.multiple_visit_routes.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= patient.last_visit_date %></td>
+
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 tooltip border border-l-4">
+                      <% if patient.note.present? %>
+                        <%= patient.note.slice(0..10) %>
+                        <% unless params[:format] == "pdf" %>
+                        <p class="tooltiptext border-l-4">
+                          <%= patient.note %>
+                        </p>
+                        <% end %>
+                      <% end %>
+                      </td>
+                      <% unless params[:format] == "pdf" %>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium border border-l-4 ">
+                          <%= button_to t("patient.Delete"), patient_path(patient), method: :delete, data: { confirm: "この患者を削除してもよろしいですか？" }, tabindex: "15", class: "mt-2 rounded-lg py-3 px-5 text-white-500 bg-red-500 hover:bg-red-600 font-medium cursor-pointer" %>
+                        </td>
+                      <% end %>
+                    </tr>
+                    <% @patient_no += 1 %>
+                  <% end %>
+                    <!-- More people... -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>

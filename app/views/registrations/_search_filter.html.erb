@@ -1,0 +1,48 @@
+<%= form_tag({:controller => "registrations", :action => params[:action]}, {:method => :get}) do %>
+     <div class="flex">
+
+       <div class="md:grid-cols-8 flex-1">
+            <fieldset class=" border-solid border-gray-300 rounded p-5 mt-3 mb-6 bg-[#c0e7eb] rounded-lg">
+            <legend class="text-sm text-black text-bold text-md rounded-md rounded-full border-2 border-green px-8 py-1 h-8 bg-[#fff]"><%= t("patient.Search Conditions") %></legend>
+
+            <div class="grid grid-cols-5 gap-3">
+     
+            <div class=" col-span-4">
+
+            <div class="row-first md:grid grid-cols-7 gap-1  mb-3" style="grid-template-columns: auto 2fr 0fr 2fr 1fr 1fr 2fr 0fr;align-items: center;" >
+            
+            <%= label_tag t("patient.User No"), nil,class: "mt-3 mr-3 md:col-span-1 block text-sm font-medium text-gray-700" %>
+            <%= search_field_tag :user_number1, "", value: params[:user_number1], class:"md:col-span-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md w-full",placeholder: t("patient.Starting Number") %>
+            ~
+            <%= search_field_tag :user_number2, "", value: params[:user_number2], class:"md:col-span-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md w-full",placeholder: t("patient.Ending Number")%>
+            
+            <div class="col-span-1"></div>
+            <%= label_tag t("patient.Prefectures") , nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700" %>
+            <%= select_tag(:region, options_for_select(Clinic.regions.sort.to_h.keys.map {|w| [w.humanize, w]}),  prompt: "Select"  , class:"w-full py-2 md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md text-center") %>
+          </div>
+
+            <div class="md:grid md:grid-cols-5 gap-2" style="grid-template-columns: auto 4fr 0fr 0fr 1fr 1fr 1.35fr;white-space: nowrap;" >         
+            <%= label_tag t("patient.Clinic Name"), nil,class: "mt-3 mr-1 md:col-span-1 block text-sm font-medium text-gray-700" %>
+            <%= search_field_tag :user_name, "",value: params[:user_name], class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md",placeholder: t("patient.Search by Patient Name") %>
+
+            <div class="col-span-1"></div>
+            <%= label_tag t("patient.Usage Classification"), nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700" %>
+            <%= select_tag(:usage_classification, options_for_select(User.usages.keys,selected: params[:usage_classification]),prompt: "Select", class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md text-center") %>
+            
+  
+            </div>
+            </div>
+            <div class="">
+            <div class="flex">
+            <div class="col-span-5 w-full mt-14  flex gap-4">
+            <%= submit_tag(t("patient.Search"), :id=>"button", :class=>"col-span-1 active items-center text-center py-1 border-2 border-transparent  font-small rounded-md shadow-xl text-white bg-gray-900 hover:bg-gray-700 cursor-pointer  w-full", :name=>"submit") %>
+            <%= link_to t("patient.Reset"), registrations_path, class: "col-span-1 active items-center text-center py-1.5 px-7 border-2 border-transparent font-small rounded-md shadow-xl text-white bg-red-500 hover:bg-red-700 w-full" if params[:action] == "index" %>
+          </div>     
+        </div>
+            </div>
+          </div>     
+            </fieldset>
+       </div>
+<% end %>
+
+

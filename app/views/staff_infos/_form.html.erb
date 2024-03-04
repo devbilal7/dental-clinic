@@ -1,0 +1,117 @@
+<%= form_with(model: staff_info, class: "contents",id: "sform") do |form| %>
+
+  <% if staff_info.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+      <h2><%= pluralize(staff_info.errors.count, "エラー") %> この スタッフ情報 の保存を禁止しました</h2>
+
+    </div>
+  <% end %>
+
+ <fieldset class="border border-solid border-gray-300 rounded p-2 mt-3 mb-2">
+      <legend class="text-sm text-white text-bold text-md rounded-md border-2 border-green px-8 py-1 h-8 bg-[#43c17a]">　基本情報</legend>  
+
+  <div class="my-5 flex flex-wrap">
+    <div class="flex items-center w-32">
+      <%= "職員コード" %>
+    </div>
+    <%# <%= form.number_field :staff_code, value: @staff_info.staff_code.nil? ? (StaffInfo.last.nil? ? 1 : (StaffInfo.last.id+1)) : @staff_info.staff_code, readonly: true, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 " %>
+    <%= form.text_field :staff_code, value: @staff_info.staff_code.nil? ? "": @staff_info.staff_code, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 " %>
+
+  </div>
+
+  <div class="my-5 flex flex-wrap">
+    <div class="flex items-center w-32">
+      <%= "職員氏名" %>
+    </div>
+    <%= form.text_field :last_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+    <% staff_info.errors.messages_for(:last_name).each do |message| %>
+            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">苗字 <%= message %></div>
+     <% end %>
+    <%= form.text_field :first_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 ml-2" %><br>
+     <% staff_info.errors.messages_for(:first_name).each do |message| %>
+            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">ファーストネーム<%= message %></div>
+     <% end %>
+  </div>
+
+  <div class="my-5 flex flex-wrap">
+    <div class="flex items-center w-32">
+     <%= "職員氏名(かな)" %>
+    </div>
+     <%= form.text_field :first_name_kana, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+    <%= form.text_field :last_name_kana, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 ml-2" %>
+  </div>
+
+  <div class="my-5 flex flex-wrap">
+    <div class="flex items-center w-32">
+    <%= "性別" %>
+    </div>
+     <%= form.select(:sex,{"男性": "male", "女性": "female"}, {:prompt => t("newstaffinfo.Select Gender")},  class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2") %>
+     <% staff_info.errors.messages_for(:sex).each do |message| %>
+            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">性別 <%= message %></div>
+     <% end %>
+  </div>
+
+
+  </fieldset>
+
+  <fieldset class="border border-solid border-gray-300 rounded p-2 mt-3 mb-2">
+      <legend class="text-sm text-white text-bold text-md rounded-md border-2 border-green px-8 py-1 h-8 bg-[#43c17a]">　職種情報</legend>
+
+  <div class="my-5 flex flex-wrap">
+    <div class="flex items-center w-32">
+    <%= "職種(main)" %>
+    </div>
+     <%= form.select(:job_type,options_for_select(StaffInfo.job_types.map {|k,v| [k,v]}, StaffInfo.job_types[@staff_info.job_type]),{:prompt => t("newstaffinfo.Select Job Type")}, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2") %>
+  </div>
+
+
+    <div class="my-5 flex flex-wrap">
+    <div class="flex items-center w-32">
+   <%= "職種(sub)" %>
+    </div>
+     <%= form.select(:occupation,(OccupationMaster.pluck(:job_title).map {|occu| occu}), {:prompt => t("newstaffinfo.Select Occupation")},class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2") %>
+     <% staff_info.errors.messages_for(:occupation).each do |message| %>
+            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">職種(sub) <%= message %></div>
+     <% end %>
+  </div> 
+
+  </fieldset>
+  <fieldset class="border border-solid border-gray-300 rounded p-2 mt-3 mb-2">
+      <legend class="text-sm text-white text-bold text-md rounded-md border-2 border-green px-8 py-1 h-8 bg-[#43c17a]">　その他</legend>
+
+
+  <div class="my-5 flex flex-wrap">
+    <div class="flex items-center w-32">
+   <%= "利用区分" %>
+    </div>
+    <%= form.select(:usage_classification,["利用中", "利用停止"], {:prompt => t("newstaffinfo.Select Usage Classification")}, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2") %>
+    <% staff_info.errors.messages_for(:usage_classification).each do |message| %>
+            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">利用区分<%= message %></div>
+     <% end %>
+  </div>
+
+   <div class="my-5 flex flex-wrap">
+    <div class="flex items-center w-32">
+   <%= "入社日" %>
+    </div>
+     <%= form.date_field :hire_date, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+     <% staff_info.errors.messages_for(:hire_date).each do |message| %>
+            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">入社日<%= message %></div>
+     <% end %>
+  </div>
+
+   <div class="my-5 flex flex-wrap">
+    <div class="flex items-center w-32">
+    <%= "退社日" %>
+    </div>
+     <%= form.date_field :date_of_leaving_company, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+     <% staff_info.errors.messages_for(:date_of_leaving_company).each do |message| %>
+            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">退社日<%= message %></div>
+     <% end %>
+  </div> 
+  </fieldset>
+
+  <div class="inline">
+    <%= form.submit t("patient.Save"), class: "rounded-lg py-3 px-5 bg-[#43c17a] text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

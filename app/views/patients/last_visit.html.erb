@@ -1,0 +1,83 @@
+  <main class="flex-1 pb-8 h-screen">
+      <div class="max-w-full mx-auto mt-20 px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8 mr-6">
+        <!-- Search / Filter -->
+        <%= render 'search_filter' %>
+        </div>
+        <!-- New Appointment -->
+        <%= render 'register_last_visit' %>
+        
+        
+        <!-- Table -->
+        <div class="">
+          <div class="overflow-x-auto max-w-4xl w-full mx-auto">          
+            <div class="max-h-[500px] ">
+              <table class="divide-y divide-gray-200 shadow border-b border-gray-200 sm:rounded-lg w-full">
+                <thead class="bg-[#fff] sticky top-0 z-2">
+                  <tr>
+                    <th scope="col" class=" px-6 py-3 w-fit text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4">No</th>
+                    <th scope="col" class=" px-6 py-3 w-fit text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4"><%= t("patient.Patient Number") %></th>
+                    <th scope="col" class=" px-6 py-3 w-fit text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4"><%= t("patient.Patient Name") %></th>
+                    <th scope="col" class=" px-6 py-3 w-fit text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4"><%= t("patient.Last Visit") %></th>
+                    <th scope="col" class=" px-6 py-3 w-fit text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4 border-r-4"><%= t("patient.Last Visit(Updated)") %></th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                <% @patients.each do |patient| %>
+                  <tr>
+                    <td class="text-center px-6  py-4 w-fit whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4"><%= @patient_no + 1%></td>
+                    <td class="text-center px-6  py-4 w-fit whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4"><%= patient.patient_number %></td>     
+                    <td class="text-center px-6  py-4 w-fit whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= patient.full_name %></td>
+                    <td class="text-center px-6  py-4 w-fit whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= patient.last_visit_updated %></td>
+                    <td class="text-center px-6  py-4 w-fit whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= patient.last_visit_date  %></td>
+                  </tr>
+                  <% @patient_no += 1 %>
+                <% end %>
+                    <!-- More people... -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <% if @pagy.count > 0 %>
+            <div class="mt-5 text-center">
+              <%== pagy_nav(@pagy) %>
+            </div>          
+          <% end %>
+        </div>
+      </div>
+    </main>
+<style>
+main.flex-1.pb-8.h-screen .flex .flex .col-span-5.w-full.mt-20.flex.gap-4 {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-top: 102px;
+}
+ @media only screen and (max-width:1650px){
+.max-w-full.mx-auto.mt-20.px-4.text-lg.leading-6.font-medium.text-gray-900.sm\:px-6.lg\:px-8.mr-6 form .mb-2.content-center.flex.items-center.flex-wrap.justify-between {
+    flex-wrap: wrap;
+
+}.max-w-full.mx-auto.mt-20.px-4.text-lg.leading-6.font-medium.text-gray-900.sm\:px-6.lg\:px-8.mr-6 form .mb-2.content-center.flex.items-center.flex-wrap.justify-between .flex.flex-wrap.items-center input#patient-name {
+    width: 100%! important;
+}
+.max-w-full.mx-auto.mt-20.px-4.text-lg.leading-6.font-medium.text-gray-900.sm\:px-6.lg\:px-8.mr-6 form .mb-2.content-center.flex.items-center.flex-wrap.justify-between .flex.flex-wrap.items-center .flex.input-wrapper input#patient_number {
+    width: 100%;
+}
+.max-w-full.mx-auto.mt-20.px-4.text-lg.leading-6.font-medium.text-gray-900.sm\:px-6.lg\:px-8.mr-6 form .mb-2.content-center.flex.items-center.flex-wrap.justify-between .flex.flex-wrap.items-center input#next_reservation {
+    width: 100%;
+}
+.max-w-full.mx-auto.mt-20.px-4.text-lg.leading-6.font-medium.text-gray-900.sm\:px-6.lg\:px-8.mr-6 form .mb-2.content-center.flex.items-center.flex-wrap.justify-between  .p-5 {
+    padding-left: 0;
+}
+ }
+
+    @media only screen and (max-width:1366px){
+.max-w-full.mx-auto.mt-20.px-4.text-lg.leading-6.font-medium.text-gray-900.sm\:px-6.lg\:px-8.mr-6 form .mb-2.content-center.flex.items-center.flex-wrap.justify-between .p-5 {
+    max-width: 100%! important;
+    padding-left: 0;
+}
+
+
+}
+</style>
+
+

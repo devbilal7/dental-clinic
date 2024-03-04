@@ -1,0 +1,46 @@
+
+<%= form_tag({:controller => "staff_infos", :action => "index"}, {:method => :get}) do %>
+<div class="flex">
+  <div class="flex-1">
+          <%= hidden_field_tag :type,params[:type] %>
+    <fieldset class="border border-solid border-gray-300 rounded p-2 bg-[#dcfce7] mt-3 mb-4">
+      <legend class="text-sm text-white text-bold text-md rounded-md border-2 border-green px-8 py-1 h-8 bg-[#43c17a]">検索条件</legend>
+        <div class=" xl:grid xl:grid-cols-3 gap-2 mb-5 md:grid sm:grid-cols-1 2xl:grid 2xl:grid-cols-7" style="align-items: center;grid-template-columns: auto 1fr 1fr auto 1fr auto 1fr;white-space: nowrap;" >          
+          <%= label_tag "職員コード", nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700 " %>
+          <%= search_field_tag :staff_code1, "", value: params[:staff_code1], class:"md:col-span-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md w-full",placeholder: t("patient.Starting Number") %>
+          <%= search_field_tag :staff_code2, "", value: params[:staff_code2], class:"md:col-span-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md w-full",placeholder: t("patient.Ending Number")%>
+          <% unless params[:type] == ["Dentist","DentistHygienist"] %>
+          <%= label_tag "職種(main)", nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700" %>
+          <%= select_tag(:job_type,options_for_select(StaffInfo.job_types.map {|k,v| [k,k]}, :selected => params[:job_type]), :prompt => t("newstaffinfo.Select Job Type"), class:"bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 w-full") %>
+          <% end %>
+          <%= label_tag "性別", nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700 " %>
+          <%= select_tag :sex, options_for_select(["男性","女性"], :selected => params[:sex]), prompt: "選択する", class:"bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 w-full" %>          
+           <%= label_tag "職員氏名", nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700" %>
+          <%= search_field_tag :first_name, "",value: params[:first_name], class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md w-full",placeholder: "名前で検索...." %>
+          <% unless params[:type] == ["Dentist","DentistHygienist"] %>
+          <%= label_tag "職種(sub)", nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700 " %>
+          <%= select_tag(:occupation, options_for_select(OccupationMaster.pluck(:job_title).map {|occu| occu}, :selected => params[:occupation]), :prompt => t("newstaffinfo.Select Occupation"), class:"bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 w-full") %>
+          <% end %>
+           <%= label_tag "利用区分", nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700 " %>
+          <%= select_tag(:usage_classification, options_for_select(["利用中", "利用停止"]), prompt: t("newstaffinfo.Select Usage Classification"), class:"bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 w-full") %>
+        
+        </div>
+        <%# <div class="md:grid md:grid-cols-7 gap-2 mb-5" style="grid-template-columns: 0fr -1fr 0fr 0fr 1fr 0fr 1fr;align-items: center;white-space: nowrap;"  > 
+        </div> %>
+        <div class="md:grid md:grid-cols-7 gap-2 mb-5">  
+        <div class="col-span-5"></div>
+          <%= submit_tag("検索", :id=>"button", :class=>"cursor-pointer col-span-1 active items-center py-1 border-2 border-transparent  font-small rounded-md shadow-xl text-white bg-[#43c17a] hover:bg-green-700 w-full", :name=>"submit") %>
+          <%= link_to "リセット", "/#{params[:controller]}/#{params[:action]}", class: "col-span-1 active items-center text-center py-1 border-2 border-transparent  font-small rounded-md shadow-xl text-white bg-red-500 hover:bg-red-700" unless params[:action] == "index" %>
+          <%= link_to "リセット", staff_infos_path, class: "text-center col-span-1 active   py-1 border-2 border-transparent  font-small rounded-md shadow-xl text-white bg-red-500 hover:bg-red-700" if params[:action] == "index" %>
+        </div>
+    </fieldset>
+  </div>
+<% end %>
+
+
+
+
+
+
+
+

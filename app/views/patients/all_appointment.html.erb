@@ -1,0 +1,47 @@
+  <main class="flex-1 pb-8 h-screen">
+      <div class="max-w-full mx-auto mt-20 px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8 mr-6">
+        <!-- Search / Filter -->
+        <%= render 'search_filter' %>
+      </div>
+        <!-- New Appointment -->
+        <%= render 'new_appointment' %>
+
+        <!-- Table -->
+        <div class="">
+          <div class="overflow-x-auto  mx-auto w-full max-w-4xl">          
+            <div class="max-h-[500px]">
+              <table class="divide-y divide-gray-200 w-full">
+                <thead class="bg-[#fff] sticky top-0 z-10">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4">No</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4"><%= t("patient.Patient Number") %></th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4"><%= t("patient.Patient Name") %></th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4"><%= t("patient.Next Reservation") %></th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border border-l-4 border-r-4"><%= t("patient.Next Reservation(Updated)") %></th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                <% @patients.each do |patient| %>
+                  <tr>
+                    <td class="px-6 text-center py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4"><%= @patient_no + 1 %></td> 
+                    <td class="px-6 text-center py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4"><%= patient.patient_number %></td>     
+                    <td class="px-6 text-center py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= patient.full_name %></td>
+                    <td class="px-6 text-center py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= patient.multiple_visit_routes.last(2).first.visit_route.next_reservation_date if patient.multiple_visit_routes.present? %></td>
+                    <td class="px-6 text-center py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= patient.multiple_visit_routes.last.visit_route.next_reservation_date if patient.multiple_visit_routes.present? %></td>
+                  </tr>
+                  <% @patient_no += 1 %>
+                <% end %>
+                    <!-- More people... -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <% if @pagy.count > 0 %>
+            <div class="mt-5 text-center">
+              <%== pagy_nav(@pagy) %>
+            </div>          
+          <% end %>
+        </div>
+      </div>
+    </main>
+

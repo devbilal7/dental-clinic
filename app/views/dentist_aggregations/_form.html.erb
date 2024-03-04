@@ -1,0 +1,272 @@
+<%= form_with(model: dentist_aggregation, class: "contents") do |form| %>
+  <% if dentist_aggregation.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+      <h2><%= pluralize(dentist_aggregation.errors.count, "エラー") %> この DR が保存されるのを禁止しました</h2>
+
+      <ul>
+       
+      </ul>
+    </div>
+  <% end %>
+
+  
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32 whitespace-nowrap">  <%= form.label t("dr.Dentist") %></div>
+            <div class=" col-span-4">
+               <%= form.select :dentist_id,Dentist.all.map{|r|[r.first_name, r.id]}, {:include_blank => t("dr.Select")}, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full w-[365px]" %>
+                  <% dentist_aggregation.errors.messages.each do |error| %>
+                    <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">歯科医師	 <%= t('errors.messages.blank') %></div>
+                  <% end %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32">  <%= form.label t("dr.Number of Reservations") %> </div>
+            <div class=" col-span-4">
+               <%= form.number_field :no_of_reservations, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Insurance People") %> </div>
+            <div class=" col-span-4">
+               <%= form.number_field :insurance_peoples, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Emergency Patient") %> </div>
+            <div class=" col-span-4">
+               <%= form.number_field :emergency_patients, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.New Patient") %> </div>
+            <div class=" col-span-4">
+               <%= form.number_field :new_patients, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Re-entry Patient") %> </div>
+            <div class=" col-span-4">
+               <%= form.number_field :re_entry_patients, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Patients Finished") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :patients_finished, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.No of Cancellations") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :no_of_cancellations, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.No Notice Cancellations") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :no_notice_cancellations, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Score") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :score, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Own Expense Amount of Money") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :own_expense_amount_money, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Miscellaneous Income") %></div>
+            <div class=" col-span-4">
+               <%= form.text_field :miscellaneous_income, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Own Expense Number of People") %></div>
+            <div class=" col-span-4">
+               <%= form.text_field :own_expense_people, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+ <!--
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.No of People") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :no_of_people, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Actual Examinations") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :actual_examinations, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+    -->
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Refferal Card") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :referral_card, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Refferal Patients") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :referral_patients, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.People Returning Home") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :people_returning_home, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Payment People") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :payment_people, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Through Number of Reservations") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :through_no_of_reservations, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Through Rate") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :through_rate, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Actual Visit People") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :actual_visit_peoples, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Introduction Card") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :introduction_card, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Introduction Patient") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :introduction_patients, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label t("dr.Refferal Rate") %></div>
+            <div class=" col-span-4">
+               <%= form.number_field :referral_rate, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+  
+  <%= form.hidden_field :clinic_id, value: current_user.clinic.id, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+
+  <div class="inline">
+    <%= form.submit "作成", class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

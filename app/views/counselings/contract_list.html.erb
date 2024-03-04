@@ -1,0 +1,101 @@
+<main class="flex-1 pb-8 h-screen">
+  <div class="max-w-full mx-auto mt-20 px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8 mr-6">  
+    <%= render "search_form" %>  <!-- Searching -->
+  </div>
+<div>
+      <!-- Table -->
+     <div class="flex flex-col" id="contract_list_form">
+          <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">          
+            <div class="max-h-[600px]">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-[#fff] sticky top-0 z-10">
+                  <tr>
+                    <th scope="col" class="sticky left-0 bg-[#fff] z-2 px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" >No</th>
+                    <th scope="col" class="sticky bg-[#fff] z-2 px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" whitespace-nowrap rowspan="2" style="left:65px">患者番号</th> <!-- Patient Number-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" >処置No</th> <!-- Treatment No-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap text-center" rowspan="2" >患者氏名</th> <!-- Patient Name-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap text-center" rowspan="2">担当 DR</th> <!-- DR in Charge -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap text-center" rowspan="2" >TC</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap text-center" colspan="8" >カウンセリング実施日</th> <!-- Counseling Date -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap text-center" rowspan="2">次回予約</th> <!-- Next Rservation -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" >メンテ カウンセリング後来院</th> <!-- Visit after maintenance Counseling -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" >契約結果</th> <!-- Contract Result-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" >種類</th> <!-- Kinds -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" >本数</th> <!-- Number-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" >部位 </th> <!-- Site -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" >金額</th> <!-- Amount of Money-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap border-r-4 text-center" rowspan="2" >同意書 サイン日</th> <!-- Consent form Signing Date -->
+                  </tr>
+                  <tr>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap text-center" >補綴</th> <!-- Prosthodontics -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">義歯</th> <!-- Denture -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >ホワイト</th> <!-- White -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >インプラント</th> <!-- Implant -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >インビザ</th>  <!-- Invisa -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >他矯正</th> <!-- Other Corrections-->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >マイクロ</th> <!-- Micro -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >メンテ</th> <!-- Maintenance  -->
+                  </tr>
+                </thead>
+                    <tbody class="bg-blackdivide-y divide-gray-200">
+                    <% index=0 %>
+                    <% @patients.includes(:dentist, :treatment_coordinator, :counselings,counselings: :sites).each do |patient|%>
+                        <% patient.counselings.each_with_index do |counseling,i| %>
+                        <tr>
+                        
+                            <td class="sticky left-0 bg-[#fff] z-2 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4"><%= index+1 %></td>
+                            <td class="sticky bg-[#fff] z-2 text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" style="left:65px"><%= patient.patient_number %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= i+1  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= patient.full_name  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= patient.dentist.full_name  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= patient.treatment_coordinator.full_name %></td>
+                            <% if patient.counselings.present?%>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%=  counseling.prostho  %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%=  counseling.denture%></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%=  counseling.whitening  %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%=  counseling.implant %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%=  counseling.invisalign %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%=  counseling.other_correc%></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%=  counseling.micro%></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%=  counseling.maintainance%></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.main_resv_date%></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= i+1 %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.agreement %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%=  counseling.type_agree %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%=  counseling.no_of_implant%></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.sites.count %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= counseling.contract_amt%></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= counseling.cons_sign_date%></td>
+                                <% index += 1 %>
+                            <% end %>
+                        </tr>
+                        <% end %>
+                    <%end%>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<style>
+  main.flex-1.pb-8.h-screen #contract_list_form{
+    max-width: 1358px;
+    margin: auto;
+}
+
+
+@media only screen and (max-width:1880px){
+
+  main.flex-1.pb-8.h-screen #contract_list_form {
+    max-width: 95%;
+    margin: auto;
+}
+}
+
+@media only screen and (max-width:1440px){
+main.flex-1.pb-8.h-screen #contract_list_form {
+   max-width: 93%;
+    margin: auto;
+}
+}
+</style>

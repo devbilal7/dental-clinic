@@ -1,0 +1,413 @@
+<!-- Static sidebar for desktop -->
+    <div class="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0 z-10 h-100 mt-16 <%= current_user.role == "Administrator" ? "bg-black" : "bg-white" %>">
+      <!-- Sidebar component, swap this element with another sidebar if you like -->
+      <div class="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto <%= current_user.role == "Administrator" ? "bg-[#82ced5]" : "bg-[#43c17a]" %>">
+        <div class="flex items-center flex-shrink-0 px-4">
+         
+        </div>
+        <nav class="mt-5 flex-1 flex flex-col overflow-y-auto" aria-label="Sidebar">
+          <div class="px-2 space-y-1">
+            <!-- Current: "bg-[#43c17a] text-white", Default: "text-white hover:text-gray-900 hover:bg-white" -->
+            <!-- 
+            <div id="dashboard_button" class="<%= current_user.role == "Administrator" ? "text-gray-900" : "text-white" %>">
+              <%= link_to root_path, class:"hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class ", style:"font-size:13px;"  do %>
+                <%= image_tag ("1.png"), class:"w-[9%] hover:w[100%] mr-6 dashboard_icon" %>
+                <%=t("admin.Dashboard") %>
+              <% end %>
+            </div>
+            -->
+            
+            <% if current_user.role == 'ClinicUser' %>
+
+            <div class="relative inline-block text-center">
+              <div>
+                <button id="account_button" type="button" class="focus:bg-white focus:text-gray-900 text-white hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg drop-down-button"  style="font-size:13px;" id="menu-button" aria-expanded="false" aria-haspopup="true">
+                <%= image_tag ("2.png"), class:"account_icon w-[9%] mr-6 drop-down-button"  %>
+              <%=t("admin.Patient Information")%> 
+                  <!-- Heroicon name: solid/chevron-down -->
+                  <svg class="-mr-1 ml-2 h-5 w-5 drop-down-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+
+              <div id="account_management" style="margin-right:-87px" class="w-60 hidden z-10 origin-top-right mt-2 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none drop-down-body" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                <div class="py-1 <%= (params[:action]=="index" && params[:controller] == "patients") ? "rounded-lg bg-gray-300" : "" %>" role="none">
+                  <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                  <%= link_to patients_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>  
+                    <%= t("patient.Registration / Editing") %>
+                  <% end %>
+                </div>
+                <!-- 
+                <div class="py-1 <%= (params[:action]=="last_visit" && params[:controller] == "patients") ? "bg-gray-300" : "" %>" role="none">
+                  
+                  <%= link_to last_visit_patients_path,class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;"  do %>
+                  <%= t("patient.Last Treatment Date") %>
+                  <% end %>
+                </div>
+                <div class="py-1 <%= (params[:action]=="all_appointment" && params[:controller] == "patients") ? "bg-gray-300" : "" %>" role="none">
+                  
+                  <%= link_to all_appointment_patients_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>
+                    <%= t("patient.Next Treatment Date") %>
+                  <% end %>
+                </div> 
+                -->
+              </div>
+            </div>
+            
+
+            <!-- Visit Routes -->
+            <div class=" inline-block text-center drop-down-button drop-down-button">
+              <div>
+                <button id="visit_route_button" type="button" class="focus:bg-white focus:text-gray-900 text-white hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg drop-down-button" id="menu-button" aria-expanded="false" aria-haspopup="true" style="font-size:13px;" >
+                <%= image_tag ("3.png"), class:"w-[9%] mr-6 drop-down-button visit_route_icon" %>
+              <%=t("admin.Visit Routes")%> 
+                  <!-- Heroicon name: solid/chevron-down -->
+                  <svg class="-mr-1 ml-2 h-5 w-5 drop-down-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+
+              <div id="visit_route" style="margin-right:-87px" class="w-60 hidden z-10 origin-top-right  mt-2 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none drop-down-body" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                <div class="py-1 <%= (params[:action]=="index" && params[:controller] == "visit_routes") ? "rounded-lg bg-gray-300" : "" %>" role="none">
+                  <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                  <%= link_to visit_routes_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>  
+                    <%= t("clinicuser.Registration / Edit")%>
+                  <% end %>
+                </div>
+
+                <!-- 
+                 <div class="py-1 <%= (params[:action]=="monthly_tabulation" && params[:controller] == "visit_routes") ? "bg-gray-300" : "" %>" role="none">
+                  
+                  <%= link_to monthly_tabulation_path ,class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>
+                    <%= t("clinicuser.Monthly Totalling")%>
+                  <% end %>
+                </div>
+                <div class="py-1 <%= (params[:action]=="new_patient_progress" && params[:controller] == "visit_routes") ? "bg-gray-300" : "" %>" role="none">
+      
+                <%= link_to new_patient_progress_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>
+                  <%= t("clinicuser.New Patient")%>
+                <% end %>
+                  </div>
+                  <div class="py-1 <%= (params[:action]=="new_patient_indi_progress" && params[:controller] == "visit_routes") ? "bg-gray-300" : "" %>" role="none">
+                    <%= link_to new_patient_indi_progress_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>
+                      <%= t("clinicuser.New Patient(Individual)")%>
+                    <% end %>
+                  </div> 
+                  -->
+              </div>
+            </div>
+
+
+            <% else %>
+               <%= link_to client_management_admin_managements_path,id:"client_management", class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class" do %>
+                 <%= image_tag ("14.png"), class:"w-[9%] hover:w[100%] mr-6 dashboard_icon" %>  
+                  ユーザ管理
+               <% end %> <!-- User Management -->
+            <% end %> 
+            
+            <% if current_user.role == 'ClinicUser' %>
+						 <!-- 
+						<div class="relative inline-block text-center drop-down-button">
+              <div>
+                <button id="account_button_c" type="button" class="focus:bg-white focus:text-gray-900 text-white hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg drop-down-button" style="font-size:13px;" id="menu-button" aria-expanded="false" aria-haspopup="true">
+                  <%= image_tag ("4.png"), class:"w-[9%] mr-6 drop-down-button account_icon_c" %>
+              <%=t("clinicuser.Counseling")%> 
+                 
+                  <svg class="-mr-1 ml-2 h-5 w-5 drop-down-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+
+              <div id="account_management_c" style="margin-right:-87px" class="w-60 hidden z-10 origin-top-right  mt-2 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none drop-down-body"  role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                <div class="py-1 <%= (params[:action]=="index" && params[:controller] == "counselings") ? "bg-gray-300" : "" %>" role="none">
+                  
+                  <%= link_to counselings_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>  
+                    <%= t("clinicuser.Registration / Edit") %>
+                  <% end %>
+                </div>
+                <div class="py-1 <%= (params[:action]=="aggregation_basic_information" && params[:controller] == "counselings") ? "bg-gray-300" : "" %>" role="none">
+                 
+                  <%= link_to aggregation_basic_information_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>  
+                    <%= t("clinicuser.Basic Information") %>
+                  <% end %>
+                </div>
+                <div class="py-1 <%= (params[:action]=="individual_target" && params[:controller] == "counselings") ? "bg-gray-300" : "" %>" role="none">
+                 
+                  <%= link_to individual_target_path,class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>
+                    <%= t("clinicuser.TC Target Value") %>
+                  <% end %>
+                </div>
+                <div class="py-1 <%= (params[:action]=="consultant_list" && params[:controller] == "counselings") ? "bg-gray-300" : "" %>" role="none">
+                  
+                  <%= link_to consultant_list_counselings_path,class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>
+                    <%= t("clinicuser.Counseling Member List") %>
+                  <% end %>
+                </div>
+                <div class="py-1 <%= (params[:action]=="batting_average" && params[:controller] == "counselings") ? "bg-gray-300" : "" %>" role="none">
+                  
+                  <%= link_to batting_average_counselings_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>
+                    <%= t("clinicuser.Batting Average") %>
+                  <% end %>
+                </div>
+                <div class="py-1 <%= (params[:action]=="contract_list" && params[:controller] == "counselings") ? "bg-gray-300" : "" %>" role="none">
+                  
+                  <%= link_to contract_list_counselings_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>
+                    <%= t("clinicuser.Contract List") %>
+                  <% end %>
+                </div>
+                <div class="py-1 <%= (params[:action]=="individual_consultant" && params[:controller] == "counselings") ? "bg-gray-300" : "" %>" role="none">
+                  
+                  <%= link_to individual_consultant_counselings_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>
+                    <%= t("clinicuser.Table by Doctor") %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+           -->
+
+            <!-- DR Aggregation -->
+              
+              <!--
+            <div class="relative inline-block text-center drop-down-button">
+              <div>
+                <button id="DR" type="button" class="focus:bg-white focus:text-gray-900 text-white hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg drop-down-button" style="font-size:13px;" id="menu-button" aria-expanded="false" aria-haspopup="true">
+                  <%= image_tag ("5.png"), class:"w-[9%] mr-6 drop-down-button DR_icon" %>  
+                  <%=t("clinicuser.DR Stats")%> 
+                  <svg class="-mr-1 ml-2 h-5 w-5 drop-down-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+
+              <div id="DR_list" style="margin-right:-87px" class="w-60 hidden z-10 origin-top-right  mt-2 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none drop-down-body" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+              <div class="py-1 <%= (params[:action]=="monthly_tabulation" && params[:controller] == "dentist_aggregations") ? "bg-gray-300" : "" %>" role="none">
+              
+                <%= link_to monthly_tabulation_dentist_aggregations_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>  
+                  <%= t("dr.Monthly Stats") %>
+                <% end %>
+                </div>
+                <div class="py-1 <%= (params[:action]=="annual_tabulation" && params[:controller] == "dentist_aggregations") ? "bg-gray-300" : "" %>" role="none">
+                
+                <%= link_to annual_tabulation_dentist_aggregations_path,class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>
+                  <%= t("dr.Annual Stats") %>
+                  <% end %>
+                  </div>
+                  <div class="py-1 <%= (params[:action]=="annual_tabulation_individual" && params[:controller] == "dentist_aggregations") ? "bg-gray-300" : "" %>" role="none">
+                  
+                  <%= link_to annual_tabulation_individual_dentist_aggregations_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>
+                    <%= t("dr.Annual Stats by doctor")%>
+                    <% end %>
+                    </div>
+                    <div class="py-1 <%= (params[:action]=="index" && params[:controller] == "dentist_aggregations") ? "bg-gray-300" : "" %>" role="none">
+                      
+                      <%= link_to dentist_aggregations_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>  
+                      <%= t("dr.Registration / Editing") %>  
+                      <% end %>
+                    </div>
+              </div>
+            </div>
+            -->
+
+            <!-- DH Aggregation -->
+            <!--
+								<button id="account_button_dh" class="focus:bg-white focus:text-gray-900 text-white hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg drop-down-button" style="font-size:13px;"  >
+									
+									<%= image_tag ("6.png"), class:"w-[9%] mr-6 drop-down-button account_icon_dh" %>
+								<%=t("clinicuser.DH Stats")%>
+                <svg class="-mr-1 ml-2 h-5 w-5 drop-down-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+								</button>
+              <div id="account_management_dh" style="margin-right:-87px" class="w-60 hidden z-10 origin-top-right  mt-2 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none drop-down-body" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                <div class="py-1 <%= (params[:action]=="dh_monthly_tabulation" && params[:controller] == "dh_aggregations") ? "bg-gray-300" : "" %>" role="none">
+                  
+                  <%= link_to dh_monthly_tabulation_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>  
+                    <%= t("dr.Monthly Stats") %>
+                  <% end %>
+                </div>
+                <div class="py-1 <%= (params[:action]=="dh_yearly_stats" && params[:controller] == "dh_aggregations") ? "bg-gray-300" : "" %>" role="none">
+                  
+                  <%= link_to dh_yearly_stats_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>  
+                    <%= t("dr.Annual Stats") %>
+                  <% end %>
+                </div>
+                <div class="py-1 <%= (params[:action]=="dh_yearly_stats_doc" && params[:controller] == "dh_aggregations") ? "bg-gray-300" : "" %>" role="none">
+                  
+                  <%= link_to dh_yearly_stats_doc_path,class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>
+                    <%= t("dr.Annual Stats by doctor") %>
+                  <% end %>
+                </div>
+                <div class="py-1 <%= (params[:action]=="index" && params[:controller] == "dh_aggregations") ? "bg-gray-300" : "" %>" role="none">
+                  
+                  <%= link_to dh_aggregations_path, class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>
+                    <%= t("dr.Registration / Editing") %>
+                  <% end %>
+                </div>
+              </div>
+             </div>
+              -->
+            
+              <div class="links">
+                <!-- Staff Info -->
+								<%= link_to staff_infos_path, id: "staff_infos_button", class: "text-white hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class", style:"font-size:13px;" do %>
+									<%= image_tag ("7.png"), class:"w-[9%] mr-6 staff_infos_icon" %>
+								  <%=t("clinicuser.Staff Information")%>
+								<% end %>
+                <!-- Master File Management -->
+                <!--
+								<a href="<%= master_admin_admin_managements_path %>" id="master_admin" class="text-white hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg nav_custom_class" style="font-size:13px;" >
+								
+									<%= image_tag ("8.png"), class:"w-[9%] mr-6 master_admin_icon" %>
+									<%=t("clinicuser.Master File Edit")%> 
+								</a>
+                -->
+                
+                <!-- Account Edit -->
+								<a href="<%= clinic_edit_registration_path(id:current_user.id) %>" id="clinic_edit" class="text-white hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium nav_custom_class rounded-lg" style="font-size:13px;" >
+									
+									<%= image_tag ("9.png"), class:"w-[9%] mr-6 clinic_edit_icon" %>
+									<%=t("clinicuser.Account Edit")%>
+                  </a>
+								              
+              </div>
+						</div>
+						
+            <% else %>
+            <!-- ADMINISTRATOR -->
+            <div class="relative text-center" id="account_management_drop">
+              <div>
+                <button id="account_button" type="button" class="focus:bg-white focus:text-gray-900 text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg drop-down-button" id="menu-button" style="font-size:13px;" aria-expanded="false" aria-haspopup="true">
+                  <%= image_tag ("11.png"), class:"w-[9%] mr-6 drop-down-button DR_icon" %>
+              <%=t("admin.Account Management")%> 
+                  
+                  <svg class="-mr-1 ml-2 h-5 w-5 account_management_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+
+              <div id="account_management" class="hidden origin-top-right  right-0 mt-2 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                <div class="py-1" role="none">
+                  <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                  <%= link_to admin_index_registrations_path(role: "Administrator"), class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg", style:"font-size:13px;" do %>
+                    管理者
+                  <% end %> 
+                </div> <!-- Administrator -->
+                <div class="py-1" role="none">
+                  <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                  <%= link_to registrations_path(role: "ClinicUser"), class:"text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg", style:"font-size:13px;" do %>
+                    ユーザ
+                  <% end %>
+                </div> <!-- User -->
+              </div>
+            </div>
+
+
+
+            <a href="<%= master_admin_admin_managements_path %>" class="text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg" style="font-size:13px;"  >
+              <!-- Heroicon name: outline/user-group -->
+              <%= image_tag ("13.png"), class:"w-[9%] mr-6 drop-down-button DR_icon" %>
+              <%= t("admin.Master Admin") %>
+            </a>
+            
+            <a href="<%= system_management_admin_managements_path %>" id="system_management" class="text-gray-900 hover:text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg">
+              <!-- Heroicon name: outline/document-report -->
+              <%= image_tag ("10.png"), class:"w-[9%] mr-6 drop-down-button DR_icon" %>
+              <%= t("admin.System Management") %>
+            </a>
+
+            <a href="<%= document_management_admin_managements_path %>" id="document_management" class="text-gray-900 hover:bg-white group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-lg">
+              <!-- Heroicon name: outline/document-report -->
+             <%= image_tag ("12.png"), class:"w-[9%] mr-6 drop-down-button" %>
+              <%=t("admin.Document Management")%>
+            </a>
+        </div>
+			<%end%>
+
+<style>
+nav a:hover img, nav button:hover img,nav button:focus img, nav f:hover img {
+    filter: invert(1);
+}
+nav div[role="menu"] div:hover a {
+    background: #ddd;
+}
+
+@media only screen and (max-width: 1439px) {
+fieldset .md\:grid.md\:grid-cols-7.grid-cols-4.gap-2.mb-5 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+}
+</style>
+<script>
+  focus_active_tab();
+
+  function focus_active_tab() {
+    $(".drop-down-button").removeClass("bg-white text-gray-900 ");
+    <% if params[:controller] == "patients" %>
+      $("#account_button").addClass("bg-white text-gray-900 focus");
+      $("#account_button").removeClass("text-white");
+      $("#account_management").show();
+      $(".account_icon").css("filter","invert(1)");
+    <% elsif params[:controller] == "visit_routes" %>
+      $("#visit_route_button").addClass("bg-white text-gray-900 focus");
+      $("#visit_route_button").removeClass("text-white");
+      $("#visit_route").show();
+      $(".visit_route_icon").css("filter","invert(1)");
+    <% elsif params[:controller] == "counselings" %>
+      $("#account_button_c").addClass("bg-white text-gray-900 focus");
+      $("#account_button_c").removeClass("text-white");
+      $("#account_management_c").show();
+      $(".account_icon_c").css("filter","invert(1)");
+    <% elsif params[:controller] == "dentist_aggregations" %>
+      $("#DR").addClass("bg-white text-gray-900 focus");
+      $("#DR").removeClass("text-white");
+      $("#DR_list").show();
+      $(".DR_icon").css("filter","invert(1)");
+    <% elsif params[:controller] == "dh_aggregations" %>
+      $("#account_button_dh").addClass("bg-white text-gray-900 focus");
+      $("#account_button_dh").removeClass("text-white");
+      $("#account_management_dh").show();
+      $(".account_icon_dh").css("filter","invert(1)");
+    <% elsif params[:controller] == "homepage" %>
+      $("#dashboard_button").addClass("bg-white text-gray-900 focus rounded-lg");
+      $("#dashboard_button").removeClass("text-white");
+      $(".dashboard_icon").css("filter","invert(1)");
+    <% elsif params[:controller] == "staff_infos" %>
+      $("#staff_infos_button").addClass("bg-white text-gray-900 focus rounded-lg");
+      $("#staff_infos_button").removeClass("text-white");
+      $(".staff_infos_icon").css("filter","invert(1)");
+    <% elsif params[:controller] == "admin_managements" && params[:action] == "master_admin" %>
+      $('#master_admin').addClass("bg-white text-gray-900 focus rounded-lg");
+      $('#master_admin').removeClass("text-white");
+      $('.master_admin_icon').css("filter","invert(1)");
+    <% elsif params[:controller] == "registrations" && params[:action] == "index"%>
+      $("#account_button").addClass("bg-white text-gray-900 focus rounded-lg");
+      $("#account_button").removeClass("text-white");
+      $("#account_management_drop").show();
+      $(".account_management_icon").css("filter","invert(1)");
+    <% elsif params[:controller] == "admin_managements" && params[:action] == "client_management" %>
+      $("#client_management").addClass("bg-white text-gray-900 focus rounded-lg");
+      $("#client_management").removeClass("text-white");
+      $(".client_management").css("filter","invert(1)");
+    <% elsif params[:controller] == "admin_managements" && params[:action] == "system_management" %>
+      $("#system_management").addClass("bg-white text-gray-900 focus rounded-lg");
+      $("#system_management").removeClass("text-white");
+      $(".system_management").css("filter","invert(1)");
+    <% elsif params[:controller] == "admin_managements" && params[:action] == "document_management" %>
+      $("#document_management").addClass("bg-white text-gray-900 focus rounded-lg");
+      $("#document_management").removeClass("text-white");
+      $(".document_management").css("filter","invert(1)");
+    <% elsif params[:controller] == "admin_managements" && params[:action] == "master_admin" %>
+      $("#master_admin").addClass("bg-white text-gray-900 focus rounded-lg");
+      $("#master_admin").removeClass("text-white");
+      $(".master_admin").css("filter","invert(1)");
+    <% elsif params[:controller] == "registrations" && params[:action] == "clinic_edit" %>
+      $("#clinic_edit").addClass("bg-white text-gray-900 focus rounded-lg");
+      $("#clinic_edit").removeClass("text-white");
+      $(".clinic_edit_icon").css("filter","invert(1)");
+    <% end %>
+  }
+</script>

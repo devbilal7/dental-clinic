@@ -1,0 +1,22 @@
+<main class="flex-1 pb-8">
+    <div class="max-w-full mx-auto mt-20 px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8 mr-8">
+        <div class="flex flex-col">
+            <div class="border px-5 py-5">
+            <%= line_chart [ 
+                {
+                    name: "系列3", type: "column", color: "gray", data: @dh_aggregations.group_by_month(:created_at).sum("CAST(COALESCE(cancellation_tel, '0') AS INTEGER)") # Cancellation Tel
+                    },
+                    {
+                        name: "系列2", type: "column", color: "orange", data: @dh_aggregations.group_by_month(:created_at).sum("CAST(COALESCE(cancellation_without, '0') AS INTEGER)") # Cancellation Without Confirmation
+                    },
+                    {
+                        name: "系列1", type: "column", color: "blue", data: $total_cancel_graph_percent #Total Cancellation
+                    },
+                ], 
+                stacked: true,
+                adapter: "highcharts"
+            %>
+            </div>
+        </div>
+    </div>
+</main>

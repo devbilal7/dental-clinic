@@ -1,0 +1,64 @@
+ <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">          
+                    <div class="max-h-[650px]">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-[#fff] sticky top-0 z-10">
+                                <tr>
+                                    <th scope="col" class="bg-[#fff] px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider sticky left-0 border  border-l-4 ">No</th>
+                                    <th scope="col" class="bg-[#fff] px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap sticky border border-l-4" style="left:60px" ><%= t("monthly.Full name") %></th>   
+                                    <th scope="col" class="bg-[#fff] px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider sticky border border-l-4" style="left:170px"  >..</th>    
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.First Visit") %></th>    
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Last Visit") %></th>    
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4 "><%= t("monthly.Treatment Plan") %></th>    
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Implant Correct") %></th>    
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Own Expense Contract") %></th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Maintenance") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Under Treatment") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Suspension") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.End") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Maintenance Visit") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Suspended TEL") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Suspended Postcard") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Suspended visit") %></th>    
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.P Heavy Defense") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.P Heavy Defense Calculation") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4">4mm</th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.P Second") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Inspection ③") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4">FOP</th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.White") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Medical Tube") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Prosthodontics") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.MT Index") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Malocclusion") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Number of New Cases") %></th>  
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider whitespace-nowrap border border-l-4 border-r-4"><%= t("monthly.Next Reservation") %></th>  
+                                </tr>
+                            </thead>
+                            <tbody class="bg-blackdivide-y divide-gray-200">
+
+                                <!-- Overall -->
+                                <% dentist_data("overall",@clinic_id,"") %>
+                                <%= render 'monthly_visit_route', consultant: "overall" %>
+
+                                <!-- Dentist -->
+                                <% @dentists.each do |dentist|  %>
+                                    <% dentist_data("dentist",@clinic_id,dentist.id) %>
+                                    <%= render 'monthly_visit_route', consultant: dentist %>
+                                <% end %>                  
+                                    
+                                <!-- DentistHygienist -->
+                                <% @dentist_hygienists.each do |dentist_hygienist|  %>
+                                    <% dentist_data("dentist_hygienist",@clinic_id,dentist_hygienist.id) %>
+                                    <%= render 'monthly_visit_route', consultant: dentist_hygienist %>
+                                <% end %> 
+
+                                <!-- Treatment Coordinator --> 
+                                <% @treatment_coordinators.each do |treatment_coordinator|  %>
+                                    <% dentist_data("treatment_coordinator",@clinic_id,treatment_coordinator.id) %>
+                                    <%= render 'monthly_visit_route', consultant: treatment_coordinator %>
+                                <% end %>  
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>

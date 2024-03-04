@@ -1,0 +1,162 @@
+<main class="pb-8 h-screen">
+  <div class="max-w-full mx-auto mt-20 px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8 mr-6">  
+    <%= render 'search_form' %>    <!-- Search -->
+    <div class="flex-0.5 ml-4">
+      <%= render "layouts/pagination_limit", controller: params[:controller], action: params[:action] %>   <!-- Pagy DropDown -->
+      <%= link_to "新規登録", new_staff_info_path, class:"ttext-center bottom-0 mb-5 mt-40 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-[#fff] hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 rounded-full border-2 border-green-400" unless current_user.role == "Administrator" %>
+    </div>
+  </div>
+</div>
+        <!-- Table -->
+        <div class="flex flex-col col-span-3 w-full ml-4">
+          <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 w-fit">
+            
+              <div class="max-h-[500px]" style="margin-left: 47px;">
+                <table class="w-60 divide-y divide-gray-200 ">
+                  <thead class="bg-[#fff] sticky top-0 z-10">
+                    <tr>
+                      <th scope="col" class="px-5 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">No</th>
+                      <th scope="col" class="px-5 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">職員コード</th> <!-- Staff Code -->
+                      <th scope="col" class="px-5 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">氏名</th> <!-- Full Name -->
+                      <th scope="col" class="px-5 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">性別</th> <!-- Sex -->
+                      <th scope="col" class="px-5 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">職種(main)</th> <!-- Job Type (main) -->
+                      <th scope="col" class="px-5 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">職種(sub)</th> <!-- Occupation(sub) -->
+                      <th scope="col" class="px-5 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">利用区分</th> <!-- Usage Classification -->
+                      <th scope="col" class="px-5 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">入社日</th> <!-- Hire Date -->
+                      <th scope="col" class="px-5 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">退社日</th> <!-- Date of leaving Company -->
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <% if @staff_infos.present? %>
+                      <% @staff_infos.uniq.each_with_index do |user, index| %>
+                      <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= index + 1 %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= user.staff_code %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-500 border border-l-4 cursor-pointer" onclick="edit_staff(<%= user.id %>)"><%= user.full_name %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= user.sex %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= user.job_type %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= user.occupation %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= user.usage_classification %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= user.hire_date.strftime("%Y-%m-%d") %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= user.date_of_leaving_company.nil? ? "" : user.date_of_leaving_company.strftime("%Y-%m-%d")  %></td>
+                        <!-- <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium border border-l-4 border-r-4">
+                          <%# <%= link_to t("newstaffinfo.Show"), staff_info_path(user.id), class:"inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-white bg-[#43c17a] hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500" %>
+                          <%# <%= button_to t("patient.Delete"), staff_info_path(id: user.id), method: :delete, data: { confirm: "Are you sure" }, class: "cursor-pointer mt-2 rounded-lg py-3 px-5 text-white-500 bg-red-500 hover:bg-red-600 font-medium" %>
+                        </td> -->
+                      </tr>
+                      <% end %>
+                    <% else %>
+                      <tr>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-red-500 text-center">No Result Found!!</td>
+                      </tr>
+                    <% end %>
+                    <!-- More people... -->
+                  </tbody>
+                </table>
+              </div>
+          </div>
+          <!-- Pagination -->
+          <div style="margin-right: 300px;">
+            <%= render "layouts/pagination" %>
+          </div>
+        </div>
+        </div>
+      </div>
+      <div id="edit_popup" class="bg-white shadow" >
+    
+      </div>
+</main> 
+
+<style>
+
+  div#edit_popup {
+    position: absolute;
+    width: 100%;
+    top: 65px;
+    z-index: 10;
+    right: -100%;
+    transition: all 0.8s ease-in;
+    display: block !important;
+    max-width: 1000px;
+}
+
+.edit_staff {
+    background: #fff;
+    padding: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+div#edit_popup>div {
+    position: unset !important;
+    min-height: 100vh;
+}
+
+div#edit_popup[style="display: block;"] {
+    right: 0 !important;
+}
+
+.showPopUp {
+    right: 100% !important;
+    transform:translateX(184%)
+}
+
+
+div#edit_popup>.bg-white {
+    background: transparent;
+    box-shadow: none;
+}
+
+div#edit_popup>.bg-white div.form-div {
+    background: #fff;
+    padding: 25px 15px;
+}
+
+div#edit_popup>.bg-white .contents>div button {
+    border-radius: 15px 15px 0px 0px;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+
+
+</style>
+
+<script>
+
+  function edit_staff(staffid){
+    $('#edit_popup').show();
+    $('#edit_popup').addClass("showPopUp");
+    $.ajax({
+            type: "get",
+            data: "id="+staffid,
+            url: `/staff_infos/${staffid}/edit`,
+        }) 
+  }
+
+  $('#advance-search-popup').hide();
+
+  $('#SmLabel').on("click",function(){
+    $('#advance-search-popup').show();
+    $('#advance-search-popup').addClass("showPopUp");
+  });
+
+  $("#advance-search-button").on("click",function(){
+    $("#advance-search").submit();
+  })
+
+  $("#clear").on("click",function(){
+    $('.clear').val('');
+    $('input[type=checkbox]').prop('checked', false)
+  }) 
+
+  $("#pagy_no").change(function(){
+      $("#pagy_form").submit();
+  })
+</script>
+
+
+
+
+

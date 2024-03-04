@@ -1,0 +1,154 @@
+  <main class="flex-1 pb-8 h-screen"> 
+    <div class="max-w-full mx-auto flex justify-end  text-lg leading-6 font-medium text-gray-900   ml-0 mr-6 mt-20">
+      <div class="max-w-full mx-auto  text-lg leading-6 font-medium text-gray-900  ml-0 mr-6 ">
+              <%= render "search_filter" %>   <!-- Search and Filter -->
+        <div class="flex-0.5 flex-justify-end ml-2">
+              <%= render "layouts/pagination_limit", controller: params[:controller], action: params[:action] %> <!-- Pagy DropDown -->
+              <div class="mt-36">
+              <button type="button" tabindex="12" class="text-center mb-5 ml-2 inline-flex items-center px-4 py-2  border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-[#fff] hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 rounded-full border-2 border-green-400" data-bs-toggle="modal" data-bs-target="#exampleModalSm" id="SmLabel" ><%= t("patient.Narrow Down") %></button>
+              <%= link_to t("patient.New Registration"), new_patient_path, tabindex: "13", class:"text-center bottom-0 mb-5  inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-[#fff] hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 rounded-full border-2 border-green-400" unless current_user.role == "Administrator" %>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+        <!-- Table -->
+            <%= render "patients/index" %>
+            <%= render "layouts/pagination" %>   <!-- Pagination -->
+          <div id="advance-search-popup" class="h-full absolute p-6 bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle">
+            <div class="bg-white">
+              <div class="">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 text-3xl text-center" id="modal-title"><%= t("patient.Narrow Down") %></h3>
+              </div>
+              <div>
+                <%= render partial:"patients/advance_search" %>
+              </div>
+            </div>
+          </div>
+      <div id="edit_popup" class="" >    
+    </div>
+  </main>
+<style>
+
+  div#edit_popup, #advance-search-popup {
+      position: absolute;
+      width: 100%;
+      top: 65px;
+      z-index: 10;
+      right: -100%;
+      transition: all 1s ease-in;
+      display: block;
+      max-width: 1000px;
+  }
+
+  .edit_patient {
+      background: #fff;
+      padding: 15px;
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  }
+
+  div#edit_popup>div, #advance-search-popup>div {
+      position: unset !important;
+  }
+
+  div#edit_popup[style="display: block;"] {
+      right: 0 !important;
+  }
+
+  .showPopUp {
+      right: 0 !important;
+  }
+
+
+</style>
+
+<script>
+
+  function editpatient(patientId){
+    $('#edit_popup').show();
+    $('#edit_popup').addClass("showPopUp");
+    $.ajax({
+            type: "get",
+            data: "id="+patientId,
+            url: "<%= edit_patient_patients_path %>"
+        }) 
+  }
+
+  $('#advance-search-popup').hide();
+
+  $('#SmLabel').on("click",function(){
+    $('#advance-search-popup').show();
+    $('#advance-search-popup').addClass("showPopUp");
+  });
+
+  $("#advance-search-button").on("click",function(){
+    $("#advance-search").submit();
+  })
+
+  $("#clear").on("click",function(){
+    $('.clear').val('');
+    $('input[type=checkbox]').prop('checked', false)
+  }) 
+
+  $("#pagy_no").change(function(){
+      $("#pagy_form").submit();
+  })
+</script>
+
+<style>
+.tooltip {
+  position: relative;
+  /* display: inline-block; */
+  
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: auto;
+    min-width: 344px;
+    height: 58px;
+    background-color: #43c17a;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    left: unset;
+    margin-left: 0;
+    opacity: 0;
+    transition: opacity 0.5s;
+    word-break: break-all;
+    white-space: normal;
+    right: 100%;
+    top: 0;
+    /* overflow-y: auto !important; */
+    padding: 10px 15px;
+    margin: auto;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translateY(-50%);
+    margin-left: 0px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent #555;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip .tooltiptext::-webkit-scrollbar {
+    width: 0;
+}
+
+</style>
+

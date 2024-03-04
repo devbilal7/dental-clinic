@@ -1,0 +1,17 @@
+<div id="<%= dom_id contract_type %>">
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Contract type code:</strong>
+    <%= contract_type.contract_type_code %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Contract type name:</strong>
+    <%= contract_type.contract_type_name %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this contract type", contract_type, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <%= link_to 'Edit this contract type', edit_contract_type_path(contract_type), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
+    <hr class="mt-6">
+  <% end %>
+</div>

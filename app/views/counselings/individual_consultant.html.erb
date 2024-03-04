@@ -1,0 +1,131 @@
+<main class="flex-1 pb-8">
+    <div class="max-w-full mx-auto mt-20 px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8 mr-6">    
+    <% unless params[:format] == "pdf" %>
+      <div class="flex">
+          <%= form_tag(individual_consultant_counselings_path,method: :get) do %>
+            <div class="md:grid md:grid-cols-7 gap-2 mb-5 flex-1">              
+                <%= label_tag "集計期間", nil,class: "text-center mt-3 md:col-span-1 block text-sm font-medium text-gray-700" %>
+                <%= month_field_tag(:aggregation_period,params[:aggregation_period], class: "time-period px-2 md:col-span-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md") %>
+                <%= label_tag "担当者", nil,class: "text-right mt-3 md:col-span-1 block text-sm font-medium text-gray-700" %>
+                <%= select_tag(:dentist, options_for_select(Dentist.all.map{|r|[r.full_name,r.id]},selected: params[:dentist]),prompt: "選択する", class:"md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md text-center") %>
+                <%= submit_tag("検索", :id=>"button", :class=>"cursor-pointer p-3 col-span-1 active items-center px-4 py-1 border border-transparent  font-small rounded-md shadow-xl text-white bg-[#43c17a] hover:bg-green-500", :name=>"submit") %>
+                <% if params[:action] == "index" %>
+                  <%= link_to "リセット", counselings_path, :class=>"col-span-1 active items-center px-4 py-1 border border-transparent  font-small rounded-md shadow-xl text-white bg-red-500 hover:bg-red-400" %>
+                <% else %>
+                  <%= link_to "リセット", "/#{params[:controller]}/#{params[:action]}", :class=>"pt-2 text-center col-span-1 active items-center px-4 py-1 border border-transparent font-small rounded-md shadow-xl text-white bg-red-500 hover:bg-red-400" %>
+                <% end %>
+            </div>
+          <% end %>    
+            <div class="mt-2 flex-0.5">
+            <%= link_to "帳票出力", individual_consultant_counselings_path(format: "pdf", aggregation_period: params[:aggregation_period],dentist: params[:dentist],submit: params[:submit]), class: "cursor-pointer col-span-1 active items-center px-4 py-2 ml-2 border border-transparent  font-small rounded-md shadow-xl text-white bg-[#43c17a] hover:bg-green-500 whitespace-nowrap"%>
+            </div>
+      </div>
+    <% end %>
+
+     <div class="flex flex-col">
+          <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">          
+            <div class="max-h-[600px]">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-[#fff] sticky top-0 z-10">
+                  <tr>
+                    <th scope="col" class="sticky left-0 bg-[#fff] z-2 px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" >日</th> <!-- Day -->
+                    <th scope="col" class="sticky bg-[#fff] z-2 px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" rowspan="2" style="left:85px">曜日 </th> <!-- Day of Week -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" colspan="1" >初診</th> <!-- First Visit -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap text-center" colspan="1" >再初診</th> <!-- Re-First Visit-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap text-center" colspan="1">急患</th> <!-- Emergency -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap text-center" colspan="2" >口臭検査</th> <!-- Bad Breath Test-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap text-center" colspan="2" >顕微鏡</th> <!-- Microscope -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap text-center" colspan="2">唾液</th> <!-- Saliva -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap text-center" colspan="5" >コース</th> <!-- Course -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap text-center" colspan="3" >歯周病</th> <!-- Periodontal Disease -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap text-center" colspan="17" >コンサル数</th> <!-- Number of Consultants -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap border-r-4 text-center" rowspan="2" >契約済金額</th> <!-- Contracted Amount-->
+                  </tr>
+                  <tr>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >人数</th> <!-- Number of People -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">人数</th> <!-- Number of People -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >人数</th> <!-- Number of People -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >説明</th> <!-- Explanation -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">実施</th>  <!-- Implementation -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >説明</th>  <!-- Explanation -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >実施</th> <!-- Implementation -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >説明</th> <!-- Explanation -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >実施</th> <!-- Implementation -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >A</th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >B</th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >C</th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >D</th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >E</th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >ア</th> <!-- ah -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >イ</th> <!-- i -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >ウ</th> <!-- Hare -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >初診</th> <!-- First Visit-->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >%</th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >再初</th> <!-- Re-First -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >%</th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >補綴</th> <!-- Prosthodontics -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >義歯</th> <!-- Denture -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >インプ</th> <!--Imp -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >インビザ</th> <!-- Invisa -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >他矯正</th> <!-- Other Corrections-->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >マイクロ</th> <!-- micro -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >ホワイト</th> <!-- White -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >計</th> <!-- Total -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >契約数</th> <!-- Number of Contract -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >契約率</th> <!-- Contract Rate-->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >セカンド</th> <!-- Second -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >メンテ</th> <!--Maintenance -->
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >合計</th> <!-- Total-->
+                  </tr>
+                </thead>
+                    <tbody class="bg-blackdivide-y divide-gray-200">
+                    <% @counselings.each do |day,data|%>
+                        <% individual_consultant(data,@all_counselings) %>
+                        <tr class="<%= day.strftime('%A') == 'Sunday' ? "text-gray-900 bg-gray-100" : "text-gray-900 bg-white" %>">
+                            <% if data.present? %>
+                                <td class="sticky left-0 bg-white z-2 px-6 py-4 whitespace-nowrap text-sm font-medium border border-l-4"><%= day.strftime('%m/%d') %></td>
+                                <td class="sticky z-2 px-6 bg-white py-4 whitespace-nowrap text-sm font-medium border border-l-4" style="left:85px" ><%= $week_days[day.strftime("%A").to_sym] %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @first_visit %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @re_first_visit %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @emergency %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @bad_breath_exp %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @bad_breath_imp %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @microscope_exp %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @microscope_imp %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @saliva_exp %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @saliva_imp %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @a_count %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @b_count %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @c_count %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @d_count %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @e_count %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @i_count %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @ah_count %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @hare_count %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @first_visit %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision( @first_visit.to_f/@total_first_visit ,:precision => 2) %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @re_first_visit %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision( @re_first_visit.to_f/@total_refirst_visit ,:precision => 2) %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @prostho %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @denture %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @implant %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @invisalign %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @other_correc %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @micro %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @whitening %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @total %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @cons_sign_date %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@cons_sign_date.to_f/@count,:precision => 2) %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @second_visit %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @main_resv_date %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @second_visit + @main_resv_date %></td>
+                                <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= @contract_amt %></td>
+                            <% end %>
+                            
+                        </tr>
+                    <% end %>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</main>

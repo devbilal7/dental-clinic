@@ -1,0 +1,139 @@
+<main class="mt-20 flex-1 pb-8">
+  <div class="max-w-full text-lg leading-6 font-medium text-gray-900"> 
+    <div>
+      <button type="button" id="button-versionControl" class="inline-flex items-center px-2 hover:text-white py-2 shadow-2xl text-sm font-medium rounded-t-lg text-gray-900 bg-white hover:bg-cyan-600 border border-cyan-600">
+          バージョン管理
+      </button> <!-- Version Control -->     
+               
+      <button type="button" id="button-ipManagement" class="ml-[-6px] inline-flex items-center px-2 py-2 hover:text-white shadow-2xl text-sm font-medium rounded-t-lg text-gray-900 border bg-white hover:bg-cyan-600 border border-cyan-600">
+         最終ログイン日時 NEW IP
+      </button>  <!-- LastLogin date time NEW IP -->
+    </div>   
+  </div>
+  <div class="border border-cyan-600 pb-6">
+    <!-- Version Control -->
+    <div id="versionControl-div" class="form-div <%=(!params[:q].nil? && params[:q][:search])=="true" ? "hidden" : "block" %>">
+      <div class="flex flex-col px-5">
+        <div class="overflow-auto">       
+          <div class="text-2xl mt-4">バージョン管理</div> <!-- Version Control -->
+          <div class="text-1xl mt-4">更新日  <%= Date.today.strftime("%Y/%m/%d")%></div> <!-- Update Date -->
+          <div class="text-1xl mt-4">ユーザー管理 画面 カウンセリング>打率 画面修正 </div> <!-- User Management screen counseling > Batting average screen correction -->
+          <%= form_for @version_control,url: upload_version_control_document_admin_managements_path, method: :post, class: "w-fit" do |f|%>
+            <div class="my-5">
+              <%= f.label :date_field,"日付", class: "mr-5" %> <!-- Date -->
+              <div class="relative w-fit">
+              <%= f.text_field :date_field,{autocomplete: "off", class:"datepicker shadow rounded-md border w-[206px] border-gray-200 outline-none px-3 py-2 mt-2", placeholder:"yyyy/mm/dd"} %>
+              <div class="flex absolute inset-y-0 right-2 items-center pl-0 pointer-events-none">
+                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+              </div>
+            </div>
+            </div>
+            <div class="my-5">
+              <%= f.label :title,"タイトル", class: "mr-5" %> <!-- Title -->
+              <%= f.text_area :title, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+            </div>
+            <div class="my-5">
+            <%= f.label :document, "アップロード", class:"absolute bg-gray-200 px-6 py-2 rounded" %>
+            <%= f.file_field :document,class: "mt-2 w-0 height-0",accept:"image/png, image/jpeg" %>
+              <%# <%= f.file_field :document %> 
+            </div>
+            <div class="my-5">
+              <%= f.submit "登録",class: "block mx-auto shadow rounded-md border border-gray-200 bg-cyan-600 hover:bg-cyan-700 cursor-pointer text-white px-3 py-2 mt-2" %> <!-- Register -->
+            </div>
+          <% end %>      
+        </div>
+      </div>
+      <div class="border">
+         <div class="overflow-auto p-4">
+          <div class="text-2xl mt-4">すべてのバージョン管理</div> <!-- All Version Control -->
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-[#fff]">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border">Sr No</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border">タイトル</th> <!-- Title -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border">日付</th> <!-- Date -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border">ファイル</th> <!-- File -->
+                  </tr>
+                </thead>
+                    <tbody class="bg-blackdivide-y divide-gray-200">
+                      <% @version_controls.each_with_index do |version_control, index| %>
+                        <tr>
+                          <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border" ><%= index+1 %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border" ><%= version_control.title %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border" ><%= version_control.date_field %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 border text-blue-500" >
+                            <% if  version_control.document.attached? %>
+                              <%= link_to rails_blob_path(version_control.document) do %>
+                                <%= version_control.document.filename if  version_control.document.attached? %>
+                              <% end %>
+                            <% end %>
+                          </td>
+                          <% %>
+                        </tr>
+                      <% end %>
+                    </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ip Management -->
+    <div id="ipManagement-div" class="form-div mt-6 <%=(!params[:q].nil? && params[:q][:search])=="true" ? "block" : "hidden"%>">
+      <div class="flex flex-col px-5">
+        <div class="overflow-auto">  
+          <%= render 'system_management_search_form' %>        
+          <div class="text-2xl mt-4">最終ログイン日時, NEW IP</div> <!-- Last Login Date and Time.NEW IP -->
+            <table class="min-w-full divide-y divide-gray-200 mt-6">
+              <tbody class="bg-[#fff] whitespace-nowrap">
+                <% @clinic_ips.each do |clinic| %>
+                  <tr class="mt-4">
+                    <td>
+                      <%= "There Was a connection from #{clinic.clinic.name} on #{clinic.last_login} from IP #{clinic.ip}" %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+            <% if @pagy.count > 10%>
+              <div class="mt-5">
+                <%== pagy_nav(@pagy) %>
+              </div>          
+            <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+//for Ip Management
+$(document).ready(function(){
+  <% if !params[:q].nil? && params[:q][:search] =="true" %>
+    $("#button-ipManagement").addClass("text-white bg-cyan-600");
+    $("#button-ipManagement").removeClass("bg-white text-gray-900");    
+  <% else %>
+    $("#button-versionControl").addClass("text-white bg-cyan-600");
+    $("#button-versionControl").removeClass("bg-white text-gray-900");
+  <% end %>
+
+  $("#button-ipManagement").click(function(){
+    $("#button-ipManagement").addClass("text-white bg-cyan-600");
+    $("#button-ipManagement").removeClass("bg-white text-gray-900");
+    $("#button-versionControl").removeClass("text-white bg-cyan-600");
+    $(".form-div").hide();
+    $(".submit-button").hide();
+    $("#ipManagement-div").show();    
+  });
+
+  //for Version Control
+  $("#button-versionControl").click(function(){
+    $("#button-ipManagement").removeClass("text-white bg-cyan-600");
+    $("#button-versionControl").addClass("text-white bg-cyan-600");
+    $("#button-versionControl").removeClass("bg-white text-gray-900");
+    $(".form-div").hide();
+    $(".submit-button").hide();
+    $("#versionControl-div").show();
+  });
+});
+
+</script>

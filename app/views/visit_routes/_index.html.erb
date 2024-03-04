@@ -1,0 +1,129 @@
+  <div class="flex flex-col px-5">
+          <div class="overflow-x-auto">          
+            <div class="max-h-[510px]">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-[#fff] whitespace-nowrap sticky top-0 z-10">
+                  <tr>
+                    <th scope="col" class="sticky bg-white left-0 z-2 px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4">No</th>
+                    <th scope="col" class="sticky bg-white z-2 px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider border border-l-4" style="left:67px">
+                    <% if params[:direction] == "asc" %>
+                      <%= link_to visit_routes_path(direction: "desc")  do %>
+                      <div class="inline-flex whitespace-nowrap ">
+                        <%= "患者番号" %>  
+                          <%= image_tag('up.png',class:"text-gray-500 mr-2 flex-shrink-0 h-4 w-4 sort")  %>
+                      </div>
+                      <% end %>
+                    <% else %>
+                      <%= link_to visit_routes_path(direction: "asc")  do %>
+                      <div class="inline-flex whitespace-nowrap">
+                        <%= "患者番号" %>  
+                          <%= image_tag('down.png',class:"text-gray-500 mr-2 flex-shrink-0 h-4 w-4 sort")  %>
+                      </div>
+                      <% end %>
+                    <% end %>
+                    </th>
+                    <th scope="col" class="sticky bg-white z-2 px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4" style="left:175px"><%= "患者氏名" %>0000</th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4"><%= "来院経路" %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4">DR</th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4">DH</th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4">TC</th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4"><%= "初診" %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4"><%= t("monthly.Last Visit") %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4"><%= "治療計画" %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4"><%= "インプラント 矯正" %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4"><%= "高自費契約" %></th>
+                    
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4"><%= "メンテ" %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4"><%= "治療" %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4"><%= "中断" %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4"><%= "終了" %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider whitespace-nowrap border border-l-4"><%= "メンテ来院" %></th>
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wide whitespace-nowrap border border-l-4" ><%= "紹介患者" %></th>
+                    <% unless params[:format] == "pdf" %>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wide whitespace-nowrap border border-l-4 border-r-4" ></th>
+                    <% end %> 
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <% @patients.uniq.each do |patient| %>
+                    <tr class="border border-2">
+                    <td class="sticky bg-white left-0 z-2 px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @patient_no + 1 %></td>
+                    <td class="sticky bg-white z-2 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4" style="left:67px"><%= patient.patient_number %></td>
+
+                    <% unless current_user.role == "Administrator" %>
+                      <td class="sticky bg-white z-2 px-6 underline text-blue-300 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4 cursor-pointer" onclick="editpatient(<%= patient.id %>)" tabindex= "17" style="left:175px"><%= patient.full_name %></td>
+                    <% else %>
+                      <td class="sticky bg-white z-2 px-6 text-gray-500 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4" style="left:175px"><%= patient.full_name %></td>
+                    <% end %>
+
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= patient.patient_visit_route %></td>
+
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= patient.dentist.full_name %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= patient.dentist_hygienist.full_name %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= patient.treatment_coordinator.full_name %></td>
+                    
+                    <% if true %>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= patient.multiple_visit_routes.last.visit_route.first_visit if patient.multiple_visit_routes.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= patient.multiple_visit_routes.last.visit_route.second if patient.multiple_visit_routes.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= patient.multiple_visit_routes.last.visit_route.treatment_plan_date if patient.multiple_visit_routes.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= patient.multiple_visit_routes.last.visit_route.implant_correction if patient.multiple_visit_routes.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4 text-center">
+                        <%= patient.multiple_visit_routes.last.visit_route.self_pay_contract == true ? ("<div class='mx-auto border border-gray-500 rounded-full w-[17px] h-[17px]'></div>".html_safe) :"" if patient.multiple_visit_routes.present?%>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= patient.multiple_visit_routes.last.visit_route.maintenance if patient.multiple_visit_routes.present? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4">
+                        <%= patient.multiple_visit_routes.last.visit_route.treatment_plan == true ? ("<div class='mx-auto border border-gray-500 rounded-full w-[17px] h-[17px]'></div>".html_safe) :"" if patient.multiple_visit_routes.present?%>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4">
+                        <%= patient.multiple_visit_routes.last.visit_route.suspension == true ? ("<div class='mx-auto border border-gray-500 rounded-full w-[17px] h-[17px]'></div>".html_safe) :"" if patient.multiple_visit_routes.present? %>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4">
+                        <%= patient.multiple_visit_routes.last.visit_route.confirmation_end == true ? ("<div class='mx-auto border border-gray-500 rounded-full w-[17px] h-[17px]'></div>".html_safe) :"" if patient.multiple_visit_routes.present? %>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 text-center">
+                        <%= patient.multiple_visit_routes.last.visit_route.maintenance_visit == true ? ("<div class='mx-auto border border-gray-500 rounded-full w-[17px] h-[17px]'></div>".html_safe) :"" if patient.multiple_visit_routes.present? %>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-grey-500 border border-l-4 border-r-4">
+                        
+                      </td>
+                      <% unless params[:format] == "pdf" %>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-500 border border-l-4 border-r-4 cursor-pointer" onclick="editvisitroute(<%=  patient.multiple_visit_routes.last.id if patient.multiple_visit_routes.present? %>,<%= patient.id if patient.multiple_visit_routes.present? %>)" tabindex="18">
+                      <%= "編集" if patient.multiple_visit_routes.present?%> <!-- Edit -->
+                      </td>
+                      <% end %>
+                    <% end %>
+                    
+                    </tr>
+                    <% @patient_no += 1 %>
+                  <% end %>
+                    <!-- More people... -->
+                  <% unless @patients.present? %>
+                      <tr>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-red-500 text-center border">No Result Found!!</td>
+                      </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div> 
+          <% unless params[:format] == "pdf" %>
+          <div class="border border-2" >
+            <%= render "layouts/pagination" %> <!-- Pagination -->
+          </div>
+          <% end %>
+          
+        </div>

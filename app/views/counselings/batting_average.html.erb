@@ -1,0 +1,49 @@
+<main class="flex-1 pb-8 h-screen">
+    <div class="max-w-full mx-auto mt-20 px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8 mr-6">     
+     <%= form_tag(batting_average_counselings_path,method: :get) do %>
+        <div class="md:grid md:grid-cols-7 gap-2 mb-5" style="grid-template-columns: auto 1fr 1fr 1fr 1fr 1fr 1fr 1fr;" >              
+            <%= label_tag "期間", nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700" %>
+            <%= month_field_tag(:aggregation_period,params[:aggregation_period],id: "search-field", class: "time-period px-2 md:col-span-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md") %>
+        </div>
+     <% end %>
+
+     <div class="flex flex-col">
+          <div class="my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">          
+            <div class="max-h-[780px]" >
+              <table class="min-w-full divide-y divide-gray-200 ">
+                <thead class="bg-[#fff] sticky top-0 z-10">
+                  <tr>
+                    <th scope="col" class="sticky left-0 bg-white z-2 px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" >担当 </th> <!-- Responsible Person -->
+                    <th scope="col" class="bg-white px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" colspan="3" rowspan="2">補綴 </th> <!-- Prosthodontics-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" colspan="3"  >義歯</th> <!-- Denture-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 text-center whitespace-nowrap" colspan="3"  >インプラント</th> <!-- Implant -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 text-center whitespace-nowrap" colspan="3" >インビザライン</th> <!-- Invisalign-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 text-center whitespace-nowrap" colspan="3"  >他矯正</th> <!-- Other Correction-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 text-center whitespace-nowrap" colspan="3"  >マイクロ</th> <!-- Micro -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 text-center whitespace-nowrap" colspan="3" >ホワイトニング</th> <!-- Whitening-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" colspan="3">自費コンサル全体</th>  <!-- Whole Sele Funded Consultant-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap" colspan="2">目標値</th> <!-- Target Value-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">達成率</th> <!-- Achievement Rate-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">契約目標額</th> <!-- Contract Target Amount-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 whitespace-nowrap">契約額</th> <!-- Contract Amount-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 border-r-4 whitespace-nowrap">達成率</th> <!-- Achievement Rate -->
+                  </tr>
+                </thead>
+                    <tbody class="bg-blackdivide-y divide-gray-200">
+                      <% @counselings&.each_with_index do |data, index|%>
+                        <% @data = data %>
+                        <% @index = index %>
+                        <%= render "counselings/batting_average" %>
+                      <% end %>
+                      
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<script>
+  $("#search-field").on("change",function(){
+    $("form").submit();
+  })
+</script>

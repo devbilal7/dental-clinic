@@ -1,0 +1,341 @@
+<div class="mx-auto mt-5">
+  <h1 class="font-bold text-4xl"><%= t("newuser.New User")%></h1>
+    
+    <%= form_with(model: @user, url: registration_path, class: "contents") do |form| %>
+
+        <%= form.hidden_field :role,value: params[:role] , id: "role"%>    
+        <div id="clinic-form"> 
+            <%= form.fields_for :clinic do |f| %>
+                <!-- Basic Information -->
+                <div class="border border-solid border-gray-300 mb-5 ">
+                    <div class="w-full bg-gray-100 p-3">
+                        <%= t("patient.Basic Information") %>
+                    </div>
+
+                    <div class="p-5">
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= f.label :User_no %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :user_no,value: @user.id,disabled: true, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= 'Corporate Name' %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% if  @user.errors['clinic.name'][0] .present?%>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Name #{@user.errors['clinic.name'][0]}" %></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t('clinic.postal_code') %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :postal_code, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                            <% if  @user.errors['clinic.postal_code'][0] .present?%>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Postal Code #{@user.errors['clinic.postal_code'][0]}"%></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t('clinic.region') %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :region, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                            <% if  @user.errors['clinic.region'][0] .present? %>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Region #{@user.errors['clinic.region'][0]} " %></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t('clinic.municipalities') %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :municipalities, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% if  @user.errors['clinic.municipalities'][0] .present?%>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Municipalities #{@user.errors['clinic.municipalities'][0]}" %></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t('clinic.address') %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_area :address, rows: 4, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% if  @user.errors['clinic.address'][0] .present? %>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Address #{@user.errors['clinic.address'][0]} " %></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+                    
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t('clinic.building_name') %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :building_name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% if  @user.errors['clinic.building_name'][0] .present? %>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Building Name #{@user.errors['clinic.building_name'][0]}"%></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t('clinic.Number of Floors') %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :floors, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% if  @user.errors['clinic.floors'][0] .present? %>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Building Name #{@user.errors['clinic.floors'][0]}"%></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t('clinic.phone_number') %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.number_field :phone_number, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% if  @user.errors['clinic.phone_number'][0] .present? %>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Phone Number #{@user.errors['clinic.phone_number'][0]}" %></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t('clinic.fax_number') %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :fax_number, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% if  @user.errors['clinic.fax_number'][0] .present? %>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Fax Number #{@user.errors['clinic.fax_number'][0]}"  %></div>
+                            <% end %>
+                        </div>
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+
+
+                <!-- Representative/ Person IN Charge -->
+                <div class="border border-solid border-gray-300 mb-5 ">
+                    <div class="w-full bg-gray-100 p-3">
+                        <%= t("patient.Representative") %>
+                    </div>
+                <fieldset class="p-3">
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t("patient.Full Name") %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :representative_first_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+                            <%= f.text_field :representative_last_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t("patient.Kana") %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :representative_wonder1, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+                            <%= f.text_field :representative_wonder2, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                    </div>
+                </fieldset>
+                </div>
+
+                <div class="border border-solid border-gray-300 mb-5 ">
+                    <div class="w-full bg-gray-100 p-3">
+                        <%= t("patient.Person in charge 1") %>
+                    </div>
+                <fieldset class="p-3">
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t("patient.Full Name") %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :charge1_first_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+                            <%= f.text_field :charge1_last_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t("patient.Kana") %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :charge1_wonder1, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+                            <%= f.text_field :charge1_wonder2, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                    </div>
+                </fieldset>
+                </div>
+
+                <div class="border border-solid border-gray-300 mb-5 ">
+                    <div class="w-full bg-gray-100 p-3">
+                        <%= t("patient.Person in charge 2") %>
+                    </div>
+                <fieldset class="p-3">
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t("patient.Full Name") %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :charge2_first_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+                            <%= f.text_field :charge2_last_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="my-5 d-flex">        
+                        <div class="flex flex-wrap">
+                            <div class="flex items-center w-32">
+                            <%= t("patient.Kana") %>
+                        </div>
+                        <div class=" col-span-4">
+                            <%= f.text_field :charge2_wonder1, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+                            <%= f.text_field :charge2_wonder2, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+                        </div>
+                        </div>
+                    </div>
+                </fieldset>
+                </div>
+
+            <% end %>
+        </div>
+
+        <!-- ID/Password -->
+        <div class="border border-solid border-gray-300 mb-5 ">
+                <div class="w-full bg-gray-100 p-3">
+                    <%= t("patient.ID / Password") %>
+                </div>
+            <fieldset class="p-3">
+
+                <div class="my-5 d-flex">        
+                    <div class="flex flex-wrap">
+                        <div class="flex items-center w-32">
+                        <%= t("patient.ID") %>
+                    </div>
+                    <div class=" col-span-4">
+                        <div class="my-5">
+                            <%= form.email_field :email, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <% @user.errors.full_messages_for(:email).each do |message| %>
+                                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+                            <% end %>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="my-5 d-flex">        
+                    <div class="flex flex-wrap">
+                        <div class="flex items-center w-32">
+                        <%= t("patient.Password") %>
+                    </div>
+                    <div class=" col-span-4">
+                        <%= form.password_field :password, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                        <% @user.errors.full_messages_for(:password).each do |message| %>
+                            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+                        <% end %> 
+                    </div>
+                    </div>
+                </div>
+
+                <div class="my-5 d-flex">        
+                    <div class="flex flex-wrap">
+                        <div class="flex items-center w-32">
+                        <%= t("patient.Password Confirmation") %>
+                    </div>
+                    <div class=" col-span-4">
+                        <%= form.password_field :password_confirmation, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                        <% @user.errors.full_messages_for(:password_confirmation).each do |message| %>
+                            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+                        <% end %>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="my-5 d-flex">        
+                    <div class="flex flex-wrap">
+                        <div class="flex items-center w-32">
+                        <%= t("patient.Usage Classification") %>
+                    </div>
+                    <div class=" col-span-4">
+                        <%= form.select :usage_classification, User.usages.keys, {:include_blank => "Select"},class:"bg-teal p-3 rounded text-black shadow-inner w-full" %>
+                        <% @user.errors.full_messages_for(:usage_classification).each do |message| %>
+                            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+                        <% end %>
+                    </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="inline">
+            <%= form.submit t("newuser.Create User"), class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer"%>
+        </div>
+    <% end %>
+</div>
+
+<script>
+    
+        if($("#role").val() == "Administrator")
+        {
+            $("#clinic-form").hide();
+        }
+        else
+        {
+            $("#clinic-form").show();
+        }
+    
+</script>

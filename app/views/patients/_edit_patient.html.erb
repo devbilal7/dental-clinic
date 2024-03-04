@@ -1,0 +1,75 @@
+
+
+
+<% unless @patient.nil? %>
+    <div class="w-90 h-full shadow-md bg-white px-1 absolute">
+    <span class="remove-popup absolute top-0 right-0 px-4 py-3">
+        <svg class="remove-popup fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+    </span>
+    <%= form_for @patient,id: "edit_form", url: update_patient_patients_path, method: :put do |f| %>
+    <div class="md:grid md:grid-cols-3 gap-2 mb-5 flex items-center flex-wrap mt-4" style="grid-template-columns: min-content auto !important;
+    white-space: nowrap;" >
+
+        <%= f.hidden_field :patient_number, value: params[:id]  %>
+
+        <%= t("patient.Patient Name") %>
+        <%= f.text_field :first_name,value: @patient.first_name, class:"shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65 fields_values",placeholder: t("patient.Search by Patient Name") %>
+        <%= f.text_field :last_name,value: @patient.last_name, class:"shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65 fields_values",placeholder: t("patient.Search by Patient Name") %>
+
+        <%= t("patient.Visit Route") %>
+        <%= f.select :patient_visit_route, VisitRouteMaster.pluck(:visit_route_name).map{|visit_route| visit_route}, {:include_blank => "Select"}, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65 fields_values" %>
+<div class="col-span-1"></div>
+        <%= t("patient.Keyword") %>
+        <%= f.text_field :keyword, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65 fields_values" %>
+        <%= f.text_field :keyword_detail, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65 fields_values" %>
+        
+
+        <%= t("patient.Panorama") %>    
+        <%= f.check_box :panorama,value: @patient.panorama,class: "mt-3 md:col-span-2 block text-sm font-medium text-gray-700 clear fields_values" %> 
+       
+        <%= t("patient.Calies Check")  %>   
+        <%= f.check_box :caries_check,value: @patient.caries_check,class: "mt-3 md:col-span-2 block text-sm font-medium text-gray-700 clear fields_values" %>  
+
+        <%= t("patient.Unknown Course") %>
+        <%= f.text_field :unknown_course,value: @patient.unknown_course, class:"col-span-2 shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65 fields_values" %>
+
+        <%= t("patient.Course") %>
+        <%= f.select(:course, Course.all.map{|r|[r.name]},{:include_blank => "Select"},value: @patient.course, class:"col-span-2 shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65 fields_values") %>
+ 
+        <%= t("patient.P Course") %>
+        <%= f.select(:p_course, Pcourse.all.map{|r|[r.name]},{:include_blank => "Select"},value: @patient.p_course, class:"col-span-2 shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65 fields_values") %>
+
+        <%= t("patient.Dr") %>
+        <%= f.select(:dentist, options_for_select(Dentist.all.map{|r|[r.first_name, r.id]},selected: @patient.dentist.id ),{:include_blank => "Select"}, class:"col-span-2 shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65 fields_values") %>
+       
+        <%= t("patient.Dh") %>
+        <%= f.select :dentist_hygienist, options_for_select(DentistHygienist.all.map{|r|[r.first_name, r.id]},selected: @patient.dentist_hygienist.id),{:include_blank => "Select"}, class:"col-span-2 shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65 fields_values" %>
+       
+
+        <%= label_tag :tc, nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700" %>
+        <%= f.select :treatment_coordinator, options_for_select(TreatmentCoordinator.all.map{|r|[r.first_name, r.id]},selected: @patient.treatment_coordinator.id),{:include_blank => "Select"}, class:"col-span-2 shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65 fields_values" %>
+      
+
+        <%= label_tag :memo, nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700" %>   
+        <%= f.text_area :note,value: @patient.note, class: "col-span-2 shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full fields_values",placeholder: "200 Characters max" %>
+      
+        <div class="col-span-3 flex justify-end" >
+
+
+        <%= f.submit t("patient.Save"), class: "rounded-lg py-3 px-5 bg-green-400 float-left hover:bg-green-500 text-white inline-block font-medium cursor-pointer my-5 w-40 mr-5",id: "update_button" %>
+
+        </div>
+      </div>
+    <% end %>
+    </div>
+<% end %>
+<script>
+  $(".remove-popup").click(() => {
+    $('#edit_popup').removeClass("showPopUp");
+  })
+  
+  $("#erase").on("click",function() {
+    $('.fields_values').val("")
+  })
+</script>
+

@@ -1,0 +1,324 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<div class="mx-auto mt-20">
+  <h1 class="font-bold text-4xl"><%= %></h1>
+  <%= form_with(model: @user,url: clinic_update_path(id: @user.id),class: "contents",id: "cform") do |form| %>
+      <% if @user.errors.any? %>
+        <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+          <h2><%= pluralize(@user.errors.count, "error") %> prohibited this clinic from being saved:</h2>
+
+          <ul>
+            <% @user.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+          </div>
+      <% end %>
+
+        <div>
+            <button type="button" id="button-basic" class="outline-none ring-2 ring-offset-2 ring-green-500 rounded inline-flex items-center mr-2 px-2 py-2 border border-transparent shadow-xl text-sm font-medium text-black bg-[#43c17a] hover:bg-green-500 ">
+             基本情報
+            </button> <!-- Basic Information -->
+            <button type="button" id="button-id" class="rounded inline-flex items-center mr-2 px-2 py-2 border border-transparent shadow-xl text-sm font-medium text-black bg-[#43c17a] hover:bg-green-500 ">
+             ＩＤ・パスワード   
+            </button> <!-- ID / Password -->
+            <button type="button" id="button-representative" class="rounded inline-flex items-center mr-2 px-2 py-2 border border-transparent shadow-xl text-sm font-medium text-black bg-[#43c17a] hover:bg-green-500 ">
+           その他
+            </button>  <!-- Others -->
+        </div>
+
+      <div id = "clinic-form" class="mt-14" > 
+        <div class="" style="display:none" id="id-password" >
+            <div class="border border-solid border-gray-300 mb-5  max-w-5xl">
+                <div class="w-full bg-gray-100 p-3">
+                    <%= "ID/パスワード" %>
+                </div>
+                <fieldset class="p-3">
+
+                    <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;">        
+                                <%= t("patient.ID") %>
+                                <%= @user.email%>
+                                <%= form.hidden_field :email%>
+                    </div>
+
+                <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;">        
+                                <%= "パスワード" %>
+                            <%= form.password_field :check_password, autofill: "false",class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <%= link_to "パスワードを忘れた？", new_password_path(@user),class:"font-medium text-indigo-600 hover:text-indigo-500 whitespace-nowrap" %><br />
+                </div>
+
+            </fieldset>
+            </div>
+        </div>
+
+        <%= form.fields_for :clinic do |f| %>
+        <div class="" style="display:block" id="basic-information" >
+            <div class="border border-solid border-gray-300 mb-5  max-w-5xl">
+                    <div class="w-full bg-gray-100 p-3">
+                        基本情報
+                    </div> <!-- Basic Information -->
+                <fieldset class="p-3">
+                <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;"  >
+                    <%= "法人名" %> <!-- Corporate Name -->
+                    <%= f.text_field :name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2  w-full" %>
+                        <% if  @user.errors['clinic.name'][0] .present?%>
+                            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-0"><%= "Name #{@user.errors['clinic.name'][0]}" %></div>
+                    <% end %>
+                </div>
+
+                <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;" >
+                    <%= "郵便番号" %> <!-- Post Code -->
+                    <%= f.text_field :postal_code, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                    <% if  @user.errors['clinic.postal_code'][0] .present?%>
+                        <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Postal Code #{@user.errors['clinic.postal_code'][0]}"%></div>
+                    <% end %>
+                </div>
+
+                <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;">
+                    <%= "都道府県" %> <!-- Prefectures -->
+                    <%= f.select(:region, options_for_select(Clinic.regions.keys.to_a,selected: @user.clinic.region),{:include_blank => "Select"}, class:"w-60 py-2 md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md text-center") %>
+                    <% if  @user.errors['clinic.region'][0] .present? %>
+                        <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Region #{@user.errors['clinic.region'][0]} " %></div>
+                    <% end %>
+                </div>
+
+                <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;">
+                    <%= "市区町村" %> <!-- Municipalities -->
+                    <%= f.text_field :municipalities, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                    <% if  @user.errors['clinic.municipalities'][0] .present?%>
+                        <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Municipalities #{@user.errors['clinic.municipalities'][0]}" %></div>
+                    <% end %>
+                </div>
+
+
+                <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;">
+                    <%= "番地" %> <!-- Address -->
+                    <%= f.text_field :address, rows: 4, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                    <% if  @user.errors['clinic.address'][0] .present? %>
+                        <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Address #{@user.errors['clinic.address'][0]} " %></div>
+                    <% end %>
+                </div>
+
+                
+                <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;">
+                    <%= "ビル名" %> <!-- Building Name -->
+                    <%= f.text_field :building_name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                    <% if  @user.errors['clinic.building_name'][0] .present? %>
+                        <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Building Name #{@user.errors['clinic.building_name'][0]}"%></div>
+                    <% end %>
+                </div>
+
+                <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;">
+                    <%= "階数" %> <!-- Number of Floors -->
+                    <%= f.text_field :floors, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                    <%  if  @user.errors['clinic.floors'][0] .present?  %>
+                        <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Floors #{@user.errors['clinic.floors'][0]}" %></div>
+                    <% end %>
+                </div>
+
+                  <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;">
+                    <%= "電話番号" %> <!-- Phone Number -->
+                    <%= f.text_field :phone_number, id: "phone-number",  class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                    <% if  @user.errors['clinic.phone_number'][0] .present? %>
+                        <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Phone Number #{@user.errors['clinic.phone_number'][0]}" %></div>
+                    <% end %>
+                </div>
+
+                <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;">
+                    <%= "FAX番号" %> <!-- Fax Number -->
+                    <%= f.text_field :fax_number, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                    <% if  @user.errors['clinic.floors'][0] .present? %>
+                        <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= "Fax Number #{@user.errors['clinic.fax_number'][0]}"  %></div>
+                    <% end %>
+                </div>            
+                  <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 1fr 2fr 1fr 1fr 0fr;">
+                        <%= "ロゴマーク" %> <!-- Logo -->
+                        <%= image_tag @user.logo.attached? ? @user.logo : "no_image.jpg", class: "rounded-full w-[117px] h-[117px]", id: "logo-preview" %>
+                        <div>
+                            <%= form.label :logo, "Upload a file", class:"absolute bg-gray-200 px-6 py-2 rounded" %>
+                            <%= form.file_field :logo,class: "mt-2 w-0 height-0",accept:"image/png, image/jpeg" %>
+                        </div>
+                    </div>  
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="" style="display:none" id="representative">
+
+            <div class="border border-solid border-gray-300 mb-5  max-w-5xl">
+                <div class="w-full bg-gray-100 p-3">
+                    <%= "代表者" %> 
+                </div> <!-- Representative -->
+                <fieldset class="p-3">
+
+                    <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;">        
+                                <%= "氏名" %> <!-- Full Name -->
+                            <%= f.text_field :representative_first_name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <%= f.text_field :representative_last_name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                    </div>
+
+
+
+                    <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;">        
+                                <%= "かな" %> <!-- Kana -->
+                            <%= f.text_field :representative_wonder1, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                            <%= f.text_field :representative_wonder2, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                    </div>
+
+                </fieldset>
+            </div>
+            
+            
+
+            <div class="border border-solid border-gray-300 mb-5  max-w-5xl">
+                <div class="w-full bg-gray-100 p-3">
+                    <%= "担当者１" %> 
+                </div> <!-- Person in charge 1 -->
+            <fieldset class="p-3">
+
+
+                <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;">        
+                            <%= "氏名" %> <!-- Full Name -->
+                        <%= f.text_field :charge1_first_name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                        <%= f.text_field :charge1_last_name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                </div>
+
+
+                <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;">        
+                            <%= "かな" %> <!-- Kana -->
+                        <%= f.text_field :charge1_wonder1, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                        <%= f.text_field :charge1_wonder2, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                </div>
+
+            </fieldset>
+            </div>
+
+            <div class="border border-solid border-gray-300 mb-5  max-w-5xl">
+                <div class="w-full bg-gray-100 p-3">
+                    <%= "担当者2" %>
+                </div> <!-- Person in charge 2 -->
+            <fieldset class="p-3">
+
+
+                <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;">        
+                                <%= "氏名" %> <!-- Full Name -->
+                        <%= f.text_field :charge2_first_name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                        <%= f.text_field :charge2_last_name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                </div>
+
+
+
+                    <div class="my-5 md:grid grid-cols-6 gap-2 items-center" style="grid-template-columns: 1fr 2fr 1fr 1fr 1fr 0fr;">        
+                                <%= "かな" %> <!-- Kana -->
+                        <%= f.text_field :charge2_wonder1, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                        <%= f.text_field :charge2_wonder2, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+                </div>
+            
+            </fieldset>
+            </div>
+            </div>
+            <% end %>
+        </div>
+
+            <div class="inline">
+                <%= form.submit "保存", class: "rounded-lg py-3 px-5 bg-[#43c17a] hover:bg-green-500 mb-4 text-white inline-block font-medium cursor-pointer" %>
+            </div> <!-- Save -->
+  <% end %>
+</div>
+<div class="confirm-alert">
+    <div id="dialog-confirm" title="警告！">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>保存されていない項目があります。<br>移動していいですか？</p>
+    </div>
+</div>
+
+<script>
+// Alert Confirmaton Hide?
+  $(".confirm-alert").hide();  
+</script>
+
+<script>
+
+  $("#button-id").click(function(){
+    $("#button-basic").removeClass("ring-2 ring-offset-2 ring-green-500")  
+    $("#button-id").addClass("ring-2 ring-offset-2 ring-green-500 ")  
+    $("#button-representative").removeClass("ring-2 ring-offset-2 ring-green-500 ")  
+    $("#representative").hide();
+    $("#id-password").show();
+    $("#basic-information").hide();
+  });
+  $("#button-basic").click(function(){
+    $("#button-basic").addClass("ring-2 ring-offset-2 ring-green-500")  
+    $("#button-representative").removeClass("ring-2 ring-offset-2 ring-green-500")  
+    $("#button-id").removeClass("ring-2 ring-offset-2 ring-green-500")  
+    $("#representative").hide();
+    $("#id-password").hide();
+    $("#basic-information").show();
+  });
+  $("#button-representative").click(function(){
+    $("#button-basic").removeClass("ring-2 ring-offset-2 ring-green-500")  
+    $("#button-representative").addClass("ring-2 ring-offset-2 ring-green-500")  
+    $("#button-id").removeClass("ring-2 ring-offset-2 ring-green-500")  
+    $("#representative").show();
+    $("#id-password").hide();
+    $("#basic-information").hide();
+  });
+
+  $("#user_logo").on("change",function() {
+        if($("#user_logo").prop("files").length > 0 ){
+            let tempPath = URL.createObjectURL($("#user_logo").prop("files")[0]);
+            $("#logo-preview").attr("src",tempPath);
+        }
+    })
+</script>
+
+<script>
+$(document).on('input','#phone-number',function(){
+    var phone=$('#phone-number').val();
+   if(phone.indexOf('0')!== 0){
+     $('#phone-number').val('0');
+   }
+});
+</script>
+
+<script>
+// Alert Popup
+  var show_alert=false
+  var input = document.querySelector('#cform')
+    input.addEventListener('change', () => {
+        show_alert=true
+    })
+    $('.nav_custom_class').click(function(){
+      if(show_alert)
+      {
+        var url=$(this).closest("a").attr('href')
+        myFunction(url);
+        event.preventDefault();
+       
+      }
+      
+    })
+    
+</script>
+
+<script>
+    
+  function myFunction(url) {
+    $( "#dialog-confirm" ).dialog({
+      resizable: false,
+      height: "auto",
+      width: 400,
+      modal: true,
+      buttons: {
+        "はい": function() {
+            window.location.replace(url)
+            $( this ).dialog( "close" );
+        //   location.reload();
+          return false
+        },
+        いいえ: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+  };
+  
+</script>

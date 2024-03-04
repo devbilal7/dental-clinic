@@ -1,0 +1,55 @@
+  <main class="flex-1 pb-8">
+
+        <div class="max-w-full mx-auto mt-20 px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8">
+        <!-- Search -->
+        <%= render 'client_management_search_form' %>       
+        <!-- Table -->
+        <div class="flex flex-col">
+          <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            
+              <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg mt-24">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th scope="col" class="underline px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">No</th>
+                      <th scope="col" class="underline px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"><%= sort_link(@q, :id, t("user.User No"), default_order: :desc) %></th>
+                      <th scope="col" class="underline px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"><%= sort_link(@q, :name, t("user.User Name"), default_order: :desc) %></th>
+                      <th scope="col" class="underline px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"><%= sort_link(@q, :region, t("user.Prefectures"), default_order: :desc) %></th>
+                      <th scope="col" class="underline px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"><%= sort_link(@q, :user_email, t("user.Login Id"), default_order: :desc) %></th>
+                      
+                      <th scope="col" class="underline px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"><%= t("user.Usage Classification") %></th>                    
+                      <th scope="col" class="underline px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"><%= sort_link(@q, :user_last_sign_in_at, t("user.Last Login Date"), default_order: :desc) %></th> 
+                      <th scope="col" class="underline px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"></th> 
+
+                      <th scope="col" class="relative px-6 py-3">
+                        <span class="sr-only">Edit</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <% @clinics.each_with_index do |user,index| %>
+                    <tr>
+                      <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900"><%= index+1 %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900"><%= user.id %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500"><%= user.name %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500"><%= user.region %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500"><%= user.user.email %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center"><%= user.user.email %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center"><%= user.user.last_sign_in_at.strftime("%Y/%m/%d") unless user.user.last_sign_in_at.nil? %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-500"><%= link_to user_masquerade_index_path(user_id: user.user.id), method: :get, class: "block mx-auto shadow w-fit rounded-lg border border-gray-200 bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2" do %><%= t("user.Login As") %><% end %></td>
+                    </tr>
+                    <% end %>
+                    <!-- More people... -->
+                  </tbody>
+                </table>
+              </div>
+          </div>
+          <% if @pagy.count > 10 %>
+            <div class="mt-5">
+              <%== pagy_nav(@pagy) %>
+            </div>          
+          <% end %>
+        </div>
+        </div>
+      </div>
+    </main>

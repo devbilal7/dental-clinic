@@ -1,0 +1,185 @@
+<main class="flex-1 pb-8 h-screen">
+      <div class="max-w-full mx-auto px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8 ml-0 mr-6 mt-20">
+   
+    
+        <!-- Search and Filter -->
+        <%= render 'admin_search_filter' %>
+        <!-- Buttons -->
+        <div class="flex-0.5 ml-4">
+        <!-- Pagy DropDown -->
+         <%= render "layouts/pagination_limit", controller: params[:controller], action: params[:action] %>
+         <%= link_to '新規登録', new_admin_path, class:"text-center bottom-0 mb-5 mt-24 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-[#fff] hover:bg-[#c0e7eb] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 rounded-full border-2 border-[#82ced5]" if current_user.role == "Administrator" %> <!-- Create Account -->
+
+        </div>
+        </div>
+        
+        <!-- Table -->
+        <div class="flex flex-col overflow-x-auto">
+          <div class="">          
+            <div class="shadow border-b border-gray-200 sm:rounded-lg">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-[#fff] whitespace-nowrap">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border">N0</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border whitespace-nowrap">
+                    <% if params[:direction] == "asc" %>
+                      <%= link_to admin_index_registrations_path(direction: "desc")  do %>
+                      <div class="inline-flex whitespace-nowrap">
+                        管理者No 
+                          <%= image_tag('up.png',class:"text-gray-500 mr-2 flex-shrink-0 h-4 w-4 sort")  %>
+                      </div> <!-- Administrator No. / Ptient.user_code -->
+                      <% end %>
+                    <% else %>
+                      <%= link_to admin_index_registrations_path(direction: "asc")  do %>
+                      <div class="inline-flex whitespace-nowrap">
+                        管理者No 
+                          <%= image_tag('down.png',class:"text-gray-500 mr-2 flex-shrink-0 h-4 w-4 sort")  %>
+                      </div> <!-- Administrator No. / Ptient.user_code -->
+                      <% end %>
+                    <% end %>
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border whitespace-nowrap">氏名</th> <!-- Full Name -->
+                    
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border whitespace-nowrap">権限</th> <!-- Authority -->
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border whitespace-nowrap">ログインID</th> <!-- LoginID -->
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border whitespace-nowrap">利用区分</th> <!-- Usage Classification -->
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border whitespace-nowrap">最終ログイン日</th> <!-- Last Login Date -->
+
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-black uppercase tracking-wider border whitespace-nowrap">アクション</th> <!-- Action -->
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200" id="table_body">
+                  <% index = 1 %>
+                    <% @users.each do |user| %>
+                    <tr>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border"><%= index %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center border"><%= user.id %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-500 border cursor-pointer" onclick="edit_user(<%= user.id %>)" ><%= user.full_name %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= user.role %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= user.email %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border text-center"><%= user.usage_classification %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= user.last_sign_in_at.try(:strftime, ("%F")) %></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium border">
+                        <%= link_to t("user.Delete Account"), registration_path(user.id),method: :delete,data: { confirm: "このアカウントを削除してもよろしいですか？" }, class:"inline-flex items-center px-4 py-2 border border-red-300 shadow-sm text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+                        <%= link_to "としてログイン", user_masquerade_index_path(user_id: user.id),class:"inline-flex items-center px-4 py-2 border border-green-300 shadow-sm text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %> <!-- Login As -->
+                      </td>
+                    </tr>
+                    <% index += 1 %>
+                    <% end %>
+                    <!-- More people... -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+            <!-- Pagination -->
+            <%= render "layouts/pagination" %>
+      </div>
+      
+          <div id="advance-search-popup" class="h-full absolute p-6 bg-white rounded-lg text-center overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle">
+            <div class="bg-white">
+              <div class="">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 text-3xl text-center" id="modal-title"><%= t("patient.Narrow Down") %></h3>
+              </div>
+              <div>
+                <%= render partial:"patients/advance_search" %>
+              </div>
+            </div>
+          </div>
+          <div id="edit_popup" class="bg-white shadow mt-5" >
+    
+          </div>
+    </main>
+
+
+<style>
+
+  div#edit_popup {
+    position: absolute;
+    width: 100%;
+    top: 65px;
+    z-index: 10;
+    right: -100%;
+    transition: all 1s ease-in;
+    display: block !important;
+    max-width: 1000px;
+}
+
+.edit_patient {
+    background: #fff;
+    padding: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+div#edit_popup>div {
+    position: unset !important;
+    min-height: 100vh;
+}
+
+div#edit_popup[style="display: block;"] {
+    right: 0 !important;
+}
+
+.showPopUp {
+    right: 50% !important;
+    transform:translateX(50%)
+}
+
+
+div#edit_popup>.bg-white {
+    background: transparent;
+    box-shadow: none;
+}
+
+div#edit_popup>.bg-white div.form-div {
+    background: #fff;
+    padding: 25px 15px;
+}
+
+div#edit_popup>.bg-white .contents>div button {
+    border-radius: 15px 15px 0px 0px;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+
+
+</style>
+
+<script>
+
+  function edit_user(userid){
+    $('#edit_popup').show();
+    $('#edit_popup').addClass("showPopUp");
+    $.ajax({
+            type: "get",
+            data: "id="+userid,
+            url: `/registrations/${userid}/admin_edit`,
+        }) 
+  }
+
+  $('#advance-search-popup').hide();
+
+  $('#SmLabel').on("click",function(){
+    $('#advance-search-popup').show();
+    $('#advance-search-popup').addClass("showPopUp");
+  });
+
+  $("#advance-search-button").on("click",function(){
+    $("#advance-search").submit();
+  })
+
+  $("#clear").on("click",function(){
+    $('.clear').val('');
+    $('input[type=checkbox]').prop('checked', false)
+  }) 
+
+  $("#pagy_no").change(function(){
+      $("#pagy_form").submit();
+  })
+</script>

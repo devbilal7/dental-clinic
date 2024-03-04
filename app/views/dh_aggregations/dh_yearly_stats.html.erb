@@ -1,0 +1,410 @@
+<main class="flex-1 pb-8 h-screen">
+    <div class="max-w-full mx-auto mt-20 px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8 mr-6 search-table ">   
+    <% unless params[:format] == "pdf"%>
+      <div class="flex" >
+        <%= form_tag({:controller => "dh_aggregations", :action => "dh_yearly_stats"}, {:method => :get}) do %>
+            <div class="md:grid md:grid-cols-7 gap-2 mb-5 flex-1 wrap-button" style="grid-template-columns: auto 1fr 1fr 1fr 1fr 1fr 1fr 1fr;align-items: center;" >   
+            <%= label_tag "集計期間", nil,class: "mt-3 md:col-span-1 block text-sm font-medium text-gray-700" %>
+
+            <%= month_field_tag :first_date,value = params[:first_date],id: "first_date", onchange: "check_fields_search()", class:"text-center font-medium md:col-span-1  focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"%>
+
+            <%= month_field_tag :second_date,value = params[:second_date],id: "second_date", onchange: "check_fields_search()", class:"text-center font-medium md:col-span-1  focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"%>
+                                
+            <%= submit_tag("表示", :id=>"search-button",disabled: true, :class=>"cursor-pointer py-2 cursor-not-allowed w-30 col-span-1 active items-center px-4 py-1 border border-transparent font-small rounded-md shadow-xl text-white bg-blue-300 ", :name=>"submit") %>
+            <%= link_to "リセット", dh_yearly_stats_path, class:"w-full text-center col-span-1 active items-center px-4 py-2 border border-transparent font-small rounded-md shadow-xl text-white bg-red-500 hover:bg-red-600" %>
+          <span class="col-span-1" ></span>
+            <%= link_to "保険推移", dh_yearly_stats_graph_path, class:"text-center inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 justify-center whitespace-nowrap" %>
+              <%= link_to "キャンセル率", dh_yearly_stats_cancel_graph_path, class:"text-center inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 justify-center" %> 
+            </div>    
+        <% end %>
+            <div class="mt-2.5 flex-0.5">
+              <%= link_to "帳票出力", dh_yearly_stats_path(format: "pdf",first_date: params[:first_date], second_date: params[:second_date]), class: "cursor-pointer w-full text-center col-span-1 active items-center px-4 py-1 border border-transparent font-small ml-2 rounded-md shadow-xl text-white bg-[#43c17a] hover:bg-green-500 whitespace-nowrap"%>
+            </div>
+      </div>
+    <% end %>
+       
+     <div class="flex flex-col">
+          <div class="-my-2 overflow-x-auto">          
+            <div class="max-h-[600px]">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-[#fff] sticky z-10 top-0">
+                  <tr>
+                    <th scope="col" class="sticky left-0 bg-[#fff] z-2 px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider" rowspan="2" ></th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap" rowspan="2" >予約人数</th> <!-- Number of reservations -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap text-center" colspan="4" >対応人数</th> <!-- Number of People -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap" rowspan="2" >口検数</th> <!-- Oral count  -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap" rowspan="2" >口検数</th> <!-- Oral count  -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap text-center" colspan="2">TELキャンセル</th> <!-- TEL cancellation -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap text-center" colspan="2" >無断キャンセル</th> <!-- Cancellation without permission -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap text-center" colspan="2" >全体キャンセル</th> <!-- Total cancellation -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap text-center" colspan="3">保険点数</th> <!-- Insurance points -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap" rowspan="2" >口腔機能 点数</th>  <!-- Oral function score -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap" rowspan="2" >自費収入</th> <!-- Own income -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap" rowspan="2" >医業収益</th> <!-- Medical practice revenue-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap" rowspan="2" >保険人数 合計</th> <!-- Total number of insured-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap" rowspan="2" >点数 (一人あたり)</th> <!-- Score (per person)-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap" rowspan="2" >雑収</th> <!-- Miscellaneous-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap text-center" colspan="2" >お通し率</th>  <!-- Pass rate -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap text-center" colspan="2" >アポ確定率</th> <!-- Appointment confirmation rate-->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap text-center" colspan="16" >リコール間隔</th> <!-- Recall interval -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap" rowspan="2" >SPT2</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap" rowspan="2" >SPT3</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap" rowspan="2" >単G P重防</th> <!-- Single GP heavy defense -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap" rowspan="2" >紹介人数</th> <!-- Number of referrals -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap" rowspan="2" >実診察 日数</th> <!-- Number of referrals -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap" rowspan="2" >1日 予約数</th> <!-- Number of reservations per day -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider border-r-4 whitespace-nowrap" rowspan="2" >1日平均 実診察数</th> <!-- Average number of medical examinations per day -->
+                  </tr>
+                  <tr>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">メンテ</th> <!-- Maintenance -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">治療</th> <!-- Treatment -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">自費</th>  <!-- Own expense -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap bg-gray-300">計</th> <!-- Total -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">人数</th>  <!-- Number of people -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap bg-gray-300">%</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">N人数</th> <!-- Number of people -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap bg-gray-300">%</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">人数</th> <!-- Number of people -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap bg-gray-300">%</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">メンテ</th> <!-- Maintenance -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">治療</th> <!-- Treatment -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">自費</th> <!-- Own expense -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">人数</th> <!-- Number of people -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap bg-gray-300">%</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">人数</th> <!-- Number of people -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap bg-gray-300">%</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-4 uppercase tracking-wider whitespace-nowrap">1 M</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">TEL</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">無</th> <!-- Nothing -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">2 M</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">TEL</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">無</th> <!-- Nothing -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">3 M</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">TEL</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">無</th> <!-- Nothing -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">4 M</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">TEL</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">無</th> <!-- Nothing -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">6 M</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">TEL</th>
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap">無</th> <!-- Nothing -->
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 border border-l-2 uppercase tracking-wider whitespace-nowrap bg-gray-300">全体</th> <!-- Overall -->
+                  </tr>
+                </thead>
+                <% $total_no_of_reservations, $total_number_of_records = 0,0 %>
+                    <% $total_people_maintenance = 0   %>
+                    <% $total_people_treatment   = 0   %>
+                    <% $total_people_own_expense = 0   %>
+                    <% $total_people_i           = 0   %>
+                    <% $total_oral_count         = 0   %>
+                    <% $total_out_of_the_decline = 0   %>
+                    <% $total_cancellation_tel   = 0   %>
+                    <% $total_cancellation_percent = 0 %>
+                    <% $total_cancellation_without = 0 %>
+                    <% $total_cancellation_percent_without = 0 %>
+                    <% $total_cancellation         = 0  %>
+                    <% $total_insurance_maintenance = 0 %>
+                    <% $total_insurance_treatment   = 0 %>
+                    <% $total_score_meter           = 0 %>
+                    <% $total_oral_func             = 0 %>
+                    <% $total_own_income            = 0 %>
+                    <% $total_med_prac_rev          = 0 %>
+                    <% $total_total_insured         = 0 %>
+                    <% $total_score_per             = 0 %>
+                    <% $total_miscc_income          = 0 %>
+                    <% $total_no_of_people          = 0 %>
+                    <% $total_appt_confm_people     = 0 %>
+                    <% $total_interval_1m_people    = 0 %>
+                    <% $total_interval_1m_tel       = 0 %>
+                    <% $total_interval_1m_without   = 0 %>
+                    <% $total_interval_2m_people    = 0 %>
+                    <% $total_interval_2m_tel       = 0 %>
+                    <% $total_interval_2m_without   = 0 %>
+                    <% $total_interval_3m_people    = 0 %>
+                    <% $total_interval_3m_tel       = 0 %>
+                    <% $total_interval_3m_without   = 0 %>
+                    <% $total_interval_4m_people    = 0 %>
+                    <% $total_interval_4m_tel       = 0 %>
+                    <% $total_interval_4m_without   = 0 %>
+                    <% $total_interval_6m_people    = 0 %>
+                    <% $total_interval_6m_tel       = 0 %>
+                    <% $total_interval_6m_without   = 0 %>
+                    <% $total_overall_recall        = 0 %>
+                    <% $total_spt2                  = 0 %>
+                    <% $total_spt1                  = 0 %>
+                    <% $total_g_p_heavy_defense     = 0 %>
+                    <% $total_no_of_referrals       = 0 %>
+                    <% $total_act_med_exam_days     = 0 %>
+                    <% $total_one_day_no_reservation = 0 %>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                    <% @dh_aggregations.each_with_index do |dh,index| %>
+                        <% dh_yearly(dh, index) %>
+                        <% if @i =="final_data" %>
+                        <tr>
+                            <td class="sticky left-0 bg-white z-2 px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-l-4"><%= dh.created_at.strftime("%Y-%m-%d") %></td> 
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%=  @no_of_reservations %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%=   @people_maintenance  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @people_treatment %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @people_own_expense  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500  bg-gray-300 border border-l-2"><%= @total_people %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%=  @oral_count %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-l-4"><%= @out_of_the_decline %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @cancellation_tel %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border  bg-gray-300 border-l-2"><%= number_with_precision(@cancellation_tel.to_f/@no_of_reservations.to_f, precision: 2) %> %</td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @cancellation_without %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2  bg-gray-300"><%= @cancellation_without_percent %> %</td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @cancel_total %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300"><%=number_with_precision(@cancel_total.to_f/@no_of_reservations.to_f, precision: 2) %> %</td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @insurance_maintenance%></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @insurance_treatment%></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @score_meter%></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @oral_func %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @own_income %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @med_prac_rev %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @total_insured %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @score_per %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @miscc_income %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @no_of_people %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300"><%= number_with_precision(@no_of_people.to_f/@no_of_reservations.to_f, precision: 2) %>  %</td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @appt_confm_people %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300"><%= number_with_precision(@appt_confm_people.to_f/@no_of_reservations.to_f, precision: 2) %>   %</td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @interval_1m_people  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @interval_1m_tel  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @interval_1m_without  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @interval_2m_people  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @interval_2m_tel  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @interval_2m_without  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @interval_3m_people  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @interval_3m_tel  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @interval_3m_without  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @interval_4m_people  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @interval_4m_tel  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @interval_4m_without  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @interval_6m_people  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @interval_6m_tel  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= @interval_6m_without  %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300"><%= @overall_recall %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @spt2 %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @spt1%></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @g_p_heavy_defense%></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @no_of_referrals%></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @act_med_exam_days %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @one_day_no_reservation %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= number_with_precision(@act_med_exam_days.to_f/@no_of_reservations.to_f, precision: 2) %></td>
+                        </tr>
+                        <% end %>
+                        <% end %>
+                    </tbody>
+                    <tfoot>
+                     <tr>
+                      <th scope="col" class="sticky left-0 bg-white z-2 px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-l-4 whitespace-nowrap" >合計</th> <!-- total -->
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= $total_no_of_reservations %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= $total_people_maintenance %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= $total_people_treatment %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2"><%= $total_people_own_expense %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300"><%= $total_people_i %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4  " ><%= $total_oral_count         %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_out_of_the_decline %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_cancellation_tel   %>  </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= number_with_precision($total_cancellation_tel.to_f/$total_no_of_reservations.to_f, precision: 2) %> %</td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_cancellation_without %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= number_with_precision($total_cancellation_without.to_f/$total_no_of_reservations.to_f, precision: 2) %> %</td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_cancellation       %>      </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= number_with_precision($total_cancellation.to_f/$total_no_of_reservations.to_f, precision: 2) %> %</td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_insurance_maintenance %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_insurance_treatment %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_score_meter %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_oral_func %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_own_income %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_med_prac_rev %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_total_insured %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_score_per %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_miscc_income %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_no_of_people %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= number_with_precision($total_no_of_people.to_f/$total_no_of_reservations.to_f, precision: 2) %> % </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_appt_confm_people %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= number_with_precision($total_appt_confm_people.to_f/$total_no_of_reservations.to_f, precision: 2) %> %</td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_interval_1m_people %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_interval_1m_tel %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_interval_1m_without %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_interval_2m_people %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_interval_2m_tel %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_interval_2m_without %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_interval_3m_people %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_interval_3m_tel %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_interval_3m_without %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_interval_4m_people %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_interval_4m_tel %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_interval_4m_without %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_interval_6m_people %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_interval_6m_tel %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= $total_interval_6m_without %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= $total_overall_recall %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_spt2 %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_spt1 %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_g_p_heavy_defense %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_no_of_referrals %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_act_med_exam_days %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= $total_one_day_no_reservation %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4" ><%= number_with_precision($total_act_med_exam_days.to_f/$total_no_of_reservations.to_f, precision: 2) %>   </td>
+                     </tr>
+                     <tr>
+                      <th scope="col" class="sticky left-0 bg-white z-2 px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-l-4 whitespace-nowrap">平均</th> <!-- average -->
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_no_of_reservations.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_people_maintenance.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_people_treatment.to_f/$total_number_of_records.to_f, precision: 2) %>   </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_people_own_expense.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= number_with_precision($total_people_i.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_oral_count.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_out_of_the_decline.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_cancellation_tel.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= number_with_precision(($total_cancellation_tel.to_f/$total_number_of_records.to_f)/($total_no_of_reservations.to_f/$total_number_of_records.to_f).to_f, precision: 2) %> %</td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_cancellation_without.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= number_with_precision(($total_cancellation_without.to_f/$total_number_of_records.to_f)/($total_no_of_reservations.to_f/$total_number_of_records.to_f).to_f, precision: 2) %> %</td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_cancellation.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= number_with_precision(($total_cancellation.to_f/$total_number_of_records.to_f)/($total_no_of_reservations.to_f/$total_number_of_records.to_f).to_f, precision: 2) %> %</td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_insurance_maintenance.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_insurance_treatment.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_score_meter.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_oral_func.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_own_income.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_med_prac_rev.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_total_insured.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_score_per.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_miscc_income.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_no_of_people.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= number_with_precision(($total_no_of_people.to_f/$total_number_of_records.to_f)/($total_no_of_reservations.to_f/$total_number_of_records.to_f).to_f, precision: 2) %> %</td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_appt_confm_people.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= number_with_precision(($total_appt_confm_people.to_f/$total_number_of_records.to_f)/($total_no_of_reservations.to_f/$total_number_of_records.to_f).to_f, precision: 2) %> %</td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_interval_1m_people.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_interval_1m_tel.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_interval_1m_without.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_interval_2m_people.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_interval_2m_tel.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_interval_2m_without.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_interval_3m_people.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_interval_3m_tel.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_interval_3m_without.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_interval_4m_people.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_interval_4m_tel.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_interval_4m_without.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_interval_6m_people.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_interval_6m_tel.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= number_with_precision($total_interval_6m_without.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= number_with_precision($total_overall_recall.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_spt2.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_spt1.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_g_p_heavy_defense.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_no_of_referrals.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_act_med_exam_days.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= number_with_precision($total_one_day_no_reservation.to_f/$total_number_of_records.to_f, precision: 2) %> </td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4" ><%= number_with_precision(($total_act_med_exam_days.to_f/$total_number_of_records.to_f)/($total_no_of_reservations.to_f/$total_number_of_records.to_f).to_f, precision: 2) %> </td>
+                     </tr>
+                     <tr>
+                      <th scope="col" class="sticky left-0 bg-white z-2 px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-l-4 whitespace-nowrap">昨年平均</th> <!-- Last year average-->
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(no_of_reservations, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(people_maintenance, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(people_treatment, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(people_own_expense, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= @last_year_average.sum("CAST(COALESCE(people_maintenance, '0') AS INTEGER)").to_f/12 +
+                                                                                                                  @last_year_average.sum("CAST(COALESCE(people_treatment, '0') AS INTEGER)").to_f/12  +
+                                                                                                                  @last_year_average.sum("CAST(COALESCE(people_own_expense, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(oral_count, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(out_of_the_decline, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(cancellation_tel, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= (@last_year_average.sum("CAST(COALESCE(cancellation_tel, '0') AS INTEGER)").to_f/12)/(@last_year_average.sum("CAST(COALESCE(no_of_reservations, '0') AS INTEGER)").to_f/12) %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(cancellation_without, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= (@last_year_average.sum("CAST(COALESCE(cancellation_without, '0') AS INTEGER)").to_f/12)/(@last_year_average.sum("CAST(COALESCE(no_of_reservations, '0') AS INTEGER)").to_f/12) %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= (@last_year_average.sum("CAST(COALESCE(cancellation_tel, '0') AS INTEGER)").to_f/12 + @last_year_average.sum("CAST(COALESCE(cancellation_without, '0') AS INTEGER)").to_f )/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= (@last_year_average.sum("CAST(COALESCE(cancellation_tel, '0') AS INTEGER)").to_f/12) + (@last_year_average.sum("CAST(COALESCE(cancellation_without, '0') AS INTEGER)").to_f/12)/(@last_year_average.sum("CAST(COALESCE(no_of_reservations, '0') AS INTEGER)").to_f/12) %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(insurance_maintenance, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(insurance_treatment, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= (@last_year_average.sum("CAST(COALESCE(insurance_maintenance, '0') AS INTEGER)").to_f + @last_year_average.sum("CAST(COALESCE(insurance_treatment, '0') AS INTEGER)").to_f )/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(oral_func, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(own_income, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(med_prac_rev, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= (@last_year_average.sum("CAST(COALESCE(insurance_maintenance, '0') AS INTEGER)").to_f + @last_year_average.sum("CAST(COALESCE(insurance_treatment, '0') AS INTEGER)").to_f )/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= (@last_year_average.sum("CAST(COALESCE(insurance_maintenance, '0') AS INTEGER)").to_f + @last_year_average.sum("CAST(COALESCE(insurance_treatment, '0') AS INTEGER)").to_f )/12/ @last_year_average.sum("CAST(COALESCE(no_of_reservations, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(miscc_income, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(no_of_people, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= (@last_year_average.sum("CAST(COALESCE(no_of_people, '0') AS INTEGER)").to_f/12)/(@last_year_average.sum("CAST(COALESCE(no_of_reservations, '0') AS INTEGER)").to_f/12) %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(appt_confm_people, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= (@last_year_average.sum("CAST(COALESCE(appt_confm_people, '0') AS INTEGER)").to_f/12)/(@last_year_average.sum("CAST(COALESCE(no_of_reservations, '0') AS INTEGER)").to_f/12) %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(interval_1m_people, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(interval_1m_tel, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(interval_1m_without, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(interval_2m_people, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(interval_2m_tel, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(interval_2m_without, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(interval_3m_people, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(interval_3m_tel, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(interval_3m_without, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(interval_4m_people, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(interval_4m_tel, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(interval_4m_without, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(interval_6m_people, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(interval_6m_tel, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2" ><%= @last_year_average.sum("CAST(COALESCE(interval_6m_without, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-2 bg-gray-300" ><%= @last_year_average.sum("CAST(COALESCE(interval_1m_people, '0') AS INTEGER)").to_f/12 +
+                                                                                                                      @last_year_average.sum("CAST(COALESCE(interval_1m_tel, '0') AS INTEGER)").to_f/12     +
+                                                                                                                      @last_year_average.sum("CAST(COALESCE(interval_1m_without, '0') AS INTEGER)").to_f/12 +
+                                                                                                                      @last_year_average.sum("CAST(COALESCE(interval_2m_people, '0') AS INTEGER)").to_f/12  +
+                                                                                                                      @last_year_average.sum("CAST(COALESCE(interval_2m_tel, '0') AS INTEGER)").to_f/12     + 
+                                                                                                                      @last_year_average.sum("CAST(COALESCE(interval_2m_without, '0') AS INTEGER)").to_f/12 + 
+                                                                                                                      @last_year_average.sum("CAST(COALESCE(interval_3m_people, '0') AS INTEGER)").to_f/12  + 
+                                                                                                                      @last_year_average.sum("CAST(COALESCE(interval_3m_tel, '0') AS INTEGER)").to_f/12     +
+                                                                                                                      @last_year_average.sum("CAST(COALESCE(interval_3m_without, '0') AS INTEGER)").to_f/12 +
+                                                                                                                      @last_year_average.sum("CAST(COALESCE(interval_4m_people, '0') AS INTEGER)").to_f/12  +
+                                                                                                                      @last_year_average.sum("CAST(COALESCE(interval_4m_tel, '0') AS INTEGER)").to_f/12     +
+                                                                                                                      @last_year_average.sum("CAST(COALESCE(interval_4m_without, '0') AS INTEGER)").to_f/12 +
+                                                                                                                      @last_year_average.sum("CAST(COALESCE(interval_6m_people, '0') AS INTEGER)").to_f/12  +
+                                                                                                                      @last_year_average.sum("CAST(COALESCE(interval_6m_tel, '0') AS INTEGER)").to_f/12     +
+                                                                                                                      @last_year_average.sum("CAST(COALESCE(interval_6m_without, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(spt2, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(spt1, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(g_p_heavy_defense, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(no_of_referrals, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(act_med_exam_days, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" ><%= @last_year_average.sum("CAST(COALESCE(one_day_no_reservation, '0') AS INTEGER)").to_f/12 %></td>
+                      <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4" ><%=  (@last_year_average.sum("CAST(COALESCE(one_day_no_reservation, '0') AS INTEGER)").to_f/12)/(@last_year_average.sum("CAST(COALESCE(act_med_exam_days, '0') AS INTEGER)").to_f/12)%></td>
+                     </tr>
+                    </tfoot>
+            </table>
+        </div>
+    </div>
+</main>
+
+
+<style>
+
+@media only screen and (max-width:1350px) {
+.wrap-button {
+    grid-template-columns: auto 1fr 1fr 1fr 1fr 0fr 1fr 1fr !important;
+    align-items: center;
+}
+
+.search-table input#search-button, .search-table a {
+    font-size: 16px;
+    padding: 7px;
+    text-align: center;
+}
+.search-table>.flex>form + div {
+    margin: 7px 0 0px;
+}
+
+}
+
+</style>
+
+
+
+<script>
+    function check_fields_search() {
+        if($("#first_date").val() && $("#second_date").val()){
+            $("#search-button").removeClass("cursor-not-allowed");
+            $("#search-button").removeAttr("disabled");
+            $("#search-button").removeClass("bg-blue-300");
+            $("#search-button").addClass("bg-blue-700 hover:bg-blue-500")
+        }
+    }
+</script>

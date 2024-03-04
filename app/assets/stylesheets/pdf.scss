@@ -1,0 +1,27 @@
+table, th, td, tr{
+    border: 2px solid gray;
+    border-collapse: collapse;
+    text-align: center;
+    // page-break-before: always;
+    page-break-inside: avoid;
+
+}
+table {
+   width: 100%;
+   word-wrap: break-word;
+}
+thead {
+    display: table-row-group;
+}
+
+h1{   
+    width: 100%;
+    text-align: center; 
+    display: block !important;
+    margin-bottom: 15px !important;
+}
+table{
+    top: 0!important;    
+    // display: inline !important;
+    page-break-after:always !important;
+}

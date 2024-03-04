@@ -1,0 +1,491 @@
+<%= form_with(model: counseling, class: "contents") do |form| %>
+
+    <% if @counseling.errors.any? %>
+      <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+        <h2><%= pluralize(counseling.errors.count, "エラー") %> このカウンセリングが救われることを禁止しました:</h2>
+
+        <ul>
+          <% counseling.errors.messages.each do |error| %>
+            <li><%= error[0] %> <%= t("errors.messages.blank") %></li>
+          <% end %>
+        </ul>
+        </div>
+    <% end %>
+
+            <div>
+              <button type="button" id="button-basic" class="inline-flex items-center px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#43c17a] hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+               基本情報
+              </button> <!-- Basic Information -->
+            
+            
+              <button type="button" id="button-counseling" class="inline-flex items-center px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#43c17a] hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+               カウンセリング情報
+              </button> <!-- Counseling Information -->
+         
+              <button type="button" id="button-contract" class="inline-flex items-center px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#43c17a] hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+               契約情報
+              </button> <!-- Contract Information -->
+            </div>
+            
+                 <div class="form-div" style="display:block; padding-top:20px;" id="basic-div">
+                  <div class="border-solid border-2 border-gray-600 mb-4">
+                  <h1 class="text-2xl italic bg-white " style="border-bottom:1px solid gray;padding:10px;">担当</h1> <!-- Responsible Person -->
+                        <div class="my-5 flex flex-wrap justify-between items-center  ml-0 px-2" style="max-width:50%" >
+                          <label for="counseling_dentist_id">DR<span class="required-field"></span></label>
+                          
+                          <%= form.select :dentist_id, Dentist.all.map{|r|[r.full_name,r.id]}, {:include_blank => "選択する"}, class: "w-3/4 shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-1/2" %>
+                        </div>
+                          <% if errors["dentist"].present? %>
+                          <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3 ml-2" style="width: 266px;">歯科医が立ち会う必要があります</div>  <!-- Dentist must be present -->
+                          <% end %>
+                        <div class="my-5 flex flex-wrap justify-between items-center ml-0 px-2" style="max-width:50%"  >
+                        <label for="counseling_resp_couns_staff">カウセリング担当<span class="required-field"></span></label> <!-- Counsseling Staff -->
+                          <%= form.select :resp_couns_staff,StaffInfo.where(clinic_id: current_user.clinic.id).map{|r|[r.first_name]}, {:include_blank => "選択する"}, class: "w-3/4  shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-1/2"  %>
+                          <% if errors["resp_couns_staff"].present? %>
+                          <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">責任あるカウンセリングスタッフが立ち会う必要があります</div> <!-- Responsible Counseling staff must be present -->
+                          <% end %>
+                        </div>
+                  </div>
+                    
+
+                        <%= form.hidden_field :patient_id %>
+
+                       
+                          <% if @edit == nil %>
+                            <%= form.fields_for :oral_types do |builder| %>
+                                  
+                                    <div class="border-solid border-2 border-gray-600 mb-4">
+                                      <div class="col-span">
+                                          <div class="">
+                                            <h1 class="text-2xl italic bg-white " style="border-bottom:1px solid gray;padding:10px; " >口臭</h1> <!-- Bad Breath -->
+                                            <%= builder.hidden_field :name,value: "bad_breath"%>
+                                          </div>
+                                          <div class="mb-3 xl:w-full flex flex-wrap items-center justify-between p-2"  style="max-width:70%">
+                                            <div class="flex flex-wrap items-center">
+                                                <%= "説明日" %> <!-- Explanation Date -->
+                                              <%= builder.date_field :exp_date, class:" ml-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"%>
+                                          
+                                            </div>
+                                          <div class="flex flex-wrap items-center">
+                                            <%= "実施日" %> <!-- Implementation Date -->
+                                            <%= builder.date_field :imp_date, class:"ml-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"%>
+                                         </div>
+                                          </div>                       
+                                                        
+                                      </div>
+                                    </div>
+                                  
+                                  
+                              <% end %>
+                              <%= form.fields_for :oral_types do |builder| %>
+                                
+                                    <div class="border-solid border-2 border-gray-600 mb-4">
+                                      <div class="col-span">
+                                        <div class="">
+                                        <h1 class="text-2xl italic bg-white " style="border-bottom:1px solid gray;padding:10px; " >顕微鏡</h1> <!-- Microscope -->
+                                        
+                                          <%= builder.hidden_field :name,value: "microscope"%>
+                                        </div>
+                                        <div class="mb-3 xl:w-full flex flex-wrap items-center justify-between p-2"  style="max-width:70%">
+                                         <div class="flex flex-wrap items-center">
+                                            <%= "説明日" %> <!-- Explanation Date -->
+                                            <%= builder.date_field :exp_date, class:" ml-2 md:col-span-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"%>
+                                        </div>
+                                         <div class="flex flex-wrap items-center">
+                                            <%= "実施日" %> <!-- Implementation Date -->
+                                            <%= builder.date_field :imp_date, class:"ml-2 md:col-span-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"%>
+                                        </div>                       
+                                    </div>
+                                    </div>
+                                </div>                     
+                               <% end %>
+                                
+                                <%= form.fields_for :oral_types do |builder| %>
+                                    <div class="border-solid border-2 border-gray-600 mb-4">
+                                    <div class="col-span">
+                                        <div class="grid grid-col-2">
+                                        <h1 class="text-2xl italic bg-white " style="border-bottom:1px solid gray;padding:10px; " >唾液</h1> <!-- Saliva -->
+                                          <%= builder.hidden_field :name,value: "saliva"%>
+                                        </div>
+                                        <div class="mb-3 xl:w-full flex flex-wrap items-center justify-between p-2"  style="max-width:70%">
+                                           <div class="flex flex-wrap items-center">
+                                           <%= "説明日" %> <!-- Explanation Date -->
+                                            <%= builder.date_field :exp_date, class:"ml-2  md:col-span-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"%>
+                                          </div>
+                                           <div class="flex flex-wrap items-center">
+                                            <%= "実施日" %> <!-- Implementation Date -->
+                                            <%= builder.date_field :imp_date, class:"ml-2 md:col-span-2 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"%>
+                                      </div>
+                                       </div>             
+                                    </div>
+                                 </div>
+                                 <% end %>
+                                 
+                          <% else %>
+                                  <%= form.fields_for :oral_types do |builder| %>
+                                      <div class="border-solid border-2 border-gray-600 mb-4">
+                                        <div class="col-span">
+                                            <div class="">
+                                              <h1 class="text-2xl italic bg-white " style="border-bottom:1px solid gray;padding:10px; " ><%=builder.object.name.humanize %></h1>
+                                              <%= builder.hidden_field :name %>
+                                            </div>
+                                            <div class="mb-3 xl:w-full flex flex-wrap items-center justify-between p-2"  style="max-width:70%" >
+                                             <div class="flex flex-wrap items-center">
+                                                <%= "説明日" %> <!-- Explanation Date -->
+                                                <%= builder.date_field :exp_date, class:"ml-2  md:col-span-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"%>
+                                            </div>
+                                             <div class="flex flex-wrap items-center">
+                                                <%= "実施日" %> <!-- Implementation Date -->
+                                                <%= builder.date_field :imp_date, class:" ml-2 md:col-span-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"%>
+                                            </div> 
+                                            </div>                       
+                                        </div>
+                                      </div>
+                                    <% end %>
+                          <% end %>
+                          
+
+                                                  
+                              <div class="border-solid border-2 border-gray-600 mb-4">
+                                  <div class="col-span">
+                                    <h1 class="text-2xl italic bg-white " style="border-bottom:1px solid gray;padding:10px; " >コース</h1> <!-- Course -->
+                                  </div>
+                                  <div class="col-span">                               
+                                    <div class="mb-3 xl:w-full flex flex-wrap items-center justify-between p-2"  style="max-width:70%">
+                                    <div class="flex flex-wrap items-center">
+                                        <%= "コース名" %> <!-- Course Name -->
+                                        <%= form.select :course_id,Course.all.map{|r|[r.name,r.id]}, {:include_blank => "Select"}, class: "mt-0 ml-2 shadow rounded-md border border-gray-200 outline-none px-3 py-2  w-40"  %>
+                                      </div>
+                                      <div class="flex flex-wrap items-center">
+                                      <label for="counseling_course_imp_date">実施日<span class="required-field"></span></label> <!-- Implementation Date -->
+                                     
+                                      <%= form.date_field :course_imp_date, class:"mt-0 ml-2 md:col-span-1  focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"%>
+                                    </div>
+                                    <% if errors["course"].present? %>
+                                      <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3" style="width: 266px;">コースが存在する必要があります</div> <!-- Course must exist -->
+                                      <% end %>
+                                    </div>                       
+                                  </div>
+                              </div>
+                        
+                            <div class="border-solid border-2 border-gray-600 mb-4">
+                              <div class="col-span">
+                               <h1 class="text-2xl italic bg-white " style="border-bottom:1px solid gray;padding:10px; " >　Pコース</h1> <!-- P Course -->
+                                                     
+                              </div>
+                              <div class="col-span">
+                                  <div class="mb-3 xl:w-full flex flex-wrap items-center justify-between p-2"  style="max-width:70%">
+                                  <div class="flex flex-wrap items-center">
+                                      <%= "Pコース" %> <!-- P Course -->
+                                      <%= form.select :pcourse_id, Pcourse.all.map{|r|[r.name,r.id]}, {:include_blank => "Select"}, class: "mt-0 ml-2 shadow rounded-md border border-gray-200 outline-none px-3 py-2  w-40"  %>
+                                  </div> 
+                                  <div class="flex flex-wrap items-center">
+                                  <label for="counseling_pcourse_imp_date">実施日<span class="required-field"></span></label> <!-- Implementation Date -->
+                                     
+                                      <%= form.date_field :pcourse_imp_date, class:"mt-0 ml-2 md:col-span-1  focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md"%>
+                                 </div>
+                                 <% if errors["pcourse"].present? %>
+                                      <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3" style="width: 266px;">Pコースが存在する必要があります</div> <!-- P course must be present -->
+                                      <% end %>
+                                  </div>                       
+                              </div>
+                             </div>
+                </div>
+
+
+                <div class="form-div" style="display:none; padding-top:20px" id="counseling-div">
+                  <div class="border-solid border-2 border-gray-600 mb-4">
+                    <h1 class="text-2xl italic bg-white " style="border-bottom:1px solid gray;padding:10px; " >　カウンセリング</h1> <!-- Counseling -->
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl">
+                    <div class="w-1/3">
+                     <%= "初診" %> <!-- First Visit -->
+                    </div>
+                    <%= form.date_field :first_visit, class: "w-2/3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2  " %>
+                    </div>
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl ">
+                    <div class="w-1/3">
+                    <%= "再初診" %> <!-- Re-First Visit -->
+                    </div>
+                    <%= form.date_field :re_first_visit, class: " w-2/3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 " %>
+                    </div>
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl ">
+                    <div class="w-1/3">
+                    <%= "セカンド" %> <!-- Second -->
+                    </div>
+                    <%= form.date_field :second_visit , class: "w-2/3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 " %>
+                    </div>
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl">
+                     <div class="w-1/3">
+                    
+                    <%= "Pコンサル" %> <!-- P Consultant -->
+                    </div>
+                    <%= form.date_field :p_consult, class: "w-2/3  block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+                    </div>
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl">
+                     <div class="w-1/3">
+                    <%= "検査③" %> <!-- Inspection ③ -->
+                    </div>
+                    <%= form.date_field :inspection , class: "w-2/3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 " %>
+                    </div>
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl">
+                     <div class="w-1/3">
+                    <%= "治療計画" %> <!-- Treatment Plan -->
+                    </div>
+                    <%= form.date_field :treat_plan , class: "w-2/3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+                    </div>
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl">
+                     <div class="w-1/3">
+                    <%= "補綴" %> <!-- Prosthodontics -->
+                    </div>
+                    <%= form.date_field :prostho , class: "w-2/3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+                    </div>
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl">
+                     <div class="w-1/3">
+                    <%= "義歯" %> <!-- Denture -->
+                    </div>
+                    <%= form.date_field :denture , class: "w-2/3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+                    </div>
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl">
+                     <div class="w-1/3">
+                    <%= "ホワイトニング" %> <!-- Whitening -->
+                    </div>
+                    <%= form.date_field :whitening , class: "w-2/3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+                    </div>
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl">
+                     <div class="w-1/3">
+                    <%= "インプラント" %> <!-- Implant -->
+                    </div>
+                    <%= form.date_field :implant , class: "w-2/3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+                    </div>
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl">
+                     <div class="w-1/3">
+                    <%= "インビザライン" %> <!-- Invisalign -->
+                    </div>
+                    <%= form.date_field :invisalign , class: "w-2/3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+                    </div>
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl">
+                     <div class="w-1/3">
+                    <%= "他矯正" %> <!-- Other Correction -->
+                    </div>
+                    <%= form.date_field :other_correc , class: "w-2/3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+                    </div>
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl">
+                     <div class="w-1/3">
+                    <%= "マイクロ" %> <!-- Micro -->
+                    </div>
+                    <%= form.date_field :micro , class: "w-2/3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+                    </div>
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl">
+                     <div class="w-1/3">
+                    <%= "メンテ" %> <!-- Maintenance -->
+                    </div>
+                    <%= form.date_field :maintainance , class: "w-2/3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+                    </div>
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl">
+                    <div class="w-1/3">
+                    <%= "急患" %>
+                    </div>
+                    <%= form.check_box :emergency, class: "rounded-md border outline-none ml-0" %>
+                    </div>
+                  </div>
+                  <div class="border-solid border-2 border-gray-600 mb-4">
+                  <h1 class="text-2xl italic bg-white " style="border-bottom:1px solid gray;padding:10px; " >　メンテ</h1> <!-- Maintenance -->
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl">
+                    <div class="w-1/3">
+                    <%= "メンテ予約日" %> <!-- Maintenance Reservation Date -->
+                    </div>
+                    <%= form.date_field :main_resv_date , class: "w-2/3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+                    </div>
+
+                    <div class="my-5 mb-4 flex flex-wrap items-center text-center max-w-2xl">
+                    <div class="w-1/3">
+                    <%= "メンテ移行" %> <!-- Maintenance Transition -->
+                    </div>
+                    <%= form.text_field :main_trans, class: "w-2/3 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2" %>
+                    </div>
+                  </div>
+             </div>   
+
+             <div class="form-div" style="display:none; padding-top:20px" id="contract-div">
+                  <div class="border-solid border-2 border-gray-600 mb-4">
+                   <h1 class="text-2xl italic bg-white " style="border-bottom:1px solid gray;padding:10px;" >　契約</h1> <!-- Contract/ Agreement -->
+                    <div class="my-5 flex justify-between  flex-wrap items-center px-10" style="max-width:51%">
+                     <div class="w-1/3">
+                      <%= form.label "種類", style:"font-size:14px;" %> <!-- Type -->
+                      </div>
+                      <%= form.select(:type_agree, ContractType.pluck(:contract_type_name).map{|type| type} , {include_blank: "選択する"} , class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-2/3") %>
+                    </div>
+
+                    <div class="flex my-5  justify-between  flex-wrap items-center px-10" >
+                    <div class="flex flex-wrap items-center pr-2" style="max-width:50%;flex:50%;" >
+                    <div class="w-1/3 " >
+                      <%= form.label "補綴種類", style:"font-size:14px;" %> <!-- Prosthodontic type -->
+                      </div>
+                      <%= form.select(:prostho_type, ProsthodonticMaster.pluck(:prosthodontic_name).map{|pros_type| pros_type}, {include_blank: "選択する"} , class: " block shadow rounded-md border border-gray-200 outline-none px-3 py-2 w-2/3") %>
+                      </div>
+                       <div class="flex flex-wrap items-center" style="max-width:50%;flex:50%;" >
+                     <div class="w-1/3">
+                      <%= form.label "インプラント本数", style:"font-size:14px;" %> <!-- Number of Implants -->
+                      </div>
+                      <%= form.number_field :no_of_implant , class: " block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-2/3" %>
+                    </div>
+                  </div>
+                          
+
+                  <div class="border-solid border-2 border-gray-600 mx-auto max-w-4xl overflow-x-auto pb-6 mb-10">
+                   <h1 class="text-2xl italic bg-white sticky left-0" style="border-bottom:1px solid gray;padding:10px;" >　部位</h1> <!-- Site -->
+                      <table class="min-w-full divide-y divide-gray-200 whitespace-nowrap">
+                        <thead class="bg-gray-200">
+                          <tr>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border">No.</th>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border">部位</th> <!-- Site -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border">提示金額</th> <!-- Offer Amount -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border">契約</th> <!-- Contract/ Agreement -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border">同意書サイン日</th> <!-- Consent Form Signing Date -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border">契約金額</th> <!-- Contract Amount -->
+                          </tr>
+                        </thead>
+                        <tbody id="site-body">
+                          <% if @sites.present? %>
+                            <% @sites.each_with_index do |site,i| %>
+                              <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= i+1 %>.</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= form.text_field :site ,name: "site_name#{i+1}",value: "#{site.site_name}", class: "site#{i+1} block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= form.number_field :offer_amount ,name: "site_offer_amount#{i+1}",value: "#{site.site_offer_amount}", class: "offer-amount block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full", oninput:"siteTotal()" %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= form.text_field :agreement ,name: "site_agreement#{i+1}",value: "#{site.site_agreement}", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= form.date_field :consent_signing_date ,name: "site_consent_signing_date#{i+1}",value: "#{site.site_consent_signing_date}", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= form.number_field :contract_amount ,name: "site_contract_amount#{i+1}",value: "#{site.site_contract_amount}", class: "contract-amount block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full", oninput:"siteTotal()" %></td>
+                              </tr>
+                            <% end %>                            
+                          <% else %>
+                            <tr>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border">1.</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= form.text_field :site ,name: "site_name1", class: "site1 block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %></td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= form.number_field :offer_amount ,name: "site_offer_amount1", class: "offer-amount block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full", oninput:"siteTotal()" %></td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= form.text_field :agreement ,name: "site_agreement1", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %></td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= form.date_field :consent_signing_date ,name: "site_consent_signing_date1", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %></td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= form.number_field :contract_amount ,name: "site_contract_amount1", class: "contract-amount block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full", oninput:"siteTotal()" %></td>
+                            </tr>
+                          <% end %>
+                            <tr id="add-row" onclick="addRowSite(<%= @sites.present? ? @sites.length : 1 %>)">
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border cursor-pointer">+</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"></td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"></td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"></td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"></td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border" colspan="2">合計</th> <!-- Total -->
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= form.number_field :offer_amt,id: "total-offer-amount", class: "border-none block rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= form.text_field :agreement,id: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= form.date_field :cons_sign_date, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border" ><%= form.number_field :contract_amt,id: "total-contract-amount", class: "border-none block rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %></td>
+                          </tr>
+                        </tfoot>
+                       </table> 
+                  </div>
+                 </div> 
+                  
+                    <div class="flex justify-end px-10">
+                      <% if params[:action] == "new" %>
+                      <%= form.submit "保存", class: "rounded-lg py-3 px-5 bg-green-600 text-white inline-block font-medium cursor-pointer mt-6" %> <!-- Save -->
+                      <% else %>
+                      <%= form.submit "アップデート", class: "rounded-lg py-3 px-5 bg-green-600 text-white inline-block font-medium cursor-pointer" %> <!-- Update -->
+                    </div>
+                  <% end %>
+                    </div>
+             </div>   
+<% end %>
+
+
+<script>
+//for counseling-information
+$(document).ready(function(){
+  $("#button-counseling").click(function(){
+    $("#counseling-div").show();
+    $("#basic-div").hide();
+    $("#contract-div").hide();
+  });
+});
+
+//for basic-information
+$(document).ready(function(){
+  $("#button-basic").click(function(){
+    $("#counseling-div").hide();
+    $("#contract-div").hide();
+    $("#basic-div").show();
+  });
+});
+
+//for contract-information
+$(document).ready(function(){
+  $("#button-contract").click(function(){
+    $("#counseling-div").hide();
+    $("#basic-div").hide();
+    $("#contract-div").show();
+  });
+});
+
+function addRowSite(i){
+  if($(".site"+i).val()){
+    i++;
+    let row = '<tr> \
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border">'+i+'</td> \
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><input type="text" name="site_name'+i+'" , class="site'+i+' block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" ></td> \
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><input type="number" name="site_offer_amount'+i+'" , class="offer-amount block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" oninput="siteTotal()" ></td> \
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><input type="text" name="site_agreement'+i+'" , class="block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" ></td> \
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><input type="date" name="site_consent_signing_date'+i+'" , class="block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" ></td> \
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><input type="number" name="site_contract_amount'+i+'" , class="contract-amount block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" oninput="siteTotal()" ></td> \
+              </tr>';
+    let addRow = $("#add-row").html();
+    $("#add-row").remove();
+
+    $("#site-body").append("<tr>"+row+"</tr>"+"<tr id='add-row' onclick='addRowSite("+i+")'>"+addRow+"<tr>");
+  }
+  else{
+    $(".site"+i).focus();
+  }
+}
+siteTotal();
+function siteTotal(){  
+      var totalOfferAmount = 0;
+      var totalContractAmount = 0;
+      $('.offer-amount').each(function(){
+          if($(this).val()){
+            totalOfferAmount += parseFloat($(this).val()); 
+          }
+      });
+      $("#total-offer-amount").val( totalOfferAmount);
+      $('.contract-amount').each(function(){
+        if($(this).val()){
+          totalContractAmount += parseFloat($(this).val());
+        }
+      });
+      $("#total-contract-amount").val( totalContractAmount);
+}
+</script>
+
+<style>
+.required-field::before {
+  content: "*";
+  color: red;
+}
+</style>

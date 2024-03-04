@@ -1,0 +1,2 @@
+class OccupationMaster < ApplicationRecord
+end

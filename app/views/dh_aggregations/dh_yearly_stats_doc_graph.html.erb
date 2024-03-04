@@ -1,0 +1,18 @@
+<main class="flex-1 pb-8">
+    <div class="max-w-full mx-auto mt-20 px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8 mr-8">
+        <div class="flex flex-col">
+            <div class="border px-5 py-5">
+            <%= line_chart [
+                {
+                    name: "保険点数", type: "column",color: "gray", data: @dh_aggregations.group_by_month(:created_at).sum("CAST(COALESCE(miscc_income, '0') AS INTEGER)") # insurance points
+                    },
+                    {
+                        name: "保険人数", type: "line",color: "red", data: @dh_aggregations.group_by_month(:created_at).sum("CAST(COALESCE(insurance_maintenance, '0') AS INTEGER)") # No. of people insured
+                    }
+                ],
+                adapter: "highcharts"
+            %>
+            </div>
+        </div>
+    </div>
+</main>

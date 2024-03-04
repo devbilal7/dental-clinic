@@ -1,0 +1,120 @@
+<tr>
+    <th scope="col" class="bg-white px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 border  border-l-4" rowspan="2"><%= @index %></th>
+    <% if consultant == "overall" %>
+        <th scope="col" class="bg-white px-6 py-3 text-center text-xs font-medium text-black-500 uppercase tracking-wider sticky border border-l-4 " style="left:60px"  rowspan="2"><%= consultant %></th>
+    <% else %>
+        <th scope="col" class="bg-white px-6 py-3 text-center text-xs font-medium text-black-500 uppercase tracking-wider sticky border  border-l-4" style="left:60px" rowspan="2"><%= "#{@dr} #{consultant.full_name}" %></th>
+    <% end %>
+    <td class="bg-white px-6 py-4 whitespace-nowrap text-sm text-gray-500 sticky border border-l-4 "  style="left:170px" ><%= t("monthly.Subject") %></td>
+    <% if @multiple_visits.present? %>
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @first_visit %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @second %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @treatment_plan_date %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @implant_correction %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @self_pay_contract %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @maintenance %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @treatment_plan %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @suspension %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @confirmation_end %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @maintenance_visit %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @suspension_contact_TEL %></td>
+    
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @suspended_contact_postcard %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @visit_after_interruption %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @p_heavy_defense_target %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @p_heavy_defense_calculation %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @inspection_4mm %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @p_second %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @inspection_3 %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @fop %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @whitening %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @medical_tube %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @prosthodontics %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @mt_tooth_number %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @malocclusion %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 "><%= @visit_count %></td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= @next_reservation_date %></td>
+    <% end %>
+</tr> 
+<tr>                               <!-- Dentist Percentage      -->
+    <td class="sticky bg-white z-2 px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" style="left:170px">%</td>
+    <% if @multiple_visits.present? %>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@first_visit.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@second.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@treatment_plan_date.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@implant_correction.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@self_pay_contract.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@maintenance.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@treatment_plan.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@suspension.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@confirmation_end.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@maintenance_visit.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@suspension_contact_TEL.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@suspended_contact_postcard.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@visit_after_interruption.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@p_heavy_defense_target.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@p_heavy_defense_calculation.to_f / @visit_count.to_f, precision: 2) %></td>
+    
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@inspection_4mm.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@p_second.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@inspection_3.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@fop.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@whitening.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@medical_tube.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@prosthodontics.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@mt_tooth_number.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@malocclusion.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@visit_count.to_f / @visit_count.to_f, precision: 2) %></td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= number_with_precision(@next_reservation_date.to_f / @visit_count.to_f, precision: 2) %></td>
+    <% end %>
+</tr> 
+<% @index += 1 %>

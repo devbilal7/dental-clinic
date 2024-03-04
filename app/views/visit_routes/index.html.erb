@@ -1,0 +1,187 @@
+<main class="flex-1 pb-8 h-screen">
+  <div class="max-w-full mx-auto flex justify-end px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 mt-16"> 
+      <%= render "search_filter" %> <!-- Searching / Filtering -->
+    <div class="flex-0.5 mt-2" >  <!-- Button-->
+     <%= render "layouts/pagination_limit", controller: params[:controller], action: params[:action] %> <!-- Pagy DropDown -->
+     <button type="button" tabindex="16" class="text-center mb-4 mt-36 inline-flex items-center px-4 py-2  border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-[#fff] hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 rounded-full border-2 border-green-400" data-bs-toggle="modal" data-bs-target="#exampleModalSm" id="SmLabel" ><%= t("patient.Narrow Down") %></button>
+    </div>
+  </div>
+</div>
+
+      <%= render "visit_routes/index" %> <!-- Table -->
+      
+
+    <div id="advance-search-popup" class="h-full absolute p-6 bg-white rounded-lg text-center overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle">
+      <div class="bg-white">
+        <div class="">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 text-3xl text-center" id="modal-title"><%= t("patient.Narrow Down") %></h3>
+        </div>
+        <div>
+        <%= render partial:"visit_routes/advance_search" %>
+        </div>
+      </div>
+    </div>
+    <div id="edit_popup" class="" >
+    
+    </div>
+</main>
+
+<style>
+.input-wrap.w-full input#multiple_visit_route_visit_route_attributes_thank_you_note_patient_no {
+    width: 95%;
+}
+.input-wrap.w-full input#multiple_visit_route_visit_route_attributes_introducer_name {
+    width: 95%;
+}
+.input-wrap.w-full input#multiple_visit_route_visit_route_attributes_next_reservation_date {
+    width: 95%;
+}
+.input-wrap.w-full input#multiple_visit_route_visit_route_attributes_mt_tooth_number {
+    width: 95%;
+}
+.input-wrap.w-full select#multiple_visit_route_visit_route_attributes_prosthodontics {
+    width: 95%;
+}
+.input-wrap.w-full input#multiple_visit_route_visit_route_attributes_p_heavy_defense_calculation_date {
+    width: 78%;
+}
+.input-wrap.w-full input#multiple_visit_route_visit_route_attributes_visit_after_interruption {
+    width: 100%;
+}
+
+
+
+
+
+
+
+ div#edit_popup, #advance-search-popup {
+    position: absolute;
+    width: 100%;
+    top: 92px;
+    z-index: 10;
+    right: -100%;
+    transition: all 1s ease-in;
+    display: block;
+    max-width: 1000px;
+}
+
+div#edit_popup .w-90 {
+    height: 755px;
+    overflow-y: scroll;
+}
+
+  div#edit_popup{
+    background:transparent;
+  }
+
+  .edit_patient {
+      background: #fff;
+      padding: 15px;
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  }
+
+  div#edit_popup>div, #advance-search-popup>div {
+      position: unset !important;
+  }
+
+  div#edit_popup[style="display: block;"] {
+      right: 0 !important;
+  }
+
+  .showPopUp {
+    right: 0% !important;
+    
+
+  div[id="edit_popup"].showPopUp {
+    right: 50% !important;
+    transform: translateX(50%);
+}
+div#edit_popup {
+    max-width: 560px;
+    box-shadow: none;
+}
+
+div#edit_popup>.bg-white {
+    background: transparent;
+    box-shadow: none !important;
+}
+
+
+div#edit_popup>.bg-white div.form-div {
+    background: #fff;
+    padding: 25px 15px;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+div#edit_popup>.bg-white>.mx-auto>div>button {
+    border-radius: 15px 15px 0px 0px;
+    outline: none;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+
+
+
+
+</style>
+
+<script>
+  function editpatient(patientId){
+    $('#edit_popup').show();
+    $('#edit_popup').addClass("showPopUp");
+    $.ajax({
+            type: "get",
+            data: "id="+patientId,
+            url: "<%= new_visit_route_path %>"
+        }) 
+  }
+
+  $('#advance-search-popup').hide();
+
+  $('#SmLabel').on("click",function(){
+    $('#advance-search-popup').show();
+    $('#advance-search-popup').addClass("showPopUp");
+  });
+  
+  function editvisitroute(multiplevisitrouteid,patientId){
+    $('#edit_popup').show();
+    $('#edit_popup').addClass("showPopUp");
+    $.ajax({
+            type: "get",
+            data: "patient="+patientId,
+            url: "/visit_routes/"+multiplevisitrouteid+"/edit"
+        }) 
+  }
+
+</script>
+
+<!-- Advance Search-->
+<script>
+$('#SmLabel').on("click",function(){
+  $('.alert-modal').removeClass('hidden');
+});
+
+$("#advance-search-button").on("click",function(){
+  $("#advance-search").submit();
+})
+
+$("#clear").on("click",function(){
+  $('.clear').val('');
+  $('input[type=checkbox]').prop('checked', false)
+}) 
+
+$(".bg-modal").click(function(){
+  $('.alert-modal').addClass('hidden');
+})
+</script>
+
+<script>
+    $("#pagy_no").change(function(){
+        $("#pagy_form").submit();
+    })
+</script>

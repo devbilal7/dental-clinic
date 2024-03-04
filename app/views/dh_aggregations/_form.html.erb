@@ -1,0 +1,407 @@
+<%= form_with(model: dh_aggregation, class: "contents") do |form| %>
+  <% if dh_aggregation.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+      <h2><%= pluralize(dh_aggregation.errors.count, "エラー") %> この DH が保存されるのを禁止しました:</h2>
+    </div>
+  <% end %>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32">   <%= "歯科衛生士" %> </div><!-- Dental Hygienist -->
+            <div class=" col-span-4">
+              <%= form.select(:dentist_hygienist_id, DentistHygienist.pluck(:first_name, :id), { prompt: "IDを選択" }, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-[365px]") %>
+                <% dh_aggregation.errors.messages.each do |error| %>
+                  <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">歯科衛生士	 <%= t('errors.messages.blank') %></div>
+                <% end %>
+            </div>
+      </div>
+    </div>
+
+  <div class="my-5">
+    <%= form.hidden_field :clinic_id, value: current_user.clinic.id, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32">  <%= "予約人数" %> </div><!-- No of Reservations -->
+            <div class=" col-span-4">
+              <%= form.number_field :no_of_reservations, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32">  <%= "人のメンテナンス" %></div> <!-- People Maintenance -->
+            <div class=" col-span-4">
+              <%= form.number_field :people_maintenance, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"> <%= "人々の治療" %></div> <!-- People Treatment -->
+            <div class=" col-span-4">
+              <%= form.number_field :people_treatment, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"> <%= "人々は経費を所有します" %></div> <!-- People Own Expense -->
+            <div class=" col-span-4">
+              <%= form.number_field :people_own_expense, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"> <%= "口検数" %></div> <!-- Oral Count -->
+            <div class=" col-span-4">
+             <%= form.number_field :oral_count, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"> <%= "衰退から" %></div> <!-- Out of the Decline -->
+            <div class=" col-span-4">
+             <%= form.number_field :out_of_the_decline, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"> <%= "TELキャンセル" %></div> <!-- Cancellation TEL -->
+            <div class=" col-span-4">
+             <%= form.number_field :cancellation_tel, id:"cancel_tel_field", value: "", class: "cancelation block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"> <%= "無断キャンセル" %></div>  <!-- Cancellation Without Permission -->
+            <div class=" col-span-4">
+              <%= form.number_field :cancellation_without, id:"cancel_with_field", value: "", class: "cancelation block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= "保険のメンテナンス" %></div>  <!-- Insurance Maintenance -->
+            <div class=" col-span-4">
+               <%= form.number_field :insurance_maintenance, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"> <%= "保険治療" %></div> <!-- Insurance Treatment -->
+            <div class=" col-span-4">
+               <%= form.number_field :insurance_treatment, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"> <%= "自費収入" %></div> <!-- Own Income -->
+            <div class=" col-span-4">
+               <%= form.number_field :own_income, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"> <%= "雑収 所得" %></div> <!-- Miscellaneous Income -->
+            <div class=" col-span-4">
+               <%= form.number_field :miscc_income, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"> <%= "お通し率" %></div> <!-- Pass Rate -->
+            <div class=" col-span-4">
+               <%= form.number_field :no_of_people, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"> <%= "予約確認 人々" %></div> <!-- Appointment Confirm People -->
+            <div class=" col-span-4">
+               <%= form.number_field :appt_confm_people, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32">  <%= "インターバル 1m 人" %></div> <!-- Interval 1m People -->
+            <div class=" col-span-4">
+               <%= form.number_field :interval_1m_people, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32">  <%= "インターバル 1m TEL" %></div> <!-- Interval 1M TEL -->
+            <div class=" col-span-4">
+               <%= form.number_field :interval_1m_tel, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32">  <%= "間隔 1M なし" %></div> <!-- Interval 1M Without -->
+            <div class=" col-span-4">
+               <%= form.number_field :interval_1m_without, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32">  <%= "インターバル 2m 人" %></div> <!-- Interval 2M People -->
+            <div class=" col-span-4">
+               <%= form.number_field :interval_2m_people, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32">   <%= "インターバル 2M TEL" %></div> <!-- Interval 2M TEL -->
+            <div class=" col-span-4">
+               <%= form.number_field :interval_2m_tel, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32">   <%= "間隔 2m なし" %></div><!-- Interval 2M Without -->
+            <div class=" col-span-4">
+               <%= form.number_field :interval_2m_without, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32">  <%= "インターバル 3m 人" %></div><!-- Interval 3m People -->
+            <div class=" col-span-4">
+               <%= form.number_field :interval_3m_people, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32">  <%= "インターバル 3m TEL" %> </div> <!-- Interval 3m TEL -->
+            <div class=" col-span-4">
+               <%= form.number_field :interval_3m_tel, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32">  <%= "間隔 3m なし" %> </div> <!-- Interval 3m Without -->
+            <div class=" col-span-4">
+               <%= form.number_field :interval_3m_without, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32">  <%= "インターバル 4m 人" %> </div> <!-- Interval 4m People -->
+            <div class=" col-span-4">
+               <%= form.number_field :interval_4m_people, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"> <%= "インターバル 4m TEL" %> </div> <!-- Interval 4m TEL -->
+            <div class=" col-span-4">
+               <%= form.number_field :interval_4m_tel, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"> <%= "間隔 4m なし" %></div> <!-- Interval 4m Without -->
+            <div class=" col-span-4">
+               <%= form.number_field :interval_4m_without, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"> <%= "インターバル 6m 人" %></div> <!-- Interval 6m People -->
+            <div class=" col-span-4">
+               <%= form.number_field :interval_6m_people, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= "インターバル 6m TEL" %> </div><!-- Interval 6m TEL -->
+            <div class=" col-span-4">
+               <%= form.number_field :interval_6m_tel, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= "間隔 6m なし" %> </div><!-- Interval 6m Without -->
+            <div class=" col-span-4">
+               <%= form.number_field :interval_6m_without, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label :spt2 %> </div>
+            <div class=" col-span-4">
+               <%= form.number_field :spt2, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= form.label :spt1 %> </div>
+            <div class=" col-span-4">
+               <%= form.number_field :spt1, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= "単G P重防" %> </div> <!-- Simple G P Heavy Defense -->
+            <div class=" col-span-4">
+               <%= form.number_field :g_p_heavy_defense, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= "紹介人数" %> </div> <!-- Number of Referrals -->
+            <div class=" col-span-4">
+               <%= form.number_field :no_of_referrals, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= "ノート" %> </div> <!-- Note -->
+            <div class=" col-span-4">
+               <%= form.number_field :note, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= "口腔機能 点数" %> </div> <!-- Oral Function -->
+            <div class=" col-span-4">
+               <%= form.number_field :oral_func, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= "医業収益" %> </div> <!-- Medical practice revenue -->
+            <div class=" col-span-4">
+               <%= form.number_field :med_prac_rev, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= "実診察 日数" %> </div> <!-- Actual Medical examination Days -->
+            <div class=" col-span-4">
+               <%= form.number_field :act_med_exam_days, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+
+    <div class="my-5 d-flex">
+      <div class="flex flex-wrap">
+          <div class="flex items-center w-32"><%= "1日 予約数" %> </div> <!-- One day no of reservation -->
+            <div class=" col-span-4">
+                  <%= form.number_field :one_day_no_reservation, value: "", class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+            </div>
+      </div>
+    </div>
+
+  <div class="inline">
+    <%= form.submit "作成", class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

@@ -1,0 +1,96 @@
+   <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">          
+                    <div class="max-h-[600px]">
+                    <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-[#fff] sticky top-0 z-10">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4">No</th>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4"><%= t("monthly.Full name") %></th>   
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4"></th> 
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4">a</th>    
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4">b</th>    
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4">c</th>    
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-blackuppercase tracking-wider border border-l-4 border-r-4"><%= t("monthly.Total") %></th>      
+                        </tr>
+                    </thead>
+                        <tbody class="bg-blackdivide-y divide-gray-200">
+                        <tr>
+                        <% i = 1%>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-l-4" rowspan="2"><%= i%></th>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-l-4" rowspan="2">全体</th>
+                            <% overall_courses %>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= t("monthly.Subject") %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @overall_course_ah %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @overall_course_i  %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @overall_course_hare  %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= @total_p_course %></td>
+                          </tr> 
+                          <tr>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4">%</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@overall_course_ah.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@overall_course_i.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@overall_course_hare.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= number_with_precision(@total_p_course.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          </tr>
+                          <% @dentists.each_with_index do |dentist, index|  %>
+                            <% monthly_tabulation(dentist,"") %>
+                          <tr>
+                          <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-l-4" rowspan="2"><%= i+1%></th>
+                          <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-l-4" rowspan="2"><%= "DR #{dentist.full_name}"  %></th>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= t("monthly.Subject") %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%=  @ah_course  %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @i_course  %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @hare_course %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= @total_p_courses %></td>
+                          </tr> 
+                          <tr>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4">%</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@ah_course.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@i_course.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@hare_course.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4" border-r-4><%= number_with_precision(@total_p_courses.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          </tr>  
+                          <% i+=1 %>
+                          <% end %>
+                          <% @dentist_hygienists.each_with_index do |dentist, index|  %>
+                            <% monthly_tabulation(dentist,"") %>
+                          <tr>
+                          <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-l-4" rowspan="2"><%= i+1 %></th>
+                          <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-l-4" rowspan="2"><%= "DH #{dentist.full_name}" %></th>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= t("monthly.Subject") %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%=  @ah_course  %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @i_course  %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @hare_course %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @total_p_courses%></td>
+                          </tr> 
+                          <tr>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4">%</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@ah_course.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@i_course.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@hare_course.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@total_p_courses.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          </tr>
+                          <% i+=1%>  
+                          <% end %>
+                          <% @treatment_coordinators.each_with_index do |dentist, index|  %>
+                            <% monthly_tabulation(dentist,"") %>
+                          <tr>
+                          <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-l-4" rowspan="2"><%= i+1 %></th>
+                          <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-l-4" rowspan="2"><%= "TC #{dentist.full_name}"  %></th>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= t("monthly.Subject") %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%=  @ah_course  %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @i_course  %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= @hare_course %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= @total_p_courses%></td>
+                          </tr> 
+                          <tr>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4">%</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@ah_course.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@i_course.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4"><%= number_with_precision(@hare_course.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border border-l-4 border-r-4"><%= number_with_precision(@total_p_courses.to_f/@number_of_new_cases.to_f,precision: 2) %></td>
+                          </tr> 
+                          <% i+=1 %> 
+                          <% end %>   
+                </table>
+                    </div>
+                </div>

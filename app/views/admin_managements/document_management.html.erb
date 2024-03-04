@@ -1,0 +1,53 @@
+<main class="mt-20 flex-1 pb-8">
+  <div class="w-full text-lg leading-6 font-medium text-gray-900"> 
+    <div class="w-fit border border-cyan-600 pb-6 mx-auto">
+      <div class="flex flex-col px-5">
+        <div class="overflow-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <% if @documents.present? %>
+              <thead class="bg-[#fff]">
+                <tr>
+                  <th scope="col" class="px-6 py-3 text-center text-lg font-bold text-blackuppercase tracking-wider">Document Name</th>
+                  <th scope="col" class="px-6 py-3 text-center text-lg font-bold text-blackuppercase tracking-wider">Upload Date</th>
+                  <th scope="col" class="px-6 py-3 text-center text-lg font-bold text-blackuppercase tracking-wider" colspan="2"></th>
+                </tr>
+              </thead>
+              <tbody class="bg-blackdivide-y divide-gray-200">
+                <% @documents.each do |document| %>
+                  <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900" ><%= document.filename %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900" ><%= document.created_at.strftime("%Y-%m-%d") %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 text-blue-500" >
+                      <%= link_to "Download", rails_blob_path(document), class: "block mx-auto shadow w-fit rounded-lg border border-gray-200 bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 mt-2" %>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900 text-blue-500" >
+                      <%= link_to "Delete", destroy_document_admin_management_path(document),method: :delete,data: { confirm: "このドキュメントを削除してもよろしいですか？" }, class: "block mx-auto shadow w-fit rounded-lg border border-gray-200 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 mt-2" %>
+                    </td>
+                    <% %>
+                  </tr>
+                <% end %>
+              </tbody> 
+            <% else %>
+              <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-center text-xl text-red-500 font-medium text-gray-900" >
+                ドキュメントはまだアップロードされていません！ 
+              </td>           <!-- Document has not been uploaded yet -->
+            <% end %>
+          </table>           
+        </div>
+      </div>
+  </div>
+  <div class="mx-auto w-fit">
+    <%= form_with url: upload_document_admin_managements_path, method: :post, class: "w-fit" do |f|%>
+      <div class="my-5">
+        <%= f.file_field :documents, class: "opacity-0 w-0"%>
+        <%= f.label :documents,"アップロード",class: "cursor-pointer block mx-auto shadow w-fit rounded-lg border border-gray-200 bg-green-100 hover:bg-green-200 text-gray-700 px-6 py-2 mt-2" %> <!-- Upload -->
+      </div>
+    <% end %>   
+  </div>
+</main>
+<script>
+  $("#documents").on("change",function(){
+    $("form").submit();
+  })
+</script>

@@ -1,0 +1,134 @@
+<div id="<%= dom_id dentist_aggregation %>">
+  <p class="my-5">
+    <strong class="block font-medium mb-1">No of reservations:</strong>
+    <%= dentist_aggregation.no_of_reservations %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Actual visit patients:</strong>
+    <%= dentist_aggregation.actual_visit_patients %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Insurance peoples:</strong>
+    <%= dentist_aggregation.insurance_peoples %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Emergency patients:</strong>
+    <%= dentist_aggregation.emergency_patients %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">New patients:</strong>
+    <%= dentist_aggregation.new_patients %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Re entry patients:</strong>
+    <%= dentist_aggregation.re_entry_patients %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Patients finished:</strong>
+    <%= dentist_aggregation.patients_finished %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">No of cancellations:</strong>
+    <%= dentist_aggregation.no_of_cancellations %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">No notice cancellations:</strong>
+    <%= dentist_aggregation.no_notice_cancellations %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Score:</strong>
+    <%= dentist_aggregation.score %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Own expense amount money:</strong>
+    <%= dentist_aggregation.own_expense_amount_money %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Miscellaneous income:</strong>
+    <%= dentist_aggregation.miscellaneous_income %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Own expense people:</strong>
+    <%= dentist_aggregation.own_expense_people %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">No of people:</strong>
+    <%= dentist_aggregation.no_of_people %>
+  </p>
+
+  <!-- 
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Actual examinations:</strong>
+    <%= dentist_aggregation.actual_examinations %>
+  </p>
+  -->
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Referral card:</strong>
+    <%= dentist_aggregation.referral_card %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Referral patients:</strong>
+    <%= dentist_aggregation.referral_patients %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">People returning home:</strong>
+    <%= dentist_aggregation.people_returning_home %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Payment people:</strong>
+    <%= dentist_aggregation.payment_people %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Through no of reservations:</strong>
+    <%= dentist_aggregation.through_no_of_reservations %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Through rate:</strong>
+    <%= dentist_aggregation.through_rate %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Actual visit peoples:</strong>
+    <%= dentist_aggregation.actual_visit_peoples %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Introduction card:</strong>
+    <%= dentist_aggregation.introduction_card %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Introduction patients:</strong>
+    <%= dentist_aggregation.introduction_patients %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Referral rate:</strong>
+    <%= dentist_aggregation.referral_rate %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this dentist aggregation", dentist_aggregation, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <%= link_to 'Edit this dentist aggregation', edit_dentist_aggregation_path(dentist_aggregation), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
+    <hr class="mt-6">
+  <% end %>
+</div>

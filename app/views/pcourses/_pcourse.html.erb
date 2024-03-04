@@ -1,0 +1,17 @@
+<div id="<%= dom_id pcourse %>">
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Name:</strong>
+    <%= pcourse.name %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Code:</strong>
+    <%= pcourse.code %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this pcourse", pcourse, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <%= link_to 'Edit this pcourse', edit_pcourse_path(pcourse), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
+    <hr class="mt-6">
+  <% end %>
+</div>

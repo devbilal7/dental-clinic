@@ -1,0 +1,15 @@
+<div class="mx-auto mt-20 w-full flex">
+  <div class="mx-auto w-full max-w-6xl">
+    <% if notice.present? %>
+      <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+    <% end %>
+
+    <%= render @staff_info %>
+
+    <%= link_to t("newstaffinfo.Edit"), edit_staff_info_path(@staff_info), class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <div class="inline-block ml-2">
+      <%= button_to t("newstaffinfo.Delete"), staff_info_path(@staff_info), method: :delete, data: { confirm: "このスタッフ情報を削除してもよろしいですか？" }, class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
+    </div>
+    <%= link_to t("newstaffinfo.Back to Staff Info"), staff_infos_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+  </div>
+</div>

@@ -1,0 +1,343 @@
+  
+            <div class="z-50 mt-24">
+              <button type="button" id="button-occupation" class="inline-flex items-center px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 <%= current_user.role == "Administrator" ? "bg-[#82ced5] hover:bg-[#89d7ee] focus:ring-[#82ced5]" : "bg-[#43c17a] hover:bg-green-500 focus:ring-[#43c17a]" %>">
+               職業 
+              </button> <!-- Occupation -->
+            
+            
+              <button type="button" id="button-course" class="inline-flex items-center px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 <%= current_user.role == "Administrator" ? "bg-[#82ced5] hover:bg-[#89d7ee] focus:ring-[#82ced5]" : "bg-[#43c17a] hover:bg-green-500 focus:ring-[#43c17a]" %>">
+               コース
+              </button> <!-- Course -->
+         
+              <button type="button" id="button-pcourse" class="inline-flex items-center px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 <%= current_user.role == "Administrator" ? "bg-[#82ced5] hover:bg-[#89d7ee] focus:ring-[#82ced5]" : "bg-[#43c17a] hover:bg-green-500 focus:ring-[#43c17a]" %>">
+               Pコース
+              </button> <!-- P Course -->
+               <button type="button" id="button-contract-type" class="inline-flex items-center px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 <%= current_user.role == "Administrator" ? "bg-[#82ced5] hover:bg-[#89d7ee] focus:ring-[#82ced5]" : "bg-[#43c17a] hover:bg-green-500 focus:ring-[#43c17a]" %>">
+               契約タイプ
+              </button> <!-- Contract Type -->
+            
+            
+              <button type="button" id="button-prosthodontics" class="inline-flex items-center px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 <%= current_user.role == "Administrator" ? "bg-[#82ced5] hover:bg-[#89d7ee] focus:ring-[#82ced5]" : "bg-[#43c17a] hover:bg-green-500 focus:ring-[#43c17a]" %>">
+               補綴
+              </button> <!-- Prosthodontics -->
+         
+              <button type="button" id="button-visit_routes" class="inline-flex items-center px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 <%= current_user.role == "Administrator" ? "bg-[#82ced5] hover:bg-[#89d7ee] focus:ring-[#82ced5]" : "bg-[#43c17a] hover:bg-green-500 focus:ring-[#43c17a]" %>">
+                来院経路
+              </button> <!-- Visit Route -->
+            </div>
+
+          <%# Occupation %>
+            <div class="" style="display:none" id="occupation-div">
+            <div class="flex justify-end w-full">
+              <a href="<%= new_occupation_master_path %>" id="create-occup" class="inline-flex items-center float-right px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 <%= current_user.role == "Administrator" ? "bg-[#82ced5] hover:bg-[#89d7ee] focus:ring-[#82ced5]" : "bg-[#43c17a] hover:bg-green-500 focus:ring-[#43c17a]" %>">
+                作成 職業
+              </a> <!-- Create Occupation -->
+            </div>
+             <div class="flex flex-col mt-6 mr-6 ml-6">
+                <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-[#fff]">
+                            <tr>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border"> コード      </th> <!-- Code -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border"> 項目名 </th> <!-- Item Name -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">備考   </th> <!-- Remarks -->
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                           <% @occupations = OccupationMaster.all%>
+                            <% @occupations.each_with_index do |occ, index| %>
+                            <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border"><%= index + 1 %></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= occ.job_title %>         </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= occ.remarks %>         </td>                           
+                            </tr>
+                            <% end %>
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+              </div>            
+            </div>
+
+          <%# Course %>
+            <div class="" style="display:none" id="course-div">
+            <div class="flex justify-end w-full">
+              <a href="<%= new_course_path %>" id="create-occup" class="inline-flex items-center float-right px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 <%= current_user.role == "Administrator" ? "bg-[#82ced5] hover:bg-[#89d7ee] focus:ring-[#82ced5]" : "bg-[#43c17a] hover:bg-green-500 focus:ring-[#43c17a]" %>">
+                作成 コース
+              </a>  <!-- Create Course -->
+            </div>
+             <div class="flex flex-col mt-6 mr-6 ml-6">
+                <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-[#fff]">
+                            <tr>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border"> コード      </th> <!-- Code -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border"> 項目名 </th> <!-- Item Name -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">備考   </th> <!-- Remarks -->
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                           <% @courses = Course.all%>
+                            <% @courses.each_with_index do |course, index| %>
+                            <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border"><%= index + 1 %></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= course.name %>         </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= course.remarks %>         </td>                           
+                            </tr>
+                            <% end %>
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+              </div>            
+            </div>
+           
+           <%# P Course %>
+           <div class="" style="display:none" id="pcourse-div">
+             <div class="flex justify-end w-full">
+              <a href="<%= new_pcourse_path %>" id="create-occup" class="inline-flex items-center float-right px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 <%= current_user.role == "Administrator" ? "bg-[#82ced5] hover:bg-[#89d7ee] focus:ring-[#82ced5]" : "bg-[#43c17a] hover:bg-green-500 focus:ring-[#43c17a]" %>">
+                作成 P コース
+              </a> <!-- Create PCourse -->
+            </div>
+             <div class="flex flex-col mt-6 mr-6 ml-6">
+                <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-[#fff]">
+                            <tr>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border"> コード      </th> <!-- Code -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border"> 項目名 </th> <!-- Item Name -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">備考   </th> <!-- Remarks -->
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                           <% @pcourses = Pcourse.all%>
+                            <% @pcourses.each_with_index do |pcourse, index| %>
+                            <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border"><%= index + 1 %></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= pcourse.name %>         </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= pcourse.remarks %>         </td>                           
+                            </tr>
+                            <% end %>
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+              </div>            
+            </div>
+
+            <%# Contract Type %>
+           <div class="" style="display:none" id="contract-type-div">
+             <div class="flex justify-end w-full">
+              <a href="<%= new_contract_type_path %>" id="create-occup" class="inline-flex items-center float-right px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 <%= current_user.role == "Administrator" ? "bg-[#82ced5] hover:bg-[#89d7ee] focus:ring-[#82ced5]" : "bg-[#43c17a] hover:bg-green-500 focus:ring-[#43c17a]" %>">
+                作成 契約タイプ
+              </a> <!-- Create Contract Type -->
+            </div>
+             <div class="flex flex-col mt-6 mr-6 ml-6">
+                <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-[#fff]">
+                            <tr>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border"> コード      </th> <!-- Code -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border"> 項目名 </th> <!-- Item Name -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">備考   </th> <!-- Remarks -->
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                           <% @contract_types = ContractType.all%>
+                            <% @contract_types.each_with_index do |contract, index| %>
+                            <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border"><%= index + 1 %></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= contract.contract_type_name %>         </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= contract.remarks %>         </td>                           
+                            </tr>
+                            <% end %>
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+              </div>            
+            </div>
+
+            <%# Prosthodontics %>
+           <div class="" style="display:none" id="prosthodontics-div">
+             <div class="flex justify-end w-full">
+              <a href="<%= new_prosthodontic_master_path %>" id="create-occup" class="inline-flex items-center float-right px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 <%= current_user.role == "Administrator" ? "bg-[#82ced5] hover:bg-[#89d7ee] focus:ring-[#82ced5]" : "bg-[#43c17a] hover:bg-green-500 focus:ring-[#43c17a]" %>">
+                作成 補綴
+              </a> <!-- Create Prosthodontic -->
+            </div>
+             <div class="flex flex-col mt-6 mr-6 ml-6">
+                <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-[#fff]">
+                            <tr>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border"> コード      </th> <!-- Code -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border"> 項目名 </th> <!-- Item Name -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">備考   </th> <!-- Remarks -->
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                           <% @prosthodontics = ProsthodonticMaster.all%>
+                            <% @prosthodontics.each_with_index do |prosthodontic, index| %>
+                            <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border"><%= index + 1 %></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= prosthodontic.prosthodontic_name %>         </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= prosthodontic.remarks %>         </td>                           
+                            </tr>
+                            <% end %>
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+              </div>            
+            </div>
+
+            <%# Visit Route %>
+           <div class="" style="display:none" id="visit-route-div">
+              <div class="flex justify-end w-full">
+              <a href="<%= new_visit_route_master_path %>" id="create-occup" class="inline-flex items-center float-right px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 <%= current_user.role == "Administrator" ? "bg-[#82ced5] hover:bg-[#89d7ee] focus:ring-[#82ced5]" : "bg-[#43c17a] hover:bg-green-500 focus:ring-[#43c17a]" %>">
+                作成 来院経路
+              </a> <!-- Create Visi Route -->
+            </div>
+             <div class="flex flex-col mt-6 mr-6 ml-6">
+                <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-[#fff]">
+                            <tr>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border"> コード      </th> <!-- Code -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border"> 項目名 </th> <!-- Item Name -->
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border">備考   </th> <!-- Remarks -->
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                           <% @visit_routes = VisitRouteMaster.all%>
+                            <% @visit_routes.each_with_index do |visit_route, index| %>
+                            <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border"><%= index + 1 %></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= visit_route.visit_route_name %>         </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border"><%= visit_route.remarks %>         </td>                           
+                            </tr>
+                            <% end %>
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+              </div>            
+            </div>
+
+
+
+
+
+
+<script>
+
+var a;
+  <% if params[:tab].nil? %>
+    if(a == undefined){
+      $("#occupation-div").show();
+    }
+    else{
+      $(a).show();
+    }
+  <% else%> 
+    $("#<%= params[:tab] %>").show;
+  <% end %>
+
+// Course
+$("#button-course").click(function(){
+    $("#occupation-div").hide();
+    $("#course-div").show();
+    $("#pcourse-div").hide();
+    $("#contract-type-div").hide();
+    $("#visit-route-div").hide(); 
+     $("#prosthodontics-div").hide();
+     clear_query_string()   
+  });
+
+// Occupation
+$("#button-occupation").click(function(){
+    $("#occupation-div").show();
+    $("#course-div").hide();
+    $("#pcourse-div").hide();
+    $("#contract-type-div").hide();
+    $("#visit-route-div").hide();    
+     $("#prosthodontics-div").hide(); 
+     clear_query_string()
+  });
+
+  // P Course
+$("#button-pcourse").click(function(){
+    $("#occupation-div").hide();
+    $("#course-div").hide();
+    $("#pcourse-div").show();
+    $("#contract-type-div").hide();
+    $("#visit-route-div").hide();    
+     $("#prosthodontics-div").hide();
+     a = "#pcourse-div";
+  });
+
+
+  // Contract type
+$("#button-contract-type").click(function(){
+    $("#occupation-div").hide();
+    $("#course-div").hide();
+    $("#pcourse-div").hide();
+    $("#contract-type-div").show();
+    $("#visit-route-div").hide();    
+     $("#prosthodontics-div").hide(); 
+     clear_query_string()
+  });
+
+   // Prosthodontics
+$("#button-prosthodontics").click(function(){
+    $("#occupation-div").hide();
+    $("#course-div").hide();
+    $("#pcourse-div").hide();
+    $("#contract-type-div").hide();
+    $("#visit-route-div").hide();    
+     $("#prosthodontics-div").show(); 
+     clear_query_string()
+  });
+
+
+   // Visit Route
+$("#button-visit_routes").click(function(){
+    $("#occupation-div").hide();
+    $("#course-div").hide();
+    $("#pcourse-div").hide();
+    $("#contract-type-div").hide();
+    $("#visit-route-div").show();    
+     $("#prosthodontics-div").hide(); 
+     clear_query_string()
+  });
+
+  function clear_query_string() {
+    if (window.location.href.indexOf('?') > -1) {
+        history.pushState('', document.title, window.location.pathname);
+    }
+  }
+
+
+
+
+
+
+var urlParams;
+var tab;
+if(!urlParams){
+  urlParams = new URLSearchParams(window.location.search);
+  tab = urlParams.get('tab');
+}
+if(tab)
+{
+ $("#"+tab).click();
+
+}
+
+</script>

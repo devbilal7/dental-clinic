@@ -1,0 +1,238 @@
+<div class=" mt-12">
+<%= form_with(model: patient,class: "contents") do |form| %>
+    <div class="border border-solid border-gray-300 mb-5 ">
+        <div class="w-full bg-gray-100 p-3">
+            <%= t("patient.Patient") %>
+        </div>
+    <fieldset class="p-3">
+        <div class="my-5 flex flex-wrap">
+        <div class="flex items-center w-32">
+        <%= t("patient.Patient Number") %>
+        </div>
+        <%= form.number_field :patient_number,value: Patient.all.empty? ? 1000000 : Patient.last.id + 1, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 " %>
+        
+        <% patient.errors.messages_for(:patient_number).each do |message| %>
+            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= t("patient.Patient Number") %> <%= message %></div>
+        <% end %>
+        </div>
+
+        <div class="my-5 d-flex">        
+            <div class="flex flex-wrap">
+            <div class="flex items-center w-32">
+            <%= t("patient.Patient Name") %>
+            </div>
+            <div class=" col-span-4">
+            <%= form.text_field :last_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+            <%= form.text_field :first_name, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65  " %>
+            <% patient.errors.messages_for(:first_name).each do |message| %>
+                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= t("patient.First Name") %>  <%= t('errors.messages.blank') %></div>
+            <% end %>
+            <% patient.errors.messages_for(:last_name).each do |message| %>
+                <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= t("patient.Last Name") %>  <%= t('errors.messages.blank') %></div>
+            <% end %>
+            </div>
+            </div>
+        </div>
+    </fieldset>
+    </div>
+
+
+
+    <div class="border border-solid border-gray-300  mb-5">
+        <div class="w-full bg-gray-100 p-3">
+             <%= t("patient.Visit Route") %>
+        </div>
+        <fieldset class=" p-3">
+                
+        <div class="my-5 d-flex">
+
+        <div class="flex flex-wrap">
+        <div class="flex items-center w-32"> <%= t("patient.Visit Route") %></div>
+        <div class=" col-span-4">
+        <%= form.select :patient_visit_route, VisitRouteMaster.pluck(:visit_route_name).map{|visit_route| visit_route}, {:include_blank => "Select"}, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-64" %>
+        <% patient.errors.full_messages_for(:patient_visit_route).each do |message| %>
+            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3 w-65"><%= message %></div>
+        <% end %>
+        </div>
+        </div>
+    </div>
+
+     
+    <div class="my-5 d-flex">
+
+    <div class="flex flex-wrap">
+    <div class="flex items-center w-32">  <%= t("patient.Keyword") %></div>
+    <div class=" col-span-4">
+    <%= form.text_field :keyword, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+    <%= form.text_field :keyword_detail, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-65" %>
+    <% patient.errors.messages_for(:keyword).each do |message| %>
+        <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+    <% end %>
+    </div>
+    </div>
+    </fieldset>
+    </div>
+
+
+
+
+
+<div class="border border-solid border-gray-300 mb-5">
+<div class="w-full bg-gray-100 p-3">
+<%= t("patient.Check") %>
+    </div>
+    <fieldset class=" p-3 ">
+    <legend class="text-sm"></legend>
+
+
+    <div class="my-5 d-flex">
+
+    <div class="flex flex-wrap">
+    <div class="flex items-center w-32">   <%= t("patient.Panorama") %></div>
+    <div class=" col-span-4">
+    <%= form.check_box :panorama %>
+        <% patient.errors.messages_for(:panorama).each do |message| %>
+            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3 w-65"><%= message %></div>
+        <% end %>
+        </div>
+    </div>
+  
+    <div class="my-5 d-flex">
+
+    <div class="flex flex-wrap">
+    <div class="flex items-center w-32">   <%= t("patient.Calies Check") %></div>
+    <div class=" col-span-4">
+    <%= form.check_box :caries_check %>
+    <% patient.errors.messages_for(:caries_check).each do |message| %>
+        <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+    <% end %>
+    </div>
+    </div>
+        
+    </fieldset>
+</div>
+
+
+
+
+<div class="border border-solid border-gray-300 mb-5">
+<div class="w-full bg-gray-100 p-3">
+<%= t("patient.Course") %>
+    </div>
+    <fieldset class="p-3">
+
+    <div class="my-5 d-flex">
+
+    <div class="flex flex-wrap">
+    <div class="flex items-center w-32">   <%= t("patient.Course") %></div>
+    <div class=" col-span-4">
+    <%= form.select :course, Course.all.map{|r|[r.name]}, {:include_blank => "Select"}, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-40" %>
+    <% patient.errors.full_messages_for(:course).each do |message| %>
+        <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+    <% end %>
+    </div>
+    </div>
+
+    <div class="my-5 d-flex">
+
+    <div class="flex flex-wrap">
+    <div class="flex items-center w-32">   <%= t("patient.P Course") %></div>
+    <div class=" col-span-4">
+    <%= form.select :p_course, Pcourse.all.map{|r|[r.name]}, {:include_blank => "Select"}, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-40" %>
+    <% patient.errors.full_messages_for(:p_course).each do |message| %>
+        <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+    <% end %>
+    </div>
+    </div>
+
+    <div class="my-5 d-flex">
+
+    <div class="flex flex-wrap">
+    <div class="flex items-center w-32">  <%= t("patient.Unknown Course") %></div>
+    <div class=" col-span-4">
+    <%= form.text_field :unknown_course, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-40" %>
+    <% patient.errors.full_messages_for(:unknown_course).each do |message| %>
+        <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+    <% end %>
+    </div>
+    </div>
+   
+</fieldset>
+</div>
+
+
+<div class="border border-solid border-gray-300 mb-5">
+<div class="w-full bg-gray-100 p-3">
+<%= t("patient.Responsible Person") %>
+    </div>
+    <fieldset class=" p-3 ">
+
+    <div class="my-5 d-flex">
+
+    <div class="flex flex-wrap">
+    <div class="flex items-center w-32">  DR</div>
+    <div class=" col-span-4">
+    <%= form.select :dentist_id, Dentist.all.map{|r|[r.first_name, r.id]}, {:include_blank => "Select"}, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-40" %>
+    <% patient.errors.messages_for(:dentist).each do |message| %>
+        <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= t("patient.DR") %>  <%= t('errors.messages.must exist') %></div>
+    <% end %>
+    </div>
+    </div>
+
+    
+    <div class="my-5 d-flex">
+
+    <div class="flex flex-wrap">
+    <div class="flex items-center w-32">    DH</div>
+    <div class=" col-span-4">
+    <%= form.select :dentist_hygienist_id, DentistHygienist.all.map{|r|[r.first_name, r.id]}, {:include_blank => "Select"},class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-40" %>
+        <% patient.errors.messages_for(:dentist_hygienist).each do |message| %>
+            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= t("patient.DH") %>  <%= t('errors.messages.must exist') %></div>
+        <% end %>
+        </div>
+    </div>
+
+    <div class="my-5 d-flex">
+
+    <div class="flex flex-wrap">
+        <div class="flex items-center w-32">TC</div>
+        <div class=" col-span-4">
+                <%= form.select :treatment_coordinator_id, TreatmentCoordinator.all.map{|r|[r.first_name, r.id]}, {:include_blank => "Select"}, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-40" %>
+                <% patient.errors.messages_for(:treatment_coordinator).each do |message| %>
+                    <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">TC <%= t('errors.messages.must exist') %></div>
+                <% end %>
+        </div>
+    </div>
+    </fieldset>
+
+
+</div>
+
+
+
+
+
+
+<div class="border border-solid border-gray-300 mb-5">
+    <div class="w-full bg-gray-100 p-3">
+        <%= t("patient.Memo") %>
+    </div>
+ 
+    <fieldset class="p-3 ">
+        <div class="my-5">
+       
+        <%= form.text_area :note, class: "shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+        <% patient.errors.messages_for(:note).each do |message| %>
+            <div class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3"><%= message %></div>
+        <% end %>
+        </div>
+
+    </fieldset>
+</div>
+
+<div class="inline">
+    <%= form.submit t("patient.New Registration"), class: "rounded-lg py-3 px-5 bg-green-400 hover:bg-green-500 text-white inline-block font-medium cursor-pointer my-5" %>
+    </div>
+    <%= link_to t("patient.Back"), patients_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+<% end %>
+</div>

@@ -1,0 +1,2 @@
+module VisitRouteMastersHelper
+end
