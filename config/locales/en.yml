@@ -1,0 +1,159 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# The following keys must be escaped otherwise they will not be retrieved by
+# the default I18n backend:
+#
+# true, false, on, off, yes, no
+#
+# Instead, surround them with single quotes.
+#
+# en:
+#   'true': 'foo'
+#
+# To learn more, please read the Rails Internationalization guide
+# available at https://guides.rubyonrails.org/i18n.html.
+
+en:
+  admin:
+    Search Transactions: "Search Transactions"
+  newuser:
+    Create User: "Create User"
+  edituser:
+    Update User: "Update User"
+  manager:
+    Update Manager: "Update Manager"  
+    Create Manager: "Create Manager"
+  agent: 
+    Update Agent: "Update Agent"  
+  dentist:
+    Create Dentist: "Create Dentist"  
+  dentisthygienist:
+    Create Dentist Hygienist: "Create Dentist Hygienist"  
+  clinics:
+    New Patient Registration: "New Patient Registration"
+    Destroy this Clinic: "Destroy this Clinic" 
+    Create Clinic: "Create Clinic" 
+    Update Clinic: "Update Clinic"
+  newstaffinfo:
+    Create Staff Info: "Create Staff Info"
+    Update: "Update"  
+    Delete: "Delete"
+    Reset: "Reset"
+  users:
+    sign_in: "Sign In"
+    Log Out: "Log Out"
+  user:
+    User No: "User No"
+    User Name: "User Name"
+    Usage Classification: "Usage Classification"
+    Prefectures: "Prefectures"
+    Login Id: "Login Id"
+    Last Login Date: "Last Login Date"
+  patient:
+    Save: "Save" 
+    Search: "Search" 
+    Starting Number: "Starting Number"
+    Ending Number: "Ending Number" 
+    Search by Patient Name: "....Search by Patient Name"
+    Delete: "Delete"
+    New Patient Registration: "New Patient Registration"
+    New Registration: "New Registration"
+    New Appointment: "New Appointment"
+    Add Last Visit: "Add Last Visit"
+    Patient Name: "Patient Name"
+    First Name: "First Name"
+    Last Name: "Last Name"
+    Search Conditions: "Search Conditions"
+    Patient Number: "Patient Number"
+    Patient Number Is Not Available!: "Patient Number Is Not Available!"
+    Last Visit Date Updated!: "Last Visit Date Updated!"
+    New Appointment: "New Appointment"
+    Create Visit Route First!: "Create Visit Route First!"
+    Successfully Created!: "Successfully Created!"
+    First Visit: "First Visit"
+    Next Reservation: "Next Reservation"
+    Last Visit Date: "Last Visit Date"
+  errors:
+    # The default format to use in full error messages.
+    format: "%{attribute} %{message}"
+
+    # The values :model, :attribute and :value are always available for interpolation
+    # The value :count is available when applicable. Can be used for pluralization.
+    messages:
+      blank: "can't be blank"
+      must exist: "must exist"
+  monthly:
+    Patient Number: "Patient Number"
+    Starting Number: "Starting Number"
+    Ending Number: "Ending Number"
+    First Visit: "First Visit"
+    Patient Name: "Patient Name" 
+    Search by Patient Name: "Search by Patient Name"
+    Visit Route: "Visit Route"
+    Search by Visit Route: "Search by Visit Route"
+    Dentist: "Dentist"
+    Dentist Hygienist: "Dentist Hygienist"
+    Treatment Coordinator: "Treatment Coordinator"
+    Search by Dentist: "Search by Dentist"
+    Search by Dentist Hygienist: "Search by Dentist Hygienist"
+    Search by Treatment Coordinator: "Search by Treatment Coordinator"
+    Search: "Search"
+    Second: "Second"
+    Last Visit: "Last Visit"
+    Treatment Plan: "Treatment Plan"
+    Period: "Period"
+    to..: "to.."
+    Occupation: "Occupation"
+    Manager: "Manager"
+    Select: "Select"
+    Search by Patient Name: "Search by Patient Name"
+  dr:
+    Period: "Period"
+    Responsible Person: "Responsible Person"   
+    Search: "Search"
+    Dentist: "Dentist"
+    Select: "Select"
+    Number of Reservations: "Number of Reservations"
+    Actual Visit Patient: "Actual Visit Patient"
+    Insurance People: "Insurance People"
+    Emergency Patient: "Emergency Patient"
+    New Patient Registration: "New Patient Registration"
+    New Patient: "New Patient"
+    Re-entry Patient: "Re-entry Patient"
+    Patients Finished: "Patients Finished"
+    No of Cancellations: "No of Cancellations"
+    No Notice Cancellations: "No Notice Cancellations"
+    Actual Examinations: "Actual Examinations"
+    Refferal Card: "Refferal Card"
+    Refferal Patients: "Refferal Patients"
+    People Returning Home: "People Returning Home"
+    Payment People: "Payment People"
+    Actual Visit People: "Actual Visit People"
+    Introduction Patient: "Introduction Patient"
+    Create Dentist Aggregation: "Create Dentist Aggregation"
+    Own Expense Number of People: "Own Expense Number of People"
+    Miscellaneous Income: "Miscellaneous Income"
+    Own Expense Amount of Money: "Own Expense Amount of Money"
+    Score: "Score"
+    No of People: "No of People"
+    Through Number of Reservations: "Through Number of Reservations"
+    Through Rate: "Through Rate"
+    Introduction Card: "Introduction Card"
+    Refferal Rate: "Refferal Rate"
+    Filter: "Filter"
