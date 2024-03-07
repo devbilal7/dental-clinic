@@ -22,7 +22,7 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: postgres
+  username: dev
   password: password
 
 development:
@@ -87,7 +87,7 @@ test:
 production:
   <<: *default
   database: main_dental_development
-  username: postgres
+  username: dev
   password: cssoft@123#
   host: localhost
   timeout: 5000
