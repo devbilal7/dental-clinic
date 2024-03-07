@@ -94,9 +94,6 @@ Rails.application.configure do
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
-  set :rails_env, 'production'
-  set :puma_env, fetch(:rack_env, fetch(:rails_env, 'production'))
-  server '<production server public IP address>', user: 'deploy', roles: %w{web app db}
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
