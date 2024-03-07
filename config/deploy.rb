@@ -37,7 +37,7 @@ set :repo_url, "git@example.com:me/my_repo.git"
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
-set :application, 'Dental clinic'
+set :application, 'Dental'
 set :repo_url, 'git@github.com:devbilal7/dental-clinic.git' # Edit this to match your repository
 set :branch, :main #use `git rev-parse --abbrev-ref HEAD`.chomp for pick current branch
 set :deploy_to, '/home/deploy/dental-clinic'
