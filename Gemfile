@@ -45,9 +45,9 @@ group :development do
   gem 'spring'
   #gem 'bullet'
   gem 'capistrano'
+  gem 'capistrano-rails'
+  gem 'capistrano-bundler'
   gem 'capistrano3-puma'
-  gem 'capistrano-rails', require: false
-  gem 'capistrano-bundler', require: false
   gem 'capistrano-rvm'
 end
 
