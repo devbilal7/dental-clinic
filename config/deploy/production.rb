@@ -31,16 +31,10 @@
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
 
-# set :rails_env, 'production'
-# set :puma_env, fetch(:rack_env, fetch(:rails_env, 'production'))
-# server '52.201.106.210', user: 'deploy', roles: %w{web app db}
-
+set :rails_env, 'production'
+set :puma_env, fetch(:rack_env, fetch(:rails_env, 'production'))
 server '52.201.106.210', user: 'deploy', roles: %w{web app db}
-set :ssh_options, {
-	forward_agent: true,
-	auth_methods: %w[publickey],
-	keys: %w[/home/codefire/Downloads/dental.pem]
-}
+
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a
