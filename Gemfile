@@ -49,7 +49,6 @@ group :development do
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rvm'
-  gem 'capistrano-rvm'
 end
 
 group :test do
@@ -84,3 +83,5 @@ gem "groupdate"
 gem "wicked_pdf"
 
 gem "wkhtmltopdf-binary"
+gem 'ed25519', '~> 1.2', require: false
+
