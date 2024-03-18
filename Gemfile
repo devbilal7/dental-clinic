@@ -84,4 +84,6 @@ gem "wicked_pdf"
 
 gem "wkhtmltopdf-binary"
 gem 'ed25519', '~> 1.2', require: false
+gem 'bcrypt_pbkdf', '~> 1.0', require: false
+
 
