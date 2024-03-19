@@ -37,10 +37,10 @@ lock "~> 3.18.0"
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
-set :application, 'DentalClinic'
+set :application, 'Dental_Clinic'
 set :repo_url, 'git@github.com:devbilal7/dental-clinic.git' # Edit this to match your repository
 set :branch, :main #use `git rev-parse --abbrev-ref HEAD`.chomp for pick current branch
-set :deploy_to, '/home/ubuntu/DentalClinic'
+set :deploy_to, '/home/ubuntu/Dental_Clinic'
 set :pty, true
 set :linked_files, %w{config/database.yml config/application.yml} #if rails 5.2 & above master.key is used insted of application.yml
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads}
