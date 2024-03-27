@@ -32,7 +32,7 @@
 # Feel free to add new variables to customise your setup.
 
 set :rails_env, 'production'
-set :puma_env, fetch(:rack_env, fetch(:rails_env, 'production'))
+# set :puma_env, fetch(:rack_env, fetch(:rails_env, 'production'))
 server '13.115.57.100', user: 'ubuntu', roles: %w{web app db}
 
 # Custom SSH Options
