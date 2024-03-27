@@ -44,13 +44,13 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   #gem 'bullet'
-  gem 'capistrano'
+  # gem 'capistrano'
   gem 'capistrano3-puma'
-  gem 'capistrano-rails', require: false
+  # gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
-  gem 'capistrano-rvm'
-  gem 'capistrano-passenger', '~> 0.2.0'
-  gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4'
+  # gem 'capistrano-rvm'
+  # gem 'capistrano-passenger', '~> 0.2.0'
+  # gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4'
 
 end
 
@@ -88,4 +88,7 @@ gem "wicked_pdf"
 gem "wkhtmltopdf-binary"
 
 
-
+gem 'capistrano', '~> 3.11'
+gem 'capistrano-rails', '~> 1.4'
+gem 'capistrano-passenger', '~> 0.2.0'
+gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4'
