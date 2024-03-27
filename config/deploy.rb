@@ -45,3 +45,14 @@ set :pty, true
 # set :linked_files, %w{config/database.yml config/application.yml} #if rails 5.2 & above master.key is used insted of application.yml
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
 set :keep_releases, 5
+
+namespace :puma do
+    desc 'Upload puma.rb'
+    task :upload_config do
+      on roles(:app) do
+        upload! StringIO.new(File.read('config/puma.rb')), "#{shared_path}/puma.rb"
+      end
+    end
+  end
+  
+  before 'deploy:check', 'puma:upload_config'
