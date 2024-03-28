@@ -15,5 +15,9 @@ class Clinic < ApplicationRecord
                     香川: "香川", 愛媛: "愛媛", 高知: "高知", 福岡: "福岡", 佐賀: "佐賀", 長崎: "長崎",
                     熊本: "熊本", 大分: "大分" , 宮崎: "宮崎", 鹿児島: "鹿児島", 沖縄: "沖縄" 
                 }
+
+                def self.ransackable_attributes(auth_object = nil)
+                    ["address", "building_name", "charge1_first_name", "charge1_last_name", "charge1_wonder1", "charge1_wonder2", "charge2_first_name", "charge2_last_name", "charge2_wonder1", "charge2_wonder2", "created_at", "fax_number", "floors", "id", "municipalities", "name", "phone_number", "postal_code", "region", "representative_first_name", "representative_last_name", "representative_wonder1", "representative_wonder2", "updated_at", "user_id"]
+                  end
     # validates :name,:postal_code, :region, :address, :municipalities, :building_name, :floors, :fax_number, :phone_number, presence: true
 end
